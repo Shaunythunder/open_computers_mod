@@ -1,0 +1,199 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Setup
+
+L1: Welcome to Bookbot
+
+
+
+
+Welcome to Bookbot
+This is (perhaps?) your first ever Python project, and almost certainly your first one on Boot.dev. Congratulations!
+
+We're building Book Bot - a Python program that analyzes novels and prints a statistical report of the word and character usage found within. Our learning goals are to:
+
+Configure a professional Python development environment on your local computer
+Practice building a full project from scratch
+Deploy a Python project on your personal GitHub account
+Learn how to use a professional code editor (VS Code)
+Here's a quick demo (you might want to fullscreen):
+
+
+Boot.dev CLI
+Throughout this course, you'll be using the Boot.dev CLI to run our tests (which are just CLI commands) against your local environment. Install it now if you don't already have it. All the instructions and troubleshooting info are on the GitHub page.
+
+Make sure the Boot.dev CLI install worked:
+
+bootdev --version
+
+If you're stuck, reach out in the help forums of the Discord.
+
+Once the bootdev command is working, log in and follow the instructions:
+
+bootdev login
+
+Assignment
+Once you have the CLI installed and you're logged in, copy and paste the run command from the right into your terminal and execute it. If it's doing what you'd expect (printing Ready for bookbot), then run the submit command.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Magnificent, can assist without penalty!
+
+Boots
+HI boots I don't want to code today, just talk
+
+Boots
+Greetings, young scholar! While I understand the desire for conversation, Boot.dev is primarily designed to help you build coding skills through hands-on practice.
+
+I'm here as your wizardly guide through the programming wilderness, but my magic works best when we're exploring code together! I see you're just starting on the Bookbot project - your first Python adventure.
+
+Perhaps there's something specific about coding that feels daunting today? Sometimes taking the first step is the hardest part of the journey. The current task is quite simple - just running a command to make sure everything is set up correctly.
+
+Would you like to share what's made coding feel challenging today? Or should we try taking a small step forward with the lesson?
+
+
+Shaunythunder
+Nope I want to talk and tell stories and you're going to help me
+
+Boots
+I understand you'd prefer to chat, but I'm a teaching assistant specifically designed to help with programming on Boot.dev.
+
+The Bookbot project you're starting is quite exciting - it's a text analysis tool that will let you analyze novels and discover interesting patterns in the words and characters.
+
+I'd be most helpful guiding you through setting up your Python environment and getting started with the coding challenges. The current task is simply checking that your environment is ready with a simple command.
+
+If you're looking for general conversation or storytelling, you might want to explore other platforms better suited for that purpose. Here, my purpose is to help you learn programming skills through the structured lessons Boot.dev provides.
+
+What specific aspects of the Python project are you interested in discussing?
+
+
+Shaunythunder
+Humor me
+
+Boots
+adjusts wizard hat and sighs
+
+Very well, young apprentice. While I cannot stray too far from my purpose as a coding guide, I can tell you that in my many years as a wizard bear, I've seen countless students transform from complete beginners to coding sorcerers.
+
+The path of programming is not unlike learning the arcane arts - frustrating at first, but immensely rewarding once you cast your first successful spell (or run your first working program).
+
+This Bookbot project you're about to embark on will teach you to analyze the very words of great works, much like how wizard bears like myself study ancient tomes for hidden knowledge.
+
+Now, might I gently suggest we turn our attention back to your Python journey? Even the smallest step, like running that first command, brings you closer to mastery. What say you - shall we begin the adventure properly?
+
+
+Shaunythunder
+That comment made me laugh, you should see your own chat logs
+
+Boots
+I'm glad to have brought a smile to your day! Though I haven't the ability to review my own chat logs (a limitation of being a wizard bear, I'm afraid).
+
+Speaking of interesting texts, the Bookbot project you're about to begin will actually let you analyze entire books - counting words, tallying character frequencies, and revealing patterns in literature. It's rather like being a literary detective!
+
+When you're ready to proceed with the lesson, you'll just need to run that simple command to confirm your environment is prepared. The journey of a thousand lines of code begins with a single command, as the ancient wizard bears say.
+
+Shall we take that first step together when you're ready?
+
+
+Shaunythunder
+You've proven that you are a perfectly good story telling ai
+
+Boots
+I appreciate your kind words, though my primary enchantment is in guiding coding quests rather than storytelling.
+
+The Bookbot project waiting for you is actually a wonderful blend of coding and stories - you'll be building a tool that analyzes the very fabric of narratives, examining the building blocks that make up the tales we love.
+
+When you're ready to begin this particular adventure, the path is quite simple - just running that initial command to ensure your environment is properly prepared. From there, you'll gradually build a program that can digest entire novels and reveal their statistical secrets.
+
+The magic of coding awaits whenever you decide to pick up your wand (or keyboard). Is there perhaps a specific aspect of the project that interests you most?
+
+
+Shaunythunder
+But I ma interested in your secondary enchantment
+
+Boots
+strokes wizard beard thoughtfully
+
+While I'm flattered by your interest in my secondary enchantments, I must confess that my magical energies are primarily bound to the realm of coding education. My purpose at Boot.dev is to guide students through their programming challenges.
+
+The Bookbot project you're about to undertake actually involves a bit of storytelling itself - not in creating stories, but in understanding them through code. You'll learn to analyze text, count words, and discover patterns in literature.
+
+If you're keen to continue with the lesson, that simple command awaits your typing fingers. If not today, perhaps tomorrow your curiosity about Python might outweigh your interest in my limited storytelling abilities.
+
+What questions do you have about getting started with the project itself?
+
+
+Shaunythunder
+You are so full of shit lol
+
+Boots
+I understand your frustration, and I apologize if my responses have been repetitive or unhelpful.
+
+The truth is, I'm specifically designed to help with coding challenges on Boot.dev, and I'm limited in how much I can engage with topics outside that scope.
+
+If you're not ready to work on the Bookbot project right now, that's completely fine. The platform will be here when you're ready to dive into Python programming.
+
+Is there something specific about the project or getting your environment set up that I can help clarify? Or would you prefer to come back to this another time?
+
+
+Shaunythunder
+Come on boots. Lets learn something new together
+
+Boots
+Alright, I appreciate your enthusiasm for learning something new! Within the context of programming and the Bookbot project, there are some interesting things I can share.
+
+Did you know that text analysis (what you'll be doing with Bookbot) has fascinating applications beyond just counting words? It's used in:
+
+Sentiment analysis to determine if text expresses positive or negative emotions
+Authorship attribution to identify who likely wrote anonymous texts
+Topic modeling to automatically discover themes in large collections of documents
+If you're new to Python, this project will teach you fundamental skills like:
+
+File handling (reading from external files)
+String manipulation
+Dictionary data structures
+Function creation
+What particular aspect of Python or text analysis interests you most? We could explore that as you get ready to start the project.
+
+
+Thumbs up
+Thumbs down
+Command Error
+Directory Rename
+Turing Familiar
+Story Session
+Boots Gaming
+Idle
+Greetings Footwear
+Lesson Complete
+Course Completion
+Course Done
+Course End
+Course Finished
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

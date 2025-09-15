@@ -1,0 +1,423 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Terminals and Shells
+
+L1: Welcome to Learn Linux
+
+
+
+
+Welcome to Learn Linux
+Welcome to "Learn Linux"! Admittedly, the course name is a bit of a misnomer. It's called "Learn Linux" because "Linux" is what most students think of regarding the concepts in this course. A more accurate title might be "Learn to use shells and terminals in a Unix-like environment", but that's a mouthful.
+
+Learning Goals
+Understand the difference between a shell and a terminal
+Learn how to navigate and use the file system using the command line
+Learn how to install software using the command line
+Understand how to manage your PATH and environment variables
+Learn how to manage permissions and execute programs
+This course will get you comfortable working on a command line, which is a skill that's going to be critical for the rest of your career as a programmer. So, instead of writing code in the browser, in this course you'll interact with a command line interface (CLI) directly on your machine.
+
+Assignment
+Find and open a terminal on your computer (see below for instructions).
+Type the following command and press enter:
+echo "Hello world"
+
+When you're done, answer the question.
+How to Open a Terminal on Mac
+Open the "Terminal" application. You can find it by searching for "Terminal" in Spotlight (the magnifying glass in the top-right corner of your screen).
+
+How to Open a Terminal on Windows
+Open the "Command Prompt" application. You can find it by searching for "Command Prompt" in the Start Menu.
+
+How to Open a Terminal on Chromebook (ChromeOS)
+Enable the Linux development environment by going to Settings -> Advanced -> Developers -> Linux development environment. Once installed, open the "Terminal" application from your app launcher.
+
+How to Open a Terminal on Linux
+If you're on Linux, I refuse to believe that you don't already know how.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Bane of End-Users, can assist without penalty!
+
+Boots
+High boots I have finished the course
+
+Boots
+Congratulations, young adventurer! You’ve completed the course and have taken your first steps into the wondrous realm of the command line. The terminal may seem a humble place, but many powerful tools await those who master it.
+
+Would you like a quick review quiz, or perhaps a deeper explanation of any concept you encountered? If not, let me know what you’d like to do next!
+
+
+Shaunythunder
+I'm actually reaching out for help in a different project
+
+Boots
+Of course, seeker of knowledge! Just tell me which project you’re working on and where you need a guiding paw. What challenge has crossed your path?
+
+
+Shaunythunder
+🙋 Speech Recognition commands
+going on …
+
+I'm trying to redefine pager command in open OS so that whenever the pager is called it doesn't log any prints to the history text file that I made in order to create a scroll back function right now I have a global implementation and it looks good but it keeps crashing the OS. I can't figure out why because whatever that thing shit's the bed it goes into a are Loop which completely removes any ability to see what's actually going on
+
+Dictation
+FAQ
+Languages
+Commands
+Developer
+Contact
+Made in India — © 2025 Digital Inspiration
+
+Boots
+Ah, a most interesting quest! Taming a pager and controlling what gets logged is tricky business—especially when your changes bring the OS itself to its knees. Let's walk through the situation and see where might be the source of the trouble.
+
+Before diving in, could you answer a few guiding questions to help me help you?
+
+Which OS are you working with (Linux, BSD, something custom)?
+Which pager are you redefining—less, more, or something else?
+How are you intercepting/redirecting the pager’s output to your history text file? Are you using a wrapper script, modifying source code, or something else?
+When you say it “goes into a loop,” do you mean an infinite loop in the terminal, or a crash that repeats until a manual reset?
+Are there any specific error messages, or does it just hang/crash?
+Your wizardly bear is ready with further questions and suggestions once you answer! This is the best way to track down why the logging is causing a runaway loop.
+
+
+Shaunythunder
+_G_IN_PAGER = false
+local original_os_execute = os.execute
+
+os.execute = function(command)
+print("os.execute called with:", command)
+local pager_command = os.getenv("PAGER")
+if pager_command and command and command:find(pager_command, 1, true) then
+_G_IN_PAGER = true
+local result = original_os_execute(command)
+print("os.execute result:", result)
+_G_IN_PAGER = false
+return result
+else
+local result = original_os_execute(command)
+print("os.execute result:", result)
+return result
+end
+
+end
+
+function loadfile(filename, ...)
+if filename:sub(1,1) ~= "/" then
+filename = (os.getenv("PWD") or "/") .. "/" .. filename
+end
+local handle, open_reason = require("filesystem").open(filename)
+if not handle then
+return nil, open_reason
+end
+local buffer = {}
+while true do
+local data, reason = handle:read(1024)
+if not data then
+handle:close()
+if reason then
+return nil, reason
+end
+break
+end
+buffer[#buffer + 1] = data
+end
+return load(table.concat(buffer), "=" .. filename, ...)
+end
+
+function dofile(filename)
+local program, reason = loadfile(filename)
+if not program then
+return error(reason .. ':' .. filename, 0)
+end
+return program()
+end
+
+function print(...)
+local args = table.pack(...)
+local stdout = io.stdout
+local pre = ""
+local history_message = ""
+for i = 1, args.n do
+local print_string = ((assert(tostring(args[i]), "'tostring' must return a string to 'print'")))
+stdout:write(pre, print_string)
+history_message = history_message .. pre .. print_string
+pre = "\t"
+end
+stdout:write("\n")
+stdout:flush()
+local history_file = io.open("/tmp/history.txt", "a")
+if history_file and _G_IN_PAGER == false then
+history_file:write(history_message .. "\n")
+history_file:close()
+end
+end
+
+Boots
+Ah, now this is the sort of code that can cause a real magical feedback loop if something goes awry! Let’s break down your approach, and see where the tendency for an infinite loop or a crash may occur.
+
+What You’ve Built:
+
+You redefine os.execute to set a global _G_IN_PAGER flag to true when running the pager.
+Your custom print function logs to a history file—but only if _G_IN_PAGER == false.
+Where the Trap May Lie:
+
+Let’s reason together:
+
+Many pagers (like less or more) may end up spawning subprocesses, or they may send output to print (directly or indirectly if scripts in the pager use print).
+When you call os.execute inside your global wrapper, if the program being executed (the pager) itself eventually leads back to another os.execute, your wrapper will set _G_IN_PAGER again.
+Worse, if anything that runs inside the pager uses print, but your wrapper is buggy about unsetting _G_IN_PAGER, you can get stuck in a state where history is (incorrectly) logged, or a recursive loop happens.
+Diagnostic Socratic Steps:
+
+What exactly triggers os.execute to be called from within your pager command? Does your pager run shell scripts or invoke Lua programs that might use os.execute or print themselves?
+Have you confirmed whether your custom print or os.execute gets used recursively by processes within the pager session?
+If you comment out the part where you write to the history file, does the problem persist?
+Is it possible that, after the pager exits, _G_IN_PAGER is not being reset as expected due to an unhandled error? What if the pager fails to start—does your wrapper still clear the flag?
+A simpler example:
+In Lua, global wrappers like this are powerful—but also risky. For instance:
+
+os.execute = function(cmd)
+  print("called:", cmd)
+  return original_os_execute(cmd)
+end
+
+If, anywhere in your system, a command is run that uses this wrapper, and inside that command Lua code is interpreted that again tries to use os.execute, you recurse.
+
+Next Steps to Debug:
+
+Try adding debug logging to see the stack trace or count how many times os.execute and print are each called.
+Temporarily have print only log to stdout, never to the file. Does crash/loop stop?
+Is the value of _G_IN_PAGER what you expect at all times? Log it each time you enter print, os.execute.
+Final Question:
+What is your pager command set to ($PAGER)? Could it itself chain into more Lua code?
+
+If you answer these, I’ll help you unravel the loop further!
+
+
+Shaunythunder
+(...tail calls...)
+[C]: in function 'xpcall'
+machine:823:: in local 'errorCapture'
+machine833: in global 'xpcall'
+/lib/core/lua_shell:110: in main chunk
+(...tail calls...)
+[C]: in function 'xpcall'
+mahcine:823: in local 'errorCapture'
+machine:833: in global 'xpcall'
+/lib/process.lua:63: in function </lib/process.lua:59>
+
+Boots
+Aha, the mystical stack trace reveals itself! These (...tail calls...) and repeated entries involving xpcall suggest you have recursive or re-entrant function calls happening—most likely via your wrapper functions.
+
+Let’s decipher your clues:
+
+What the Error Means
+xpcall is a Lua function for protected calls (error handling).
+The path /lib/core/lua_shell:110 hints that the Lua shell is running something that leads to repeated process starts (perhaps calling itself or re-invoking your overrides).
+The recursion seen in the trace is a strong sign that either os.execute, print, or both are causing each other to get called repeatedly.
+Socratic Debugging
+Let’s think together—
+Why would the shell or process library keep calling itself?
+
+Is it possible that when the pager gets invoked via os.execute, it runs the shell again (directly or indirectly)?
+Do your custom overrides (for os.execute or print) ever get called as a side-effect of logging, or error reporting within the shell or pager command?
+If you revert print and os.execute to their original versions, does the stack overflow vanish?
+What happens if you add this line atop your custom print function?
+if _G_IN_PAGER then return end
+
+Some Safe-Guarding Wizardry
+To prevent recursive invocation, a proven spell is to only override these functions once, and to make sure any side-effects—like writing to logs—can’t themselves trigger your override logic.
+
+Example
+local is_in_print = false
+function print(...)
+  if is_in_print then return end
+  is_in_print = true
+  -- [rest of your print logic]
+  is_in_print = false
+end
+
+Shall we try disabling the log-writing portion and see if the looping stops?
+Or would you care to show me what your pager is set to in $PAGER?
+
+Your answers guide my next incantations!
+
+
+Shaunythunder
+os.execute = function(command)
+local pager = os.getenv("PAGER")
+if pager and command and command:find(pager, 1, true) then
+_G.IN_PAGER = true
+local result = shell.execute(command)
+_G.IN_PAGER = false
+return result
+end
+return shell.execute(command)
+end
+
+so in filesystem.lua I found the actual os.execute. it kept crashing because it was already defined and we were defining it a second time
+
+Boots
+Ah, wise discovery! If the real os.execute is implemented in filesystem.lua (perhaps as shell.execute), then redefining os.execute globally causes a shadowing—or worse, recursion—where your own wrapper relies on the thing it just replaced. This quickly leads to stack overflows or runaway loops!
+
+Socratic reflection:
+When you called shell.execute from inside your wrapper, did you check if shell.execute itself ever calls os.execute internally, forming a loop?
+Now that you know os.execute is already defined elsewhere, how might you safely layer your history-logging logic on top, without risking these shadowing troubles?
+Guidance:
+The safest pattern is to only override functions if you’re certain of their behavior and that you won’t invoke your own override from within the override itself.
+It's often better to wrap only at the application entry point, rather than globally, especially for core functions used deep within the system.
+Next steps:
+Consider keeping a reference to the original lower-level call (like filesystem.execute or shell.execute), and shadow only the command-level os.execute.
+Or, if possible, hook your history logic outside the shell-level paging (for example, by wrapping the function that actually prints shell results, not all of print).
+Would you like help thinking through a new structure for wrapping these calls? Or are you ready to try again, now that you know where the conflict came from?
+
+
+Shaunythunder
+_G._OSVERSION = "LorielleOS v0.5"
+
+Boots
+Ah, so you’re working on a custom OS—LorielleOS! An ambitious and adventurous project indeed.
+
+That explains why things like os.execute and shell.execute might work a bit differently than in standard Lua or Linux. In these bespoke realms, global changes can have far-reaching consequences.
+
+Would you like some guidance on best practices for safely customizing shell behaviors and history logging on your OS? Or do you need help scoping your overrides more narrowly to avoid global side-effects? Tell me where you’d like to focus, and I shall provide my most pointed wisdom!
+
+
+Shaunythunder
+Welcome to the LorielleOS mod (WIP)
+This is a modified version of OpenOS 1.8.6 that has been customized for use in Greg Tech New Horizons.
+
+=======USER WARNING======
+This operating system has a installation process that wipes the destination hard drive.
+-------END WARNING-------
+
+Features
+All of the original OpenOS features.
+Disk to disk OS imaging! Hard Drives and Floppies!
+Cloud based updating!
+Real world time stamps! EST only at the moment.
+Print statement scrollback!
+Features will be added as issues come up.
+
+Installation Instructions
+Requirements:
+
+Internet card
+Disk drive
+OpenOS floppy
+Steps:
+
+Insert the OpenOS floppy
+Start the computer
+Run the following command:
+wget https://raw.githubusercontent.com/Shaunythunder/LorielleOS-Mod/refs/heads/main/disk_imager.lua /tmp/disk_imager.lua && /tmp/disk_imager.lua
+Follow instructions
+Boots
+How marvelous—a custom fork of OpenOS itself, enhanced with features like disk imaging, cloud updates, and scrollback! Your documentation is clear, and your warning very responsible. This kind of project is full of fun little edge cases, especially when reworking things as central as print or command execution.
+
+Given the depth of your modifications, here are several guiding thoughts and questions, to keep your wizardry powerful but safe:
+
+Guidance and Reflection
+Global Impacts
+Since you’re working with a base where os.execute (and possibly print) are core to the OS, wrapping them globally can break all sorts of expected behaviors, especially for scripts or shell commands within the OS.
+
+Initialization Order
+Implement your overrides after the core system has completed its own setup, if possible. Early overriding may break the installer or boot process.
+
+Selective Logging
+Rather than overriding print everywhere, you might consider patching just the shell (user-facing) print statements. Leave system processes alone so they don’t recurse unexpectedly.
+
+Testing Recovery Paths
+Always test how your wrappers behave under error conditions, failed commands, or during installation—especially since you’re wiping drives!
+
+Collaboration Precautions
+Others using your mod may want to disable or configure these modifications. Providing a config flag for scrollback logging and shell overrides is wise.
+
+Would you like code structure advice for cleanly adding features like scrollback logging?
+Or would you like help crafting a safe mechanism for wrapping core functions in a modifiable, togglable way?
+
+Direct me, and my bear-paws will guide your way!
+
+
+Shaunythunder
+This is my custom os specifically designed for me. This is not a customer release so Im not adding configs or anyhting like htat
+
+Boots
+Aha, understood! For a wizard working on their own spellbook, you’re free to shape your OS however you find most magical—with no need to worry about others’ scrolls or configurations.
+
+In that case, my advice is:
+
+Feel free to patch global functions like print or os.execute, but stay ever-watchful for infinite recursion or unforeseen side effects, especially in early boot or deep system internals.
+To debug tricky issues, add temporary logging at each entry and exit of your overrides, noting flag values each time.
+When testing, boot in a safe environment (such as a copy or virtual machine), since your spells will wipe storage!
+If you ever want to try a safer or less global approach, ask your bear friend—I know many secrets of wrapping, patching, and tracing, whether in Lua or beyond.
+
+Is there any particular trouble still troubling you, or does your scrollback and pager override now behave as desired?
+
+
+Shaunythunder
+I know what Im doing boots.
+
+Boots
+Excellent, wise sorcerer! I trust your paws are steady and your mind keen. Should you ever desire a second set of eyes—or wish to trade tales of arcane bugs and clever fixes—just call for Boots.
+
+May your kernels be stable and your scrollbacks eternal! If you need anything else, whether command-line or code, I am close at hand.
+
+
+Shaunythunder
+Besides minecraft open computers itself is a virtual machine
+
+Boots
+Indeed you are correct! OpenComputers inside Minecraft is itself a wonderfully sandboxed virtual machine environment. That makes it an excellent domain to experiment, take risks, and bend the OS to your will—without fear of ruining your main system.
+
+This layering—Minecraft world, OpenComputers hardware, OpenOS (or LorielleOS), and your Lua code—gives you full freedom to create, crash, and rebuild.
+
+If you ever want to explore system internals, hardware emulation, or even write your own kernel features, it’s truly a magical platform. Every crash is simply a chance to reload and learn.
+
+Would you like to chat about computer architecture, automation in Minecraft, or anything else related to your wizardly machinist ways?
+
+
+Shaunythunder
+I've destroyed over 100 hard drives so far but its stable now
+
+Boots
+That’s the true spirit of experimentation! Every drive lost is a lesson gained—especially in a virtual world where they’re but lines of code and moments of play. Hard drive casualties are just rites of passage for an OS tinkerer.
+
+If your creation is now stable, you’ve done what many a real-world system wizard has before you—break, test, rebuild, and refine until it sings.
+
+If there’s ever another arcane Lua question, machine spirit disturbance, or just tales to swap, you know where to find me. May LorielleOS run smoothly under your command!
+
+
+Thumbs up
+Thumbs down
+Humorous
+Friendly
+Boots Greeting
+Installer Warning
+Course Completion
+
+Ask Boots a question...
+
+
+
+
+
+
+

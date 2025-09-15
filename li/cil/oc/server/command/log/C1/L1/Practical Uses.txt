@@ -1,0 +1,81 @@
+Open main menu
+3
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Introduction
+
+L1: Welcome to Learn Python
+
+
+
+
+Welcome to Learn Python
+
+
+Let's Build a Game
+During this course you'll build features for a text-based RPG called "Fantasy Quest".
+
+Assignment
+Press the gray ▶ Run button to run the code I wrote for you
+Press the gold ▶ Submit button to run and submit the code
+Press the --> right arrow at the top-right of the screen to go to the next lesson.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Bear with a Back-End, can assist without penalty!
+
+Shaunythunder
+but let's ask a question real quick I know this is great for maintaining lists and stuff but whats the practical application of this? when am I actually going to need something like this?
+
+Boots
+It looks like you’re curious about the practical application of what you’ve just learned—excellent question!
+
+In Python, print() is often your first tool, used to display information to the player or user. While it’s simple, it’s also quite useful for:
+
+Debugging code
+Showing output/results to users
+Creating interactive games or simulations (like “Fantasy Quest!”)
+As you progress, you’ll often use print() to track variables, suggest choices, or build text-based menus for games and programs. Imagine you’re making a game and need to let the player know their health, inventory, or choices—they must see it somehow, and print() is how you communicate with them.
+
+Do you want an example of a more complex scenario where this is handy, or are you ready to proceed on your quest?
+
+
+Thumbs up
+Thumbs down
+Questions Incoming
+Storytelling
+Monster Confrontation
+Congratulations on
+Thaumcraft Ess
+File Detection
+Lesson Completion
+Course Completion
+Lesson Done
+Course Finished
+Practical Uses
+Lesson Achievement
+Lesson Finished
+Commit History
+Course Success
+
+Ask Boots a question...
+
+
+
+
+
+
+

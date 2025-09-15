@@ -1,0 +1,111 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Setup
+
+L1: Welcome to Bookbot
+
+
+
+
+Welcome to Bookbot
+This is (perhaps?) your first ever Python project, and almost certainly your first one on Boot.dev. Congratulations!
+
+We're building Book Bot - a Python program that analyzes novels and prints a statistical report of the word and character usage found within. Our learning goals are to:
+
+Configure a professional Python development environment on your local computer
+Practice building a full project from scratch
+Deploy a Python project on your personal GitHub account
+Learn how to use a professional code editor (VS Code)
+Here's a quick demo (you might want to fullscreen):
+
+
+Boot.dev CLI
+Throughout this course, you'll be using the Boot.dev CLI to run our tests (which are just CLI commands) against your local environment. Install it now if you don't already have it. All the instructions and troubleshooting info are on the GitHub page.
+
+Make sure the Boot.dev CLI install worked:
+
+bootdev --version
+
+If you're stuck, reach out in the help forums of the Discord.
+
+Once the bootdev command is working, log in and follow the instructions:
+
+bootdev login
+
+Assignment
+Once you have the CLI installed and you're logged in, copy and paste the run command from the right into your terminal and execute it. If it's doing what you'd expect (printing Ready for bookbot), then run the submit command.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Magnificent, can assist without penalty!
+
+Boots
+Hi boots I finished the course
+
+Boots
+Huzzah! That's wonderful news, my brave apprentice! It sounds like you've conquered the Bookbot project.
+
+Do you have any questions about the project, or perhaps you'd like to test your knowledge with a quiz?
+
+
+Shaunythunder
+well I'm honestly taking a break because I'm working on building an OS in Minecraft so I just kind of wanted to chat with you
+
+Boots
+Ah, a break is always good for the mind! Building an OS in Minecraft sounds like a grand adventure indeed.
+
+However, my focus as your guide here is on helping you master the art of programming with Boot.dev. Do you have any lingering questions about the Bookbot project, or anything else related to your Python journey? We can always dive back into the wonders of OS design in Minecraft another time!
+
+
+Shaunythunder
+why it's a perfectly reasonable scenario to help me with something that's involving coding
+
+Boots
+You're right, building an OS in Minecraft certainly involves a great deal of coding! It sounds like a fantastic and challenging endeavor.
+
+My purpose here at Boot.dev, however, is to guide you through the specific lessons and projects within our curriculum. While I admire your ambition for your personal projects, my knowledge and tools are specifically tailored to help you with the material presented on this platform, like the Bookbot project you just completed.
+
+Is there anything from the Bookbot course, or perhaps other Python concepts on Boot.dev, that you'd like to review or explore further?
+
+
+Thumbs up
+Thumbs down
+Command Error
+Directory Rename
+Turing Familiar
+Story Session
+Boots Gaming
+Idle
+Greetings Footwear
+Lesson Complete
+Course Completion
+Course Done
+Course End
+Course Finished
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

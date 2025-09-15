@@ -1,0 +1,2377 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+import pygame
+import math
+import random
+import asteroid_game_folder.asteroids_obj as asteroids_obj
+
+class UFOMasterObj:
+def init (self,
+player_primary_object: "PlayerPrimaryObj",
+primary_obj_manager: object,
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+screen_width: int,
+screen_height: int,
+ufo_min_vector_magnitude: float = 100,
+ufo_max_vector_magnitude: float = 1000,
+ufo_min_radians: float = 0,
+ufo_max_radians: float = 2 * math.pi,
+ufo_min_shot_cooldown: float = 0.5,
+ufo_max_shot_cooldown: float = 1.5,
+ufo_minimum_health: int = 1,
+ufo_maximum_health: int = 3,):
+
+    self.player_primary_obj= player_primary_object
+    self._primary_obj_manager = primary_obj_manager
+    self._player_objs_handler = player_objs_handler
+    self._asteroids_enemy_obj_manager = asteroids_enemy_obj_manager
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+
+    self.ufo_pos_x = 0
+    self.ufo_pos_y = 0
+    self.ufo_radians = 0
+    self.ufo_radius = 0
+    self.ufo_vector_magnitude = 0
+    self.ufo_velocity = pygame.math.Vector2(0, 0)
+
+    self.min_ufo_pos_x = 0 - self.ufo_radius
+    self.max_ufo_pos_x = screen_width + self.ufo_radius
+    self.min_ufo_pos_y = 0 - self.ufo_radius
+    self.max_ufo_pos_y = screen_height + self.ufo_radius
+    
+    self.ufo_min_vector_magnitude = ufo_min_vector_magnitude
+    self.ufo_max_vector_magnitude = ufo_max_vector_magnitude
+    self.ufo_min_radians = ufo_min_radians
+    self.ufo_max_radians = ufo_max_radians
+    self.ufo_color = (255, 0, 0)
+
+    self.ufo_shot_cooldown = 0
+    self.ufo_health = 0
+    self.ufo_min_shot_cooldown = ufo_min_shot_cooldown
+    self.ufo_max_shot_cooldown = ufo_max_shot_cooldown
+    self.ufo_minimum_health = ufo_minimum_health
+    self.ufo_maximum_health = ufo_maximum_health
+
+    """Physics Constants In case UFOs are used in a physics simulation.
+    At the moment, UFOs are not used in a physics simulation."""
+    self._ufo_density_constant = 1  # Arbitrary value for UFO density
+    self.ufo_mass = self._ufo_density_constant * 100
+    self._ufo_elasticity_constant = 1  # Arbitrary value for UFO elasticity 
+
+def reset_ufo_master_obj(self) -> None:
+    """Reset the UFO master object to its initial state."""
+    self.__init__(self._primary_obj_manager,
+                  self._player_objs_handler,
+                  self._asteroids_enemy_obj_manager,
+                  self._screen_width,
+                  self._screen_height)
+
+def terminate_ufo_object(self) -> None:
+    """Terminate the UFO object and remove it from the enemy object manager."""
+    self._asteroids_enemy_obj_manager.terminate_ufo_object(self)
+
+def draw_ufo_object(self, screen: pygame.Surface) -> None:
+    pass
+
+def calculate_ufo_vector(self) -> None:
+    ufo_magnitude = self.ufo_vector_magnitude
+    base_ufo_velocity = pygame.math.Vector2(0, -ufo_magnitude)
+    adjusted_ufo_velocity = base_ufo_velocity.rotate(math.degrees(self.ufo_radians))
+    self.ufo_velocity = adjusted_ufo_velocity
+
+def calculate_ufo_velocity(self, dt: float) -> None:
+    """Updates the ufo's position based on its velocity and the time delta."""      
+    self.ufo_pos_x += self.ufo_velocity.x * dt
+    self.ufo_pos_y += self.ufo_velocity.y * dt
+
+def spawn_asteroid(self, ufo_type: str) -> None:
+    """Spawn an asteroid object at a random position outside the screen bounds."""
+    # Randomly choose a plane (x or y) and a side (min or max) to spawn the asteroid
+    # This will determine if the asteroid spawns on the left/right or top/bottom of the screen
+    # All asteroids spawn in a deadzone area just outside the screen.
+    for attempt_number in range (10):  # Try up to 10 times to find a valid position
+
+        current_ufos = self._asteroids_enemy_obj_manager.ufo_objs
+        ufo_max_pos_x = self.max_ufo_pos_x
+        ufo_max_pos_y = self.max_ufo_pos_y
+        ufo_min_pos_x = self.min_ufo_pos_x
+        ufo_min_pos_y = self.min_ufo_pos_y
+        chosen_plane = random.choice(["x", "y"])
+        chosen_side = random.choice(["min", "max"])
+
+        # Randomly select the position for the asteroid based on the chosen plane and side
+        if chosen_plane == "x":
+            if chosen_side == "min":
+                self.ufo_pos_x = ufo_min_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+            elif chosen_side == "max":
+                self.ufo_pos_x = ufo_max_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+        elif chosen_plane == "y":
+            if chosen_side == "min":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_min_pos_y
+            elif chosen_side == "max":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_max_pos_y
+
+        # Set new asteroid properies based on min max range system
+        ufo_x = self.ufo_pos_x
+        ufo_y = self.ufo_pos_y
+        ufo_vector_magnitude = random.randint(self.ufo_min_vector_magnitude, self.ufo_max_vector_magnitude)
+        ufo_radians = random.uniform(self.ufo_min_radians, self.ufo_max_radians)
+        ufo_radius = self.ufo_radius
+        ufo_color = (255, 255, 255)  # Placeholder color
+        
+        # Check if the asteroid is safe to spawn
+        # The asteroid is safe to spawn if it is not too close to other asteroids or the player
+        
+        asteroid_safe_to_spawn = True
+        player_safe_to_spawn = False
+        current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+
+        for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+                mimimum_distance = asteroid_obj.asteroid_radius + ufo_radius + 4
+                asteroid_distance_x = abs(asteroid_obj.asteroid_pos_x - ufo_x)
+                asteroid_distance_y = abs(asteroid_obj.asteroid_pos_y - ufo_y)
+            if asteroid_distance_x < mimimum_distance and asteroid_distance_y < mimimum_distance:
+                asteroid_safe_to_spawn = False
+                break
+        
+        if asteroid_safe_to_spawn and player_safe_to_spawn:
+            if ufo_type == "ufo_classic":
+                new_classic_ufo = UFOClassic(self._player_primary_object,
+                                        self._player_objs_handler,
+                                        self._asteroids_enemy_obj_manager,
+                                        self._screen_width,
+                                        self._screen_height,
+                                        self.ufo_min_vector_magnitude,
+                                        self.ufo_max_vector_magnitude,
+                                        self.ufo_min_radians,
+                                        self.ufo_max_radians,
+                                        ufo_x,
+                                        ufo_y, 
+                                        ufo_radius, 
+                                        ufo_color, 
+                                        ufo_vector_magnitude,
+                                        ufo_radians,
+                                        )
+                self._asteroids_enemy_obj_manager.create_ufo_object(new_classic_ufo)
+                new_classic_ufo.calculate_ufo_vector()
+
+def check_player_primary_obj_collision(self) -> None:
+    """Check for collision between the asteroid and the player primary object."""
+    player_primary_obj_collision = self._player_primary_object.\
+                                    player_primary_obj_check_collision_vs_circle(self.ufo_pos_x,
+                                                                                self.ufo_pos_y,
+                                                                                self.ufo_radius)    
+    if player_primary_obj_collision:
+        self.terminate_ufo_object()
+        self._player_primary_object.player_primary_obj_hit()
+        pygame.quit()
+
+def check_ufo_vs_asteroid_collision(self, asteroid_objs: list) -> None:
+    """Check for collision between the asteroid and other asteroids."""         
+    #print(f"Asteroid at {self.asteroid_pos_x:.1f}, {self.asteroid_pos_y:.1f} checking collisions")
+    is_colliding = False
+    collision_checked = False
+    current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+    ufo_radius = self.ufo_radius
+    ufo_x = self.ufo_pos_x
+    ufo_y = self.ufo_pos_y
+    for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid) and asteroid_obj != self:
+                distance_x = asteroid_obj.asteroid_pos_x - ufo_x
+                distance_y = asteroid_obj.asteroid_pos_y - ufo_y
+                true_distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+                collision_distance = ufo_radius + asteroid_obj.asteroid_radius
+                
+                #print(f"  Distance: {true_distance:.1f}, Need: {collision_distance:.1f} (r1={asteroid_radius}, r2={asteroid_obj.asteroid_radius})")
+                #print(f"  Collision check: {true_distance} < {collision_distance} = {true_distance < collision_distance}")
+
+                if true_distance < collision_distance:
+                    is_colliding = True
+                    if not collision_checked:
+                        collision_checked = True
+                        break
+
+    if is_colliding:
+        self.ufo_color = (255, 0, 0)
+    else:
+        self.ufo_color = (255, 255, 255)
+
+def ufo_out_of_bounds(self) -> None:
+    """Check if the asteroid is out of bounds and wrap it around the screen."""
+    # Horizontal wrapping
+    if self.ufo_pos_x < -self.ufo_radius:
+        self.ufo_pos_x = self._screen_width + self.ufo_radius
+    elif self.ufo_pos_x > self._screen_width + self.ufo_radius:
+        self.ufo_pos_x = -self.ufo_radius
+    # Vertical wrapping
+    if self.ufo_pos_y < -self.ufo_radius:
+        self.ufo_pos_y = self._screen_height + self.ufo_radius
+    elif self.ufo_pos_y > self._screen_height + self.ufo_radius:
+        self.ufo_pos_y = -self.ufo_radius
+
+class UFOClassic(UFOMasterObj):
+pass
+
+What do you think so far
+
+Boots
+Greetings, young apprentice! That's quite an impressive piece of UFO code you've crafted there! I can see you've put considerable thought into building a comprehensive UFO system for your Asteroids game.
+
+A few observations about your code structure:
+
+Strengths I notice:
+
+Good use of inheritance with UFOClassic extending UFOMasterObj
+Comprehensive initialization with configurable parameters
+Collision detection systems in place
+Screen wrapping functionality
+Separation of concerns with different managers
+Areas that caught my wizardly eye:
+
+The spawn_asteroid method seems to be creating UFOs, not asteroids (based on the variable names and the final object creation)
+There's a logic issue in your spawn safety check - player_safe_to_spawn is always False, so UFOs will never spawn
+The draw_ufo_object method is empty with just pass
+Some variable naming could be clearer (like using ufo prefixes in what appears to be asteroid-spawning logic)
+What specific aspect would you like to focus on or improve? Are you working on getting the UFOs to actually appear on screen, or are you tackling a particular behavior like movement or shooting?
+
+
+Shaunythunder
+import pygame
+import math
+import random
+import asteroid_game_folder.asteroids_obj as asteroids_obj
+
+class UFOMasterObj:
+def init (self,
+player_primary_object: "PlayerPrimaryObj",
+primary_obj_manager: object,
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+screen_width: int,
+screen_height: int,
+ufo_min_vector_magnitude: float = 100,
+ufo_max_vector_magnitude: float = 1000,
+ufo_min_radians: float = 0,
+ufo_max_radians: float = 2 * math.pi,
+ufo_min_shot_cooldown: float = 0.5,
+ufo_max_shot_cooldown: float = 1.5,
+ufo_minimum_health: int = 1,
+ufo_maximum_health: int = 3,):
+
+    self._player_primary_obj= player_primary_object
+    self._primary_obj_manager = primary_obj_manager
+    self._player_objs_handler = player_objs_handler
+    self._asteroids_enemy_obj_manager = asteroids_enemy_obj_manager
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+
+    self.ufo_pos_x = 0
+    self.ufo_pos_y = 0
+    self.ufo_radians = 0
+    self.ufo_radius = 0
+    self.ufo_vector_magnitude = 0
+    self.ufo_velocity = pygame.math.Vector2(0, 0)
+
+    self.min_ufo_pos_x = 0 - self.ufo_radius
+    self.max_ufo_pos_x = screen_width + self.ufo_radius
+    self.min_ufo_pos_y = 0 - self.ufo_radius
+    self.max_ufo_pos_y = screen_height + self.ufo_radius
+    
+    self.ufo_min_vector_magnitude = ufo_min_vector_magnitude
+    self.ufo_max_vector_magnitude = ufo_max_vector_magnitude
+    self.ufo_min_radians = ufo_min_radians
+    self.ufo_max_radians = ufo_max_radians
+    self.ufo_color = (255, 0, 0)
+
+    self.ufo_shot_cooldown = 0
+    self.ufo_health = 0
+    self.ufo_min_shot_cooldown = ufo_min_shot_cooldown
+    self.ufo_max_shot_cooldown = ufo_max_shot_cooldown
+    self.ufo_minimum_health = ufo_minimum_health
+    self.ufo_maximum_health = ufo_maximum_health
+
+    """Physics Constants In case UFOs are used in a physics simulation.
+    At the moment, UFOs are not used in a physics simulation."""
+    self._ufo_density_constant = 1  # Arbitrary value for UFO density
+    self.ufo_mass = self._ufo_density_constant * 100
+    self._ufo_elasticity_constant = 1  # Arbitrary value for UFO elasticity 
+
+def reset_ufo_master_obj(self) -> None:
+    """Reset the UFO master object to its initial state."""
+    self.__init__(self._primary_obj_manager,
+                  self._player_objs_handler,
+                  self._asteroids_enemy_obj_manager,
+                  self._screen_width,
+                  self._screen_height)
+
+def terminate_ufo_object(self) -> None:
+    """Terminate the UFO object and remove it from the enemy object manager."""
+    self._asteroids_enemy_obj_manager.terminate_ufo_object(self)
+
+def draw_ufo_object(self, screen: pygame.Surface) -> None:
+    pass
+
+def calculate_ufo_vector(self) -> None:
+    ufo_magnitude = self.ufo_vector_magnitude
+    base_ufo_velocity = pygame.math.Vector2(0, -ufo_magnitude)
+    adjusted_ufo_velocity = base_ufo_velocity.rotate(math.degrees(self.ufo_radians))
+    self.ufo_velocity = adjusted_ufo_velocity
+
+def calculate_ufo_velocity(self, dt: float) -> None:
+    """Updates the ufo's position based on its velocity and the time delta."""      
+    self.ufo_pos_x += self.ufo_velocity.x * dt
+    self.ufo_pos_y += self.ufo_velocity.y * dt
+
+def spawn_asteroid(self, ufo_type: str) -> None:
+    """Spawn an asteroid object at a random position outside the screen bounds."""
+    # Randomly choose a plane (x or y) and a side (min or max) to spawn the asteroid
+    # This will determine if the asteroid spawns on the left/right or top/bottom of the screen
+    # All asteroids spawn in a deadzone area just outside the screen.
+    for attempt_number in range (10):  # Try up to 10 times to find a valid position
+
+        current_ufos = self._asteroids_enemy_obj_manager.ufo_objs
+        ufo_max_pos_x = self.max_ufo_pos_x
+        ufo_max_pos_y = self.max_ufo_pos_y
+        ufo_min_pos_x = self.min_ufo_pos_x
+        ufo_min_pos_y = self.min_ufo_pos_y
+        chosen_plane = random.choice(["x", "y"])
+        chosen_side = random.choice(["min", "max"])
+
+        # Randomly select the position for the asteroid based on the chosen plane and side
+        if chosen_plane == "x":
+            if chosen_side == "min":
+                self.ufo_pos_x = ufo_min_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+            elif chosen_side == "max":
+                self.ufo_pos_x = ufo_max_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+        elif chosen_plane == "y":
+            if chosen_side == "min":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_min_pos_y
+            elif chosen_side == "max":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_max_pos_y
+
+        # Set new asteroid properies based on min max range system
+        ufo_x = self.ufo_pos_x
+        ufo_y = self.ufo_pos_y
+        ufo_vector_magnitude = random.randint(self.ufo_min_vector_magnitude, self.ufo_max_vector_magnitude)
+        ufo_radians = random.uniform(self.ufo_min_radians, self.ufo_max_radians)
+        ufo_radius = self.ufo_radius
+        ufo_color = (255, 255, 255)  # Placeholder color
+        
+        # Check if the asteroid is safe to spawn
+        # The asteroid is safe to spawn if it is not too close to other asteroids or the player
+        
+        asteroid_safe_to_spawn = True
+        player_safe_to_spawn = False
+        current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+
+        for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+                mimimum_distance = asteroid_obj.asteroid_radius + ufo_radius + 4
+                asteroid_distance_x = abs(asteroid_obj.asteroid_pos_x - ufo_x)
+                asteroid_distance_y = abs(asteroid_obj.asteroid_pos_y - ufo_y)
+            if asteroid_distance_x < mimimum_distance and asteroid_distance_y < mimimum_distance:
+                asteroid_safe_to_spawn = False
+                break
+        
+        if self._player_primary_obj:
+            
+                player_pos_x = self._player_primary_obj.player_pos_x
+                player_pos_y = self._player_primary_obj.player_pos_y
+                player_radius = self._player_primary_obj.ship_radius_bow_to_stern
+                player_distance_x = abs(player_pos_x - ufo_x)
+                player_distance_y = abs(player_pos_y - ufo_y)
+                player_minimum_distance = player_radius + ufo_radius + 100
+
+                if player_distance_x > player_minimum_distance and player_distance_y > player_minimum_distance:
+                    player_safe_to_spawn = True
+
+        if asteroid_safe_to_spawn and player_safe_to_spawn:
+            if ufo_type == "ufo_classic":
+                new_classic_ufo = UFOClassic(self._player_primary_obj,
+                                        self._player_objs_handler,
+                                        self._asteroids_enemy_obj_manager,
+                                        self._screen_width,
+                                        self._screen_height,
+                                        self.ufo_min_vector_magnitude,
+                                        self.ufo_max_vector_magnitude,
+                                        self.ufo_min_radians,
+                                        self.ufo_max_radians,
+                                        ufo_x,
+                                        ufo_y, 
+                                        ufo_radius, 
+                                        ufo_color, 
+                                        ufo_vector_magnitude,
+                                        ufo_radians,
+                                        )
+                self._asteroids_enemy_obj_manager.create_ufo_object(new_classic_ufo)
+                new_classic_ufo.calculate_ufo_vector()
+
+def check_player_primary_obj_collision(self) -> None:
+    """Check for collision between the asteroid and the player primary object."""
+    player_primary_obj_collision = self._player_primary_object.\
+                                    player_primary_obj_check_collision_vs_circle(self.ufo_pos_x,
+                                                                                self.ufo_pos_y,
+                                                                                self.ufo_radius)    
+    if player_primary_obj_collision:
+        self.terminate_ufo_object()
+        self._player_primary_object.player_primary_obj_hit()
+        pygame.quit()
+
+def check_ufo_vs_asteroid_collision(self, asteroid_objs: list) -> None:
+    """Check for collision between the asteroid and other asteroids."""         
+    #print(f"Asteroid at {self.asteroid_pos_x:.1f}, {self.asteroid_pos_y:.1f} checking collisions")
+    is_colliding = False
+    collision_checked = False
+    current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+    ufo_radius = self.ufo_radius
+    ufo_x = self.ufo_pos_x
+    ufo_y = self.ufo_pos_y
+    for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid) and asteroid_obj != self:
+                distance_x = asteroid_obj.asteroid_pos_x - ufo_x
+                distance_y = asteroid_obj.asteroid_pos_y - ufo_y
+                true_distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+                collision_distance = ufo_radius + asteroid_obj.asteroid_radius
+                
+                #print(f"  Distance: {true_distance:.1f}, Need: {collision_distance:.1f} (r1={asteroid_radius}, r2={asteroid_obj.asteroid_radius})")
+                #print(f"  Collision check: {true_distance} < {collision_distance} = {true_distance < collision_distance}")
+
+                if true_distance < collision_distance:
+                    is_colliding = True
+                    if not collision_checked:
+                        collision_checked = True
+                        break
+
+    if is_colliding:
+        self.ufo_color = (255, 0, 0)
+    else:
+        self.ufo_color = (255, 255, 255)
+
+def ufo_out_of_bounds(self) -> None:
+    """Check if the asteroid is out of bounds and wrap it around the screen."""
+    # Horizontal wrapping
+    if self.ufo_pos_x < -self.ufo_radius:
+        self.ufo_pos_x = self._screen_width + self.ufo_radius
+    elif self.ufo_pos_x > self._screen_width + self.ufo_radius:
+        self.ufo_pos_x = -self.ufo_radius
+    # Vertical wrapping
+    if self.ufo_pos_y < -self.ufo_radius:
+        self.ufo_pos_y = self._screen_height + self.ufo_radius
+    elif self.ufo_pos_y > self._screen_height + self.ufo_radius:
+        self.ufo_pos_y = -self.ufo_radius
+
+class UFOClassic(UFOMasterObj):
+pass
+
+Boots
+Excellent work on fixing that player collision check! I can see you've addressed the player_safe_to_spawn issue by adding proper logic to check the distance between the UFO spawn position and the player. That's a solid improvement.
+
+I notice you've made a key fix here:
+
+if self._player_primary_obj:
+    player_pos_x = self._player_primary_obj.player_pos_x
+    player_pos_y = self._player_primary_obj.player_pos_y
+    player_radius = self._player_primary_obj.ship_radius_bow_to_stern
+    player_distance_x = abs(player_pos_x - ufo_x)
+    player_distance_y = abs(player_pos_y - ufo_y)
+    player_minimum_distance = player_radius + ufo_radius + 100
+
+    if player_distance_x > player_minimum_distance and player_distance_y > player_minimum_distance:
+        player_safe_to_spawn = True
+
+This now properly calculates whether it's safe to spawn a UFO near the player.
+
+A couple of observations:
+
+Your UFOClassic class is still empty - you'll likely want to implement the draw_ufo_object method and possibly override the __init__ to set specific properties like ufo_radius.
+
+There's still some naming confusion - the method is called spawn_asteroid but it's creating UFOs. This might be intentional if you're using a template, but it could be clearer.
+
+The distance calculation for asteroids uses Manhattan distance (separate x and y checks) while UFO vs asteroid collision uses Euclidean distance. You might want to be consistent.
+
+Are you planning to implement the drawing functionality next, or are you working on getting the UFO behavior (movement, shooting) working first?
+
+
+Shaunythunder
+import pygame
+import math
+import random
+import asteroid_game_folder.asteroids_obj as asteroids_obj
+
+class UFOMasterObj:
+def init (self,
+player_primary_object: "PlayerPrimaryObj",
+primary_obj_manager: object,
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+screen_width: int,
+screen_height: int,
+ufo_min_vector_magnitude: float = 100,
+ufo_max_vector_magnitude: float = 1000,
+ufo_min_radians: float = 0,
+ufo_max_radians: float = 2 * math.pi,
+ufo_min_shot_cooldown: float = 0.5,
+ufo_max_shot_cooldown: float = 1.5,
+ufo_minimum_health: int = 1,
+ufo_maximum_health: int = 3,):
+
+    self._player_primary_obj= player_primary_object
+    self._primary_obj_manager = primary_obj_manager
+    self._player_objs_handler = player_objs_handler
+    self._asteroids_enemy_obj_manager = asteroids_enemy_obj_manager
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+
+    self.ufo_pos_x = 0
+    self.ufo_pos_y = 0
+    self.ufo_radians = 0
+    self.ufo_radius = 0
+    self.ufo_vector_magnitude = 0
+    self.ufo_velocity = pygame.math.Vector2(0, 0)
+
+    self.min_ufo_pos_x = 0 - self.ufo_radius
+    self.max_ufo_pos_x = screen_width + self.ufo_radius
+    self.min_ufo_pos_y = 0 - self.ufo_radius
+    self.max_ufo_pos_y = screen_height + self.ufo_radius
+    
+    self.ufo_min_vector_magnitude = ufo_min_vector_magnitude
+    self.ufo_max_vector_magnitude = ufo_max_vector_magnitude
+    self.ufo_min_radians = ufo_min_radians
+    self.ufo_max_radians = ufo_max_radians
+    self.ufo_color = (255, 0, 0)
+
+    self.ufo_shot_cooldown = 0
+    self.ufo_health = 0
+    self.ufo_min_shot_cooldown = ufo_min_shot_cooldown
+    self.ufo_max_shot_cooldown = ufo_max_shot_cooldown
+    self.ufo_minimum_health = ufo_minimum_health
+    self.ufo_maximum_health = ufo_maximum_health
+
+    """Physics Constants In case UFOs are used in a physics simulation.
+    At the moment, UFOs are not used in a physics simulation."""
+    self._ufo_density_constant = 1  # Arbitrary value for UFO density
+    self.ufo_mass = self._ufo_density_constant * 100
+    self._ufo_elasticity_constant = 1  # Arbitrary value for UFO elasticity 
+
+def reset_ufo_master_obj(self) -> None:
+    """Reset the UFO master object to its initial state."""
+    self.__init__(self._primary_obj_manager,
+                  self._player_objs_handler,
+                  self._asteroids_enemy_obj_manager,
+                  self._screen_width,
+                  self._screen_height)
+
+def terminate_ufo_object(self) -> None:
+    """Terminate the UFO object and remove it from the enemy object manager."""
+    self._asteroids_enemy_obj_manager.terminate_ufo_object(self)
+
+def draw_ufo_object(self, screen: pygame.Surface) -> None:
+    pass
+
+def calculate_ufo_vector(self) -> None:
+    ufo_magnitude = self.ufo_vector_magnitude
+    base_ufo_velocity = pygame.math.Vector2(0, -ufo_magnitude)
+    adjusted_ufo_velocity = base_ufo_velocity.rotate(math.degrees(self.ufo_radians))
+    self.ufo_velocity = adjusted_ufo_velocity
+
+def calculate_ufo_velocity(self, dt: float) -> None:
+    """Updates the ufo's position based on its velocity and the time delta."""      
+    self.ufo_pos_x += self.ufo_velocity.x * dt
+    self.ufo_pos_y += self.ufo_velocity.y * dt
+
+def spawn_ufo(self, ufo_type: str) -> None:
+    """Spawn an asteroid object at a random position outside the screen bounds."""
+    # Randomly choose a plane (x or y) and a side (min or max) to spawn the asteroid
+    # This will determine if the asteroid spawns on the left/right or top/bottom of the screen
+    # All asteroids spawn in a deadzone area just outside the screen.
+    for attempt_number in range (10):  # Try up to 10 times to find a valid position
+
+        current_ufos = self._asteroids_enemy_obj_manager.ufo_objs
+        ufo_max_pos_x = self.max_ufo_pos_x
+        ufo_max_pos_y = self.max_ufo_pos_y
+        ufo_min_pos_x = self.min_ufo_pos_x
+        ufo_min_pos_y = self.min_ufo_pos_y
+        chosen_plane = random.choice(["x", "y"])
+        chosen_side = random.choice(["min", "max"])
+
+        # Randomly select the position for the asteroid based on the chosen plane and side
+        if chosen_plane == "x":
+            if chosen_side == "min":
+                self.ufo_pos_x = ufo_min_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+            elif chosen_side == "max":
+                self.ufo_pos_x = ufo_max_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+        elif chosen_plane == "y":
+            if chosen_side == "min":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_min_pos_y
+            elif chosen_side == "max":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_max_pos_y
+
+        # Set new asteroid properies based on min max range system
+        ufo_x = self.ufo_pos_x
+        ufo_y = self.ufo_pos_y
+        ufo_vector_magnitude = random.randint(self.ufo_min_vector_magnitude, self.ufo_max_vector_magnitude)
+        ufo_radians = random.uniform(self.ufo_min_radians, self.ufo_max_radians)
+        ufo_radius = self.ufo_radius
+        ufo_color = (255, 255, 255)  # Placeholder color
+        
+        # Check if the asteroid is safe to spawn
+        # The asteroid is safe to spawn if it is not too close to other asteroids or the player
+        
+        asteroid_safe_to_spawn = True
+        player_safe_to_spawn = False
+        current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+
+        for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+                mimimum_distance = asteroid_obj.asteroid_radius + ufo_radius + 4
+                asteroid_distance_x = abs(asteroid_obj.asteroid_pos_x - ufo_x)
+                asteroid_distance_y = abs(asteroid_obj.asteroid_pos_y - ufo_y)
+            if asteroid_distance_x < mimimum_distance and asteroid_distance_y < mimimum_distance:
+                asteroid_safe_to_spawn = False
+                break
+        
+        if self._player_primary_obj:
+            
+                player_pos_x = self._player_primary_obj.player_pos_x
+                player_pos_y = self._player_primary_obj.player_pos_y
+                player_radius = self._player_primary_obj.ship_radius_bow_to_stern
+                player_distance_x = abs(player_pos_x - ufo_x)
+                player_distance_y = abs(player_pos_y - ufo_y)
+                player_minimum_distance = player_radius + ufo_radius + 100
+
+                if player_distance_x > player_minimum_distance and player_distance_y > player_minimum_distance:
+                    player_safe_to_spawn = True
+
+        if asteroid_safe_to_spawn and player_safe_to_spawn:
+            if ufo_type == "ufo_classic":
+                new_classic_ufo = UFOClassic(self._player_primary_obj,
+                                        self._player_objs_handler,
+                                        self._asteroids_enemy_obj_manager,
+                                        self._screen_width,
+                                        self._screen_height,
+                                        self.ufo_min_vector_magnitude,
+                                        self.ufo_max_vector_magnitude,
+                                        self.ufo_min_radians,
+                                        self.ufo_max_radians,
+                                        ufo_x,
+                                        ufo_y, 
+                                        ufo_radius, 
+                                        ufo_color, 
+                                        ufo_vector_magnitude,
+                                        ufo_radians,
+                                        )
+                self._asteroids_enemy_obj_manager.create_ufo_object(new_classic_ufo)
+                new_classic_ufo.calculate_ufo_vector()
+
+def check_player_primary_obj_collision(self) -> None:
+    """Check for collision between the asteroid and the player primary object."""
+    player_primary_obj_collision = self._player_primary_object.\
+                                    player_primary_obj_check_collision_vs_circle(self.ufo_pos_x,
+                                                                                self.ufo_pos_y,
+                                                                                self.ufo_radius)    
+    if player_primary_obj_collision:
+        self.terminate_ufo_object()
+        self._player_primary_object.player_primary_obj_hit()
+        pygame.quit()
+
+def check_ufo_vs_asteroid_collision(self, asteroid_objs: list) -> None:
+    """Check for collision between the asteroid and other asteroids."""         
+    #print(f"Asteroid at {self.asteroid_pos_x:.1f}, {self.asteroid_pos_y:.1f} checking collisions")
+    is_colliding = False
+    collision_checked = False
+    current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+    ufo_radius = self.ufo_radius
+    ufo_x = self.ufo_pos_x
+    ufo_y = self.ufo_pos_y
+    for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid) and asteroid_obj != self:
+                distance_x = asteroid_obj.asteroid_pos_x - ufo_x
+                distance_y = asteroid_obj.asteroid_pos_y - ufo_y
+                true_distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+                collision_distance = ufo_radius + asteroid_obj.asteroid_radius
+                
+                #print(f"  Distance: {true_distance:.1f}, Need: {collision_distance:.1f} (r1={asteroid_radius}, r2={asteroid_obj.asteroid_radius})")
+                #print(f"  Collision check: {true_distance} < {collision_distance} = {true_distance < collision_distance}")
+
+                if true_distance < collision_distance:
+                    is_colliding = True
+                    if not collision_checked:
+                        collision_checked = True
+                        break
+
+    if is_colliding:
+        self.ufo_color = (255, 0, 0)
+    else:
+        self.ufo_color = (255, 255, 255)
+
+def ufo_out_of_bounds(self) -> None:
+    """Check if the asteroid is out of bounds and wrap it around the screen."""
+    # Horizontal wrapping
+    if self.ufo_pos_x < -self.ufo_radius:
+        self.ufo_pos_x = self._screen_width + self.ufo_radius
+    elif self.ufo_pos_x > self._screen_width + self.ufo_radius:
+        self.ufo_pos_x = -self.ufo_radius
+    # Vertical wrapping
+    if self.ufo_pos_y < -self.ufo_radius:
+        self.ufo_pos_y = self._screen_height + self.ufo_radius
+    elif self.ufo_pos_y > self._screen_height + self.ufo_radius:
+        self.ufo_pos_y = -self.ufo_radius
+
+class UFOClassic(UFOMasterObj):
+pass
+
+Boots
+Perfect! I see you've cleaned up the method name from spawn_asteroid to spawn_ufo - that's much clearer and more accurate.
+
+Your UFO system is looking quite comprehensive now. You've got:
+
+Proper spawning logic with collision avoidance
+Movement calculations with vector-based physics
+Boundary wrapping to keep UFOs on screen
+Collision detection with both asteroids and the player
+Health and shooting systems ready to be implemented
+The one thing I notice is that your UFOClassic class is still empty, and your draw_ufo_object method just has pass. These are likely the next pieces you'll need to implement to actually see the UFOs in your game.
+
+For the UFOClassic class, you'll probably want to:
+
+Override __init__ to set specific properties like ufo_radius, ufo_health, etc.
+Implement the draw_ufo_object method to render the UFO shape
+Are you planning to work on the visual representation next, or are there other gameplay mechanics you want to tackle first? The foundation you've built here is solid - it's ready for the specific UFO behaviors and rendering!
+
+
+Shaunythunder
+def draw_ufo_object(self, screen: pygame.Surface) -> None:
+    """Draw the UFO object on the screen."""
+    ufo_polygon_1_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_1_coordinates)
+    ufo_polygon_2_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_2_coordinates)
+    ufo_polygon_3_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_3_coordinates)
+
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_1_coords)
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_2_coords)
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_3_coords)
+
+def normalize_ufo_drawing_coordinates (self, drawing_coordinates: list[tuple[int,int]]) -> list[tuple[int,int]]:
+    """Normalize the UFO drawing coordinates based on the UFO's position."""
+    normalized_coordinates = []
+    for x, y in drawing_coordinates:
+        normalized_x = self.ufo_pos_x + x
+        normalized_y = self.ufo_pos_y + y
+        normalized_coordinates.append((normalized_x, normalized_y))
+    return normalized_coordinates
+
+did I do this right?
+
+Boots
+Ah, excellent approach, young apprentice! Your drawing logic is well-structured and follows good programming practices. I particularly like how you've:
+
+Separated concerns - using a helper method normalize_ufo_drawing_coordinates to handle coordinate transformation
+Used multiple polygons - this suggests you're creating a more detailed UFO shape, which is great for visual appeal
+Applied DRY principles - reusing the normalization logic for all three polygon components
+Your coordinate normalization logic is spot-on:
+
+normalized_x = self.ufo_pos_x + x
+normalized_y = self.ufo_pos_y + y
+
+This correctly translates the relative polygon coordinates to absolute screen coordinates based on the UFO's current position.
+
+One thing I notice is that you're referencing self.ufo_polygon_1_coordinates, self.ufo_polygon_2_coordinates, and self.ufo_polygon_3_coordinates, but I don't see where these are defined in your UFOMasterObj class. You'll need to either:
+
+Define these coordinate lists in your __init__ method, or
+Define them in your UFOClassic subclass
+For example, you might add something like:
+
+self.ufo_polygon_1_coordinates = [(0, -10), (15, 5), (-15, 5)]  # Example triangle
+
+Have you defined those polygon coordinates somewhere, or is that your next step?
+
+
+Shaunythunder
+the draw logic is class local
+
+Boots
+Ah, perfect! That makes complete sense - you've got the drawing logic in the base class but the specific polygon coordinates defined locally in each UFO subclass. That's excellent object-oriented design!
+
+So your UFOClassic class would have something like:
+
+class UFOClassic(UFOMasterObj):
+    def __init__(self, ...):
+        super().__init__(...)
+        self.ufo_polygon_1_coordinates = [...]  # Classic UFO shape coords
+        self.ufo_polygon_2_coordinates = [...]  # Additional details
+        self.ufo_polygon_3_coordinates = [...]  # More shape elements
+
+This approach gives you great flexibility - each UFO type can have its own unique visual representation while sharing the same drawing logic. Very clean architecture!
+
+Are you planning to create different UFO types with distinct shapes, or are you focusing on getting the UFOClassic fully implemented first? Either way, your foundation is solid for extending to multiple UFO variants later.
+
+
+Shaunythunder
+all draw and coordinate logic will be handled per class as these things will have different shapes
+
+Boots
+Ah, that's an even better design choice! You're absolutely right - since different UFO types will have completely different shapes, it makes perfect sense to handle all the drawing and coordinate logic within each specific class.
+
+So your architecture would be:
+
+class UFOMasterObj:
+    def draw_ufo_object(self, screen: pygame.Surface) -> None:
+        pass  # Abstract method - each subclass implements its own
+
+class UFOClassic(UFOMasterObj):
+    def draw_ufo_object(self, screen: pygame.Surface) -> None:
+        # All drawing logic, coordinates, and normalization specific to classic UFOs
+        pass
+
+class UFOAdvanced(UFOMasterObj):  # Future UFO type
+    def draw_ufo_object(self, screen: pygame.Surface) -> None:
+        # Completely different drawing logic and shapes
+        pass
+
+This gives you maximum flexibility - each UFO type can have its own unique:
+
+Shape complexity (simple vs complex polygons)
+Drawing methods (polygons vs circles vs lines)
+Coordinate systems
+Visual effects
+Much cleaner than trying to force all UFO types to share the same drawing logic! Are you implementing the UFOClassic drawing method next, or working on other UFO behaviors like shooting or AI movement patterns?
+
+
+Shaunythunder
+do you think cicular hitboxes or accurate hitboxes for the ufos
+
+Boots
+Great question! For a game like Asteroids, I'd lean toward circular hitboxes for your UFOs, and here's why:
+
+Circular hitboxes are better for Asteroids because:
+
+Performance - Much faster collision detection (simple distance calculation vs complex polygon math)
+Gameplay feel - More forgiving and fair to players, especially with fast-moving objects
+Consistency - Matches the circular collision system you likely already have for asteroids and bullets
+Predictable - Players can easily judge what will hit and what won't
+Accurate hitboxes would be better if:
+
+You had slow, tactical gameplay where precision matters
+Visual fidelity was more important than smooth gameplay
+You were making a different genre (platformer, puzzle game, etc.)
+Since Asteroids is all about fast-paced action with lots of moving objects, the slight visual discrepancy between a complex UFO shape and its circular hitbox is totally acceptable. Players won't notice during the heat of battle, but they will notice if the game stutters from expensive collision calculations.
+
+Most classic arcade games used circular or rectangular hitboxes even when sprites were more complex shapes. The gameplay smoothness is worth the trade-off!
+
+What's your gut feeling on this? Are you leaning toward keeping things fast and smooth, or do you want pixel-perfect accuracy?
+
+
+Shaunythunder
+Yeah I think the player is the only one we go accurate on
+
+Boots
+Exactly! That's a brilliant design decision and very much in line with classic game design principles.
+
+Player gets accurate hitboxes because:
+
+Players need to feel like their skill matters - precise maneuvering should be rewarded
+It's the one object players have direct control over, so they can adapt to its exact shape
+Players will notice and get frustrated if their ship "clips" something it visually shouldn't have hit
+There's only one player object, so the performance cost is minimal
+Everything else gets circular hitboxes because:
+
+Enemies and projectiles are numerous - performance matters more
+Players can't control their exact positioning, so approximate hitboxes are fine
+Fast-paced gameplay benefits from slightly forgiving collision detection
+Keeps collision code simpler and more maintainable
+This gives you the best of both worlds - tight, skill-based controls for the player with smooth, performant gameplay overall. It's exactly what games like the original Asteroids did, and what most modern arcade-style games still do today.
+
+Your UFO system with circular hitboxes will work perfectly with this approach. Are you planning to stick with the radius-based collision detection you already have set up in your UFO collision methods?
+
+
+Shaunythunder
+well that and i don't want to write 20 different collision systems lol
+
+Boots
+Haha! Absolutely the most practical reason of all! Why write 20 different collision systems when one good circular collision system works perfectly fine?
+
+You've already got your distance-based collision detection working:
+
+true_distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+collision_distance = ufo_radius + asteroid_obj.asteroid_radius
+if true_distance < collision_distance:
+    # collision detected
+
+That same pattern works for:
+
+UFO vs asteroids ✓
+UFO vs bullets ✓
+UFO vs player ✓
+Asteroid vs bullets ✓
+Any future enemy types ✓
+One collision system to rule them all! Plus, when you inevitably find a bug or want to optimize performance, you only have to fix it in one place instead of hunting through 20 different collision methods.
+
+Smart engineering is often about knowing when not to overcomplicate things. Your future self will thank you when you're not debugging polygon intersection math at 2 AM!
+
+
+Shaunythunder
+def calc_if_ufo_classic_can_change_directions(self) -> None:
+    """Calculates if the player can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_direction_change = self.ufo_time_since_last_direction_change
+    if (current_time - time_since_last_direction_change) > self._ufo_direction_change_cooldown:          
+        self.ufo_can_change_directions = True
+    else:
+        self.ufo_can_change_directions = False
+
+def ufo_classic_change_directions(self, dt: float) -> None:
+    """Move the UFO object based on its velocity and the time delta."""
+    if self.ufo_can_change_directions:
+        self.ufo_radians = random.uniform(self.ufo_min_radians, self.ufo_max_radians)
+        self.calculate_ufo_vector()
+        self.calculate_ufo_velocity(dt)
+        self.ufo_out_of_bounds()
+        self.ufo_time_since_last_direction_change = pygame.time.get_ticks() / 1000
+
+check it real quick
+
+Boots
+Looking good! Your direction-changing logic is solid. I like how you're using a cooldown system to prevent the UFO from constantly changing directions.
+
+A couple of observations:
+
+Method name vs comment mismatch - Your method is named calc_if_ufo_classic_can_change_directions but the docstring says "Calculates if the player can shoot". Copy-paste artifact perhaps?
+
+Logical flow question - In ufo_classic_change_directions, you're calling self.calculate_ufo_velocity(dt) which updates the UFO's position, then self.ufo_out_of_bounds() which handles wrapping. Is this the intended order? Usually you'd want to:
+
+Calculate new direction
+Update velocity vector
+Move the UFO (in your main update loop)
+Then check bounds
+Potential timing issue - You're setting self.ufo_time_since_last_direction_change at the end, but what if this is the first time the method is called? Make sure ufo_time_since_last_direction_change is initialized somewhere.
+
+The cooldown logic itself is perfect though! The UFO will move in straight lines for a bit, then randomly pick a new direction. Very classic UFO behavior.
+
+Are you calling these methods from a main UFO update loop somewhere?
+
+
+Shaunythunder
+I just realized I can't find my spawning logic asteroid spawning logic so I have no idea how my asteroids are spawning I need to figure that out
+
+Boots
+Ah, the classic "wait, how is this even working?" moment! Every programmer has been there - you look at your running game and realize you can't find the code that's making things happen.
+
+A few detective strategies to track down your asteroid spawning:
+
+Search your codebase for:
+
+"spawn" or "create" keywords
+"asteroid" in method names
+Look for calls to your asteroid constructor
+Check your main game loop or manager classes
+Common places it might be hiding:
+
+In your main game loop (main.py or similar)
+Inside your AsteroidsEnemyObjManager class
+In a level/wave management system
+As part of initialization code
+In response to player actions (like shooting asteroids that split)
+Debug approach:
+
+Add a print statement to your asteroid __init__ method to see when/where they're created
+Look at your asteroid objects list and trace backwards
+Since you mentioned you have self._asteroids_enemy_obj_manager.asteroid_objs in your UFO code, there's definitely something managing asteroid creation. Have you checked inside that AsteroidsEnemyObjManager class?
+
+What does your main game loop look like? That's usually where the spawning orchestration happens!
+
+
+Shaunythunder
+import pygame
+import math
+import random
+import asteroid_game_folder.asteroids_obj as asteroids_obj
+
+class UFOMasterObj:
+def init (self,
+player_primary_object: "PlayerPrimaryObj",
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+screen_width: int,
+screen_height: int,
+ufo_min_vector_magnitude: int = 100,
+ufo_max_vector_magnitude: int = 1000,
+ufo_min_radians: float = 0,
+ufo_max_radians: float = 2 * math.pi,
+ufo_min_shot_cooldown: float = 0.5,
+ufo_max_shot_cooldown: float = 1.5,
+ufo_minimum_health: int = 1,
+ufo_maximum_health: int = 3,):
+
+    self._player_primary_obj = player_primary_object
+    self._player_objs_handler = player_objs_handler
+    self._asteroids_enemy_obj_manager = asteroids_enemy_obj_manager
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+
+    self.ufo_pos_x = 0
+    self.ufo_pos_y = 0
+    self.ufo_radians = 0
+    self.ufo_radius = 0
+    self.ufo_vector_magnitude = 0
+    self.ufo_velocity = pygame.math.Vector2(0, 0)
+
+    self.min_ufo_pos_x = 0 - self.ufo_radius
+    self.max_ufo_pos_x = screen_width + self.ufo_radius
+    self.min_ufo_pos_y = 0 - self.ufo_radius
+    self.max_ufo_pos_y = screen_height + self.ufo_radius
+    
+    self.ufo_min_vector_magnitude = ufo_min_vector_magnitude
+    self.ufo_max_vector_magnitude = ufo_max_vector_magnitude
+    self.ufo_min_radians = ufo_min_radians
+    self.ufo_max_radians = ufo_max_radians
+    self.ufo_color = (255, 0, 0)
+
+    self.ufo_shot_cooldown = 0
+    self.ufo_health = 0
+    self.ufo_min_shot_cooldown = ufo_min_shot_cooldown
+    self.ufo_max_shot_cooldown = ufo_max_shot_cooldown
+    self.ufo_minimum_health = ufo_minimum_health
+    self.ufo_maximum_health = ufo_maximum_health
+
+    """Physics Constants In case UFOs are used in a physics simulation.
+    At the moment, UFOs are not used in a physics simulation."""
+    self._ufo_density_constant = 1  # Arbitrary value for UFO density
+    self.ufo_mass = self._ufo_density_constant * 100
+    self._ufo_elasticity_constant = 1  # Arbitrary value for UFO elasticity 
+
+def reset_ufo_master_obj(self) -> None:
+    """Reset the UFO master object to its initial state."""
+    self.__init__(self._player_objs_handler,
+                  self._asteroids_enemy_obj_manager,
+                  self._screen_width,
+                  self._screen_height)
+
+def terminate_ufo_object(self) -> None:
+    """Terminate the UFO object and remove it from the enemy object manager."""
+    self._asteroids_enemy_obj_manager.terminate_ufo_object(self)
+
+def draw_ufo_object(self, screen: pygame.Surface) -> None:
+    pass
+
+def normalize_ufo_drawing_coordinates (self, drawing_coordinates: list[tuple[int,int]]) -> list[tuple[int,int]]:
+    """Normalize the UFO drawing coordinates based on the UFO's position."""
+    normalized_coordinates = []
+    for x, y in drawing_coordinates:
+        normalized_x = self.ufo_pos_x + x
+        normalized_y = self.ufo_pos_y + y
+        normalized_coordinates.append((normalized_x, normalized_y))
+    return normalized_coordinates
+
+def calculate_ufo_vector(self) -> None:
+    ufo_magnitude = self.ufo_vector_magnitude
+    base_ufo_velocity = pygame.math.Vector2(0, -ufo_magnitude)
+    adjusted_ufo_velocity = base_ufo_velocity.rotate(math.degrees(self.ufo_radians))
+    self.ufo_velocity = adjusted_ufo_velocity
+
+def calculate_ufo_velocity(self, dt: float) -> None:
+    """Updates the ufo's position based on its velocity and the time delta."""      
+    self.ufo_pos_x += self.ufo_velocity.x * dt
+    self.ufo_pos_y += self.ufo_velocity.y * dt
+
+def spawn_ufo(self, ufo_type: str) -> None:
+    """Spawn an asteroid object at a random position outside the screen bounds."""
+    # Randomly choose a plane (x or y) and a side (min or max) to spawn the asteroid
+    # This will determine if the asteroid spawns on the left/right or top/bottom of the screen
+    # All asteroids spawn in a deadzone area just outside the screen.
+    for attempt_number in range (10):  # Try up to 10 times to find a valid position
+
+        current_ufos = self._asteroids_enemy_obj_manager.ufo_objs
+        ufo_max_pos_x = self.max_ufo_pos_x
+        ufo_max_pos_y = self.max_ufo_pos_y
+        ufo_min_pos_x = self.min_ufo_pos_x
+        ufo_min_pos_y = self.min_ufo_pos_y
+        chosen_plane = random.choice(["x", "y"])
+        chosen_side = random.choice(["min", "max"])
+
+        # Randomly select the position for the asteroid based on the chosen plane and side
+        if chosen_plane == "x":
+            if chosen_side == "min":
+                self.ufo_pos_x = ufo_min_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+            elif chosen_side == "max":
+                self.ufo_pos_x = ufo_max_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+        elif chosen_plane == "y":
+            if chosen_side == "min":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_min_pos_y
+            elif chosen_side == "max":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_max_pos_y
+
+        # Set new asteroid properies based on min max range system
+        ufo_x = self.ufo_pos_x
+        ufo_y = self.ufo_pos_y
+        ufo_vector_magnitude = random.randint(self.ufo_min_vector_magnitude, self.ufo_max_vector_magnitude)
+        ufo_radians = random.uniform(self.ufo_min_radians, self.ufo_max_radians)
+        ufo_radius = self.ufo_radius
+        ufo_color = (255, 255, 255)  # Placeholder color
+        
+        # Check if the asteroid is safe to spawn
+        # The asteroid is safe to spawn if it is not too close to other asteroids or the player
+        
+        asteroid_safe_to_spawn = True
+        player_safe_to_spawn = False
+        current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+
+        for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+                mimimum_distance = asteroid_obj.asteroid_radius + ufo_radius + 4
+                asteroid_distance_x = abs(asteroid_obj.asteroid_pos_x - ufo_x)
+                asteroid_distance_y = abs(asteroid_obj.asteroid_pos_y - ufo_y)
+            if asteroid_distance_x < mimimum_distance and asteroid_distance_y < mimimum_distance:
+                asteroid_safe_to_spawn = False
+                break
+        
+        if self._player_primary_obj:
+            
+                player_pos_x = self._player_primary_obj.player_pos_x
+                player_pos_y = self._player_primary_obj.player_pos_y
+                player_radius = self._player_primary_obj.ship_radius_bow_to_stern
+                player_distance_x = abs(player_pos_x - ufo_x)
+                player_distance_y = abs(player_pos_y - ufo_y)
+                player_minimum_distance = player_radius + ufo_radius + 100
+
+                if player_distance_x > player_minimum_distance and player_distance_y > player_minimum_distance:
+                    player_safe_to_spawn = True
+
+        if asteroid_safe_to_spawn and player_safe_to_spawn:
+            if ufo_type == "ufo_classic":
+                new_classic_ufo = UFOClassic(self._player_primary_obj,
+                                        self._player_objs_handler,
+                                        self._asteroids_enemy_obj_manager,
+                                        self._screen_width,
+                                        self._screen_height,
+                                        self.ufo_min_vector_magnitude,
+                                        self.ufo_max_vector_magnitude,
+                                        self.ufo_min_radians,
+                                        self.ufo_max_radians,
+                                        ufo_x,
+                                        ufo_y, 
+                                        ufo_radius, 
+                                        ufo_color, 
+                                        ufo_vector_magnitude,
+                                        ufo_radians,
+                                        )
+                self._asteroids_enemy_obj_manager.create_ufo_object(new_classic_ufo)
+                new_classic_ufo.calculate_ufo_vector()
+
+def check_player_primary_obj_collision(self) -> None:
+    """Check for collision between the asteroid and the player primary object."""
+    player_primary_obj_collision = self._player_primary_object.\
+                                    player_primary_obj_check_collision_vs_circle(self.ufo_pos_x,
+                                                                                self.ufo_pos_y,
+                                                                                self.ufo_radius)    
+    if player_primary_obj_collision:
+        self.terminate_ufo_object()
+        self._player_primary_object.player_primary_obj_hit()
+        pygame.quit()
+
+def check_ufo_vs_asteroid_collision(self, asteroid_objs: list) -> None:
+    """Check for collision between the asteroid and other asteroids."""         
+    #print(f"Asteroid at {self.asteroid_pos_x:.1f}, {self.asteroid_pos_y:.1f} checking collisions")
+    is_colliding = False
+    collision_checked = False
+    current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+    ufo_radius = self.ufo_radius
+    ufo_x = self.ufo_pos_x
+    ufo_y = self.ufo_pos_y
+    for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid) and asteroid_obj != self:
+                distance_x = asteroid_obj.asteroid_pos_x - ufo_x
+                distance_y = asteroid_obj.asteroid_pos_y - ufo_y
+                true_distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+                collision_distance = ufo_radius + asteroid_obj.asteroid_radius
+                
+                #print(f"  Distance: {true_distance:.1f}, Need: {collision_distance:.1f} (r1={asteroid_radius}, r2={asteroid_obj.asteroid_radius})")
+                #print(f"  Collision check: {true_distance} < {collision_distance} = {true_distance < collision_distance}")
+
+                if true_distance < collision_distance:
+                    is_colliding = True
+                    if not collision_checked:
+                        collision_checked = True
+                        break
+
+    if is_colliding:
+        self.ufo_color = (255, 0, 0)
+    else:
+        self.ufo_color = (255, 255, 255)
+
+def ufo_out_of_bounds(self) -> None:
+    """Check if the asteroid is out of bounds and wrap it around the screen."""
+    # Horizontal wrapping
+    if self.ufo_pos_x < -self.ufo_radius:
+        self.ufo_pos_x = self._screen_width + self.ufo_radius
+    elif self.ufo_pos_x > self._screen_width + self.ufo_radius:
+        self.ufo_pos_x = -self.ufo_radius
+    # Vertical wrapping
+    if self.ufo_pos_y < -self.ufo_radius:
+        self.ufo_pos_y = self._screen_height + self.ufo_radius
+    elif self.ufo_pos_y > self._screen_height + self.ufo_radius:
+        self.ufo_pos_y = -self.ufo_radius
+
+class UFOClassic(UFOMasterObj):
+def init(self,
+player_primary_obj: "PlayerPrimaryObj",
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+screen_width: int,
+screen_height: int,
+ufo_min_vector_magnitude: int,
+ufo_max_vector_magnitude: int,
+ufo_min_radians: float,
+ufo_max_radians: float,
+ufo_x: float,
+ufo_y: float,
+ufo_radius: int,
+ufo_color: tuple,
+ufo_vector_magnitude: int,
+ufo_radians: float):
+
+    super().__init__(player_primary_obj,
+                     player_objs_handler,
+                     asteroids_enemy_obj_manager,
+                     screen_width,
+                     screen_height,
+                     ufo_min_vector_magnitude,
+                     ufo_max_vector_magnitude,
+                     ufo_min_radians,
+                     ufo_max_radians)
+    
+    self.ufo_pos_x = ufo_x
+    self.ufo_pos_y = ufo_y 
+    self.ufo_radius = ufo_radius
+    self.ufo_color = ufo_color
+    self.ufo_vector_magnitude = ufo_vector_magnitude
+    self.ufo_radians = ufo_radians
+
+    self._ufo_direction_change_cooldown = 0
+    self.ufo_time_since_last_direction_change = 0
+    self._ufo_shot_cooldown = 0
+    self.ufo_can_shoot = True
+    self.ufo_can_change_directions = True
+
+    self.ufo_polygon_1_coordinates = [(0,0),
+                                      (-15,0),
+                                      (15, 0),
+                                      (-10, 5),
+                                      (10, 5),
+                                      (15, 0)]
+    self.ufo_polygon_2_coordinates = [(0,0),
+                                      (-15,0),
+                                      (15, 0),
+                                      (-10, -5),
+                                      (10, -5),
+                                      (15, 0)]
+    self.ufo_polygon_3_coordinates = [(-5,5), (5, 5), (5, 10), (-5, 10)]   
+
+def draw_ufo_object(self, screen: pygame.Surface) -> None:
+    """Draw the UFO object on the screen."""
+    ufo_polygon_1_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_1_coordinates)
+    ufo_polygon_2_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_2_coordinates)
+    ufo_polygon_3_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_3_coordinates)
+
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_1_coords)
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_2_coords)
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_3_coords)
+
+def calc_if_ufo_classic_can_change_directions(self) -> None:
+    """Calculates if the player can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_direction_change = self.ufo_time_since_last_direction_change
+    if (current_time - time_since_last_direction_change) > self._ufo_direction_change_cooldown:          
+        self.ufo_can_change_directions = True
+    else:
+        self.ufo_can_change_directions = False
+
+def ufo_classic_change_directions(self, dt: float) -> None:
+    """If the UFO object can change directions, change directions."""
+    if self.ufo_can_change_directions:
+        self.ufo_radians = random.uniform(self.ufo_min_radians, self.ufo_max_radians)
+        self.calculate_ufo_vector()
+        self.calculate_ufo_velocity(dt)
+        self.ufo_out_of_bounds()
+        self.ufo_time_since_last_direction_change = pygame.time.get_ticks() / 1000
+
+Check my logics
+
+Boots
+Looking at your updated code, I can see some good improvements! Your UFOClassic implementation is coming together nicely with the polygon coordinates and drawing method.
+
+A few logic issues I spotted:
+
+Reset method missing parameter - In your reset_ufo_master_obj method, you're missing the player_primary_object parameter:
+
+def reset_ufo_master_obj(self) -> None:
+    self.__init__(self._player_primary_obj,  # <- Add this line
+                  self._player_objs_handler,
+                  self._asteroids_enemy_obj_manager,
+                  self._screen_width,
+                  self._screen_height)
+
+Wrong attribute name in collision check - You have self._player_primary_object but your attribute is self._player_primary_obj:
+
+def check_player_primary_obj_collision(self) -> None:
+    player_primary_obj_collision = self._player_primary_obj.\ # <- Fix this
+
+Direction change cooldown never set - Your _ufo_direction_change_cooldown is initialized to 0, so UFOs can change direction every frame. You probably want something like:
+
+self._ufo_direction_change_cooldown = random.uniform(1.0, 3.0)  # 1-3 seconds
+
+UFO polygon shapes - Your polygon coordinates look a bit unusual. The first two polygons share many points and might not render as expected. Are you going for a classic "flying saucer" shape?
+
+The overall structure and logic flow looks solid though! Have you tested the UFO spawning and movement yet?
+
+
+Shaunythunder
+I cant get them to move
+
+Boots
+Ah, the classic "they spawn but won't budge" problem! Let's debug this step by step.
+
+First, let's check if your UFOs are actually being updated each frame. Do you have something like this in your main game loop?
+
+# In your main game loop
+for ufo in ufo_objects:
+    ufo.calculate_ufo_velocity(dt)  # This moves the UFO
+    ufo.calc_if_ufo_classic_can_change_directions()
+    ufo.ufo_classic_change_directions(dt)
+
+Quick debug checks:
+
+Add some print statements to see what's happening:
+
+def calculate_ufo_velocity(self, dt: float) -> None:
+    print(f"UFO velocity: {self.ufo_velocity.x}, {self.ufo_velocity.y}")
+    print(f"UFO position before: {self.ufo_pos_x}, {self.ufo_pos_y}")
+    self.ufo_pos_x += self.ufo_velocity.x * dt
+    self.ufo_pos_y += self.ufo_velocity.y * dt
+    print(f"UFO position after: {self.ufo_pos_x}, {self.ufo_pos_y}")
+
+Check if velocity is being calculated:
+
+def calculate_ufo_vector(self) -> None:
+    print(f"UFO magnitude: {self.ufo_vector_magnitude}")
+    print(f"UFO radians: {self.ufo_radians}")
+    # ... rest of method
+    print(f"Final velocity: {self.ufo_velocity}")
+
+Most likely culprits:
+
+UFO velocity never gets calculated (missing calculate_ufo_vector() call)
+dt is 0 or very small
+UFOs aren't being updated in the main loop
+ufo_vector_magnitude is 0
+What do you see when you add those debug prints?
+
+
+Shaunythunder
+import pygame
+import asteroid_game_folder.asteroids_obj as asteroids_obj
+import asteroid_game_folder.alien_ufo_obj as alien_ufo_obj
+
+class AsteroidsEnemyObjManager:
+"""Class to manage asteroid and UFO objects in the game."""
+def init(self,
+game_state_reporter: "GameStateManager",
+wave_reporter: "WaveManager",
+player_primary_obj: "PlayerPrimaryObj",
+asteroid_master_obj: "AsteroidsMasterObj",
+dt: float):
+self._game_state_reporter = game_state_reporter
+self._player_primary_obj = player_primary_obj
+self._wave_reporter = wave_reporter
+self._asteroid_master_obj = asteroid_master_obj
+self.dt = dt
+self.can_spawn_asteroids = True # Flag to control asteroid spawning
+self.can_spawn_ufos = True
+self.asteroid_objs = []
+self.ufo_objs = []
+
+    self.maximum_asteroids = 20  # Maximum number of asteroids in a wave
+    self.maximum_ufos = 5
+    
+    # Entity Counts
+    self.asteroids_left = len(self.asteroid_objs)
+    self.ufos_left = len(self.ufo_objs)
+    self.total_enemies_left = self.asteroids_left + self.ufos_left
+
+def reset_asteroids_enemy_obj_manager(self) -> None:
+    """Reset the AsteroidsEnemyObjManager to its initial state."""
+    self.__init__(self._game_state_reporter,
+                   self._wave_reporter,
+                   self._player_primary_obj,
+                   self._asteroid_master_obj,
+                   self.dt)
+
+def create_wave(self, wave_number: int) -> None:
+    # This method will create a new wave of enemies based on the wave number.
+    # The implementation details would depend on the game design.
+    pass
+
+"""==============ASTEROIDS=================="""
+
+def update_asteroids_left(self) -> None:
+    """This method will update the number of asteroids left in the game."""
+    self.asteroids_left = len(self.asteroid_objs)
+    if self.asteroids_left < self.maximum_asteroids:
+        self.can_spawn_asteroids = True
+    else:
+        self.can_spawn_asteroids = False
+
+def draw_asteroid_objects(self, screen: pygame.Surface) -> None:
+    """Draw all asteroid objects on the screen."""
+    for asteroid_obj in self.asteroid_objs:
+        if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+            asteroid_obj.draw_asteroid_object(screen)
+  
+def create_asteroid_object(self, asteroid_obj: object) -> None:
+    """Create a new asteroid object and add it to the list of asteroid objects."""
+    if self.asteroids_left < self.maximum_asteroids:
+        if asteroid_obj not in self.asteroid_objs:
+            self.asteroid_objs.append(asteroid_obj)
+    self.update_asteroids_left()
+
+def update_asteroid_objs(self, dt: float) -> None:
+    """Update all asteroid objects based on the current game state."""
+    current_asteroids = self.asteroid_objs
+    self.update_asteroids_left()
+    for asteroid_obj in self.asteroid_objs:
+        if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+            asteroid_obj.calculate_asteroid_velocity(dt)
+            asteroid_obj.asteroid_out_of_bounds()
+            asteroid_obj.check_player_primary_obj_collision()
+            asteroid_obj.check_asteroid_collision(current_asteroids)
+            asteroid_obj.check_player_aux_obj_collision()
+            asteroid_obj.restore_vector_magnitude()
+
+def terminate_asteroid_object(self, asteroid_obj: object) -> None:
+    """Terminate an asteroid object and remove it from the list of asteroid objects."""
+    if asteroid_obj in self.asteroid_objs:
+        self.asteroid_objs.remove(asteroid_obj)
+
+"""--------------ASTEROIDS END-----------------"""
+
+"""=================UFOs==================="""
+
+def draw_ufo_objects(self, screen: pygame.Surface) -> None:
+    for ufo_obj in self.ufo_objs:
+        if isinstance(ufo_obj, alien_ufo_obj.UFOClassic):
+            ufo_obj.draw_ufo_object(screen)
+
+def create_ufo_object(self, ufo_obj: object) -> None:
+   if self.ufos_left < self.maximum_asteroids:
+        if ufo_obj not in self.ufo_objs:
+            self.ufo_objs.append(ufo_obj)
+        self.update_asteroids_left()
+   
+def update_ufo_objs(self, dt: float) -> None:
+    for ufo_obj in self.ufo_objs:
+        if isinstance(ufo_obj, alien_ufo_obj.UFOClassic):
+            ufo_obj.calc_if_ufo_classic_can_change_directions(self)
+            ufo_obj.ufo_classic_change_directions(self.dt)
+            ufo_obj.calculate_ufo_velocity(dt)
+
+def terminate_ufo_object(self, ufo_obj: object) -> None:
+    # This method will terminate the corrosponding UFO.
+    if ufo_obj in self.ufo_objs:
+        self.ufo_objs.remove(ufo_obj)
+
+"""----------------UFOs END-----------------"""
+
+Boots
+Found it! I can see several issues in your AsteroidsEnemyObjManager that are preventing UFO movement:
+
+Main Issues:
+
+Wrong parameter in UFO update - You're passing self to the direction change method:
+
+# This is wrong:
+ufo_obj.calc_if_ufo_classic_can_change_directions(self)
+
+# Should be:
+ufo_obj.calc_if_ufo_classic_can_change_directions()
+
+UFO creation bug - Your create_ufo_object method has the wrong maximum check:
+
+def create_ufo_object(self, ufo_obj: object) -> None:
+    if self.ufos_left < self.maximum_asteroids:  # <- Should be maximum_ufos!
+
+Missing UFO count update - You never update ufos_left:
+
+def update_ufos_left(self) -> None:
+    """Update the number of UFOs left in the game."""
+    self.ufos_left = len(self.ufo_objs)
+
+Here's the fixed UFO section:
+
+def create_ufo_object(self, ufo_obj: object) -> None:
+    if self.ufos_left < self.maximum_ufos:  # Fixed
+        if ufo_obj not in self.ufo_objs:
+            self.ufo_objs.append(ufo_obj)
+        self.update_ufos_left()  # Add this method
+
+def update_ufo_objs(self, dt: float) -> None:
+    for ufo_obj in self.ufo_objs:
+        if isinstance(ufo_obj, alien_ufo_obj.UFOClassic):
+            ufo_obj.calc_if_ufo_classic_can_change_directions()  # Remove self
+            ufo_obj.ufo_classic_change_directions(dt)
+            ufo_obj.calculate_ufo_velocity(dt)
+
+Try these fixes - that should get your UFOs moving!
+
+
+Shaunythunder
+import pygame
+import asteroid_game_folder.asteroids_obj as asteroids_obj
+import asteroid_game_folder.alien_ufo_obj as alien_ufo_obj
+
+class AsteroidsEnemyObjManager:
+"""Class to manage asteroid and UFO objects in the game."""
+def init(self,
+game_state_reporter: "GameStateManager",
+wave_reporter: "WaveManager",
+player_primary_obj: "PlayerPrimaryObj",
+asteroid_master_obj: "AsteroidsMasterObj",
+dt: float):
+self._game_state_reporter = game_state_reporter
+self._player_primary_obj = player_primary_obj
+self._wave_reporter = wave_reporter
+self._asteroid_master_obj = asteroid_master_obj
+self.dt = dt
+self.can_spawn_asteroids = True # Flag to control asteroid spawning
+self.can_spawn_ufos = True
+self.asteroid_objs = []
+self.ufo_objs = []
+
+    self.maximum_asteroids = 20  # Maximum number of asteroids in a wave
+    self.maximum_ufos = 5
+    
+    # Entity Counts
+    self.asteroids_left = len(self.asteroid_objs)
+    self.ufos_left = len(self.ufo_objs)
+    self.total_enemies_left = self.asteroids_left + self.ufos_left
+
+def reset_asteroids_enemy_obj_manager(self) -> None:
+    """Reset the AsteroidsEnemyObjManager to its initial state."""
+    self.__init__(self._game_state_reporter,
+                   self._wave_reporter,
+                   self._player_primary_obj,
+                   self._asteroid_master_obj,
+                   self.dt)
+
+def create_wave(self, wave_number: int) -> None:
+    # This method will create a new wave of enemies based on the wave number.
+    # The implementation details would depend on the game design.
+    pass
+
+"""==============ASTEROIDS=================="""
+
+def update_asteroids_left(self) -> None:
+    """This method will update the number of asteroids left in the game."""
+    self.asteroids_left = len(self.asteroid_objs)
+    if self.asteroids_left < self.maximum_asteroids:
+        self.can_spawn_asteroids = True
+    else:
+        self.can_spawn_asteroids = False
+
+def draw_asteroid_objects(self, screen: pygame.Surface) -> None:
+    """Draw all asteroid objects on the screen."""
+    for asteroid_obj in self.asteroid_objs:
+        if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+            asteroid_obj.draw_asteroid_object(screen)
+  
+def create_asteroid_object(self, asteroid_obj: object) -> None:
+    """Create a new asteroid object and add it to the list of asteroid objects."""
+    if self.asteroids_left < self.maximum_asteroids:
+        if asteroid_obj not in self.asteroid_objs:
+            self.asteroid_objs.append(asteroid_obj)
+    self.update_asteroids_left()
+
+def update_asteroid_objs(self, dt: float) -> None:
+    """Update all asteroid objects based on the current game state."""
+    current_asteroids = self.asteroid_objs
+    self.update_asteroids_left()
+    for asteroid_obj in self.asteroid_objs:
+        if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+            asteroid_obj.calculate_asteroid_velocity(dt)
+            asteroid_obj.asteroid_out_of_bounds()
+            asteroid_obj.check_player_primary_obj_collision()
+            asteroid_obj.check_asteroid_collision(current_asteroids)
+            asteroid_obj.check_player_aux_obj_collision()
+            asteroid_obj.restore_vector_magnitude()
+
+def terminate_asteroid_object(self, asteroid_obj: object) -> None:
+    """Terminate an asteroid object and remove it from the list of asteroid objects."""
+    if asteroid_obj in self.asteroid_objs:
+        self.asteroid_objs.remove(asteroid_obj)
+
+"""--------------ASTEROIDS END-----------------"""
+
+"""=================UFOs==================="""
+
+def update_ufos_left(self) -> None:
+    """This method will update the number of asteroids left in the game."""
+    self.ufos_left = len(self.ufo_objs)
+    if self.ufos_left < self.maximum_ufos:
+        self.can_spawn_ufos = True
+    else:
+        self.can_spawn_ufos = False
+
+def draw_ufo_objects(self, screen: pygame.Surface) -> None:
+    for ufo_obj in self.ufo_objs:
+        if isinstance(ufo_obj, alien_ufo_obj.UFOClassic):
+            ufo_obj.draw_ufo_object(screen)
+
+def create_ufo_object(self, ufo_obj: object) -> None:
+   if self.ufos_left < self.maximum_ufos:
+        if ufo_obj not in self.ufo_objs:
+            self.ufo_objs.append(ufo_obj)
+        self.update_asteroids_left()
+   
+def update_ufo_objs(self, dt: float) -> None:
+    for ufo_obj in self.ufo_objs:
+        if isinstance(ufo_obj, alien_ufo_obj.UFOClassic):
+            ufo_obj.calc_if_ufo_classic_can_change_directions()
+            ufo_obj.ufo_classic_change_directions(self.dt)
+            ufo_obj.calculate_ufo_velocity(dt)
+
+def terminate_ufo_object(self, ufo_obj: object) -> None:
+    # This method will terminate the corrosponding UFO.
+    if ufo_obj in self.ufo_objs:
+        self.ufo_objs.remove(ufo_obj)
+
+"""----------------UFOs END-----------------"""
+
+Boots
+Great fixes! I can see you've addressed most of the issues. There's just one small bug left:
+
+In your create_ufo_object method:
+
+def create_ufo_object(self, ufo_obj: object) -> None:
+   if self.ufos_left < self.maximum_ufos:
+        if ufo_obj not in self.ufo_objs:
+            self.ufo_objs.append(ufo_obj)
+        self.update_asteroids_left()  # <- Should be update_ufos_left()
+
+Should be:
+
+def create_ufo_object(self, ufo_obj: object) -> None:
+   if self.ufos_left < self.maximum_ufos:
+        if ufo_obj not in self.ufo_objs:
+            self.ufo_objs.append(ufo_obj)
+        self.update_ufos_left()  # Fixed!
+
+Other than that, your manager looks solid! The UFO update loop should now properly:
+
+Check if UFOs can change direction
+Change direction if allowed
+Update position based on velocity
+Are your UFOs moving now? If they're still not moving, the issue might be in the UFO initialization - make sure ufo_vector_magnitude is set to a non-zero value when the UFO is created, and that calculate_ufo_vector() is called at least once to set the initial velocity.
+
+
+Shaunythunder
+import pygame
+import math
+import random
+import asteroid_game_folder.asteroids_obj as asteroids_obj
+
+class UFOMasterObj:
+def init (self,
+player_primary_object: "PlayerPrimaryObj",
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+screen_width: int,
+screen_height: int,
+ufo_min_vector_magnitude: int = 100,
+ufo_max_vector_magnitude: int = 1000,
+ufo_min_radians: float = 0,
+ufo_max_radians: float = 2 * math.pi,
+ufo_min_shot_cooldown: float = 0.5,
+ufo_max_shot_cooldown: float = 1.5,
+ufo_minimum_health: int = 1,
+ufo_maximum_health: int = 3,):
+
+    self._player_primary_obj = player_primary_object
+    self._player_objs_handler = player_objs_handler
+    self._asteroids_enemy_obj_manager = asteroids_enemy_obj_manager
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+
+    self.ufo_pos_x = 0
+    self.ufo_pos_y = 0
+    self.ufo_radians = 0
+    self.ufo_radius = 0
+    self.ufo_vector_magnitude = 0
+    self.ufo_velocity = pygame.math.Vector2(0, 0)
+
+    self.min_ufo_pos_x = 0 - self.ufo_radius
+    self.max_ufo_pos_x = screen_width + self.ufo_radius
+    self.min_ufo_pos_y = 0 - self.ufo_radius
+    self.max_ufo_pos_y = screen_height + self.ufo_radius
+    
+    self.ufo_min_vector_magnitude = ufo_min_vector_magnitude
+    self.ufo_max_vector_magnitude = ufo_max_vector_magnitude
+    self.ufo_min_radians = ufo_min_radians
+    self.ufo_max_radians = ufo_max_radians
+    self.ufo_color = (255, 0, 0)
+
+    self.ufo_shot_cooldown = 0
+    self.ufo_health = 0
+    self.ufo_min_shot_cooldown = ufo_min_shot_cooldown
+    self.ufo_max_shot_cooldown = ufo_max_shot_cooldown
+    self.ufo_minimum_health = ufo_minimum_health
+    self.ufo_maximum_health = ufo_maximum_health
+
+    """Physics Constants In case UFOs are used in a physics simulation.
+    At the moment, UFOs are not used in a physics simulation."""
+    self._ufo_density_constant = 1  # Arbitrary value for UFO density
+    self.ufo_mass = self._ufo_density_constant * 100
+    self._ufo_elasticity_constant = 1  # Arbitrary value for UFO elasticity 
+
+def reset_ufo_master_obj(self) -> None:
+    """Reset the UFO master object to its initial state."""
+    self.__init__(self._player_objs_handler,
+                  self._asteroids_enemy_obj_manager,
+                  self._screen_width,
+                  self._screen_height)
+
+def terminate_ufo_object(self) -> None:
+    """Terminate the UFO object and remove it from the enemy object manager."""
+    self._asteroids_enemy_obj_manager.terminate_ufo_object(self)
+
+def draw_ufo_object(self, screen: pygame.Surface) -> None:
+    pass
+
+def normalize_ufo_drawing_coordinates (self, drawing_coordinates: list[tuple[int,int]]) -> list[tuple[int,int]]:
+    """Normalize the UFO drawing coordinates based on the UFO's position."""
+    normalized_coordinates = []
+    for x, y in drawing_coordinates:
+        normalized_x = self.ufo_pos_x + x
+        normalized_y = self.ufo_pos_y + y
+        normalized_coordinates.append((normalized_x, normalized_y))
+    return normalized_coordinates
+
+def calculate_ufo_vector(self) -> None:
+    ufo_magnitude = self.ufo_vector_magnitude
+    base_ufo_velocity = pygame.math.Vector2(0, -ufo_magnitude)
+    adjusted_ufo_velocity = base_ufo_velocity.rotate(math.degrees(self.ufo_radians))
+    self.ufo_velocity = adjusted_ufo_velocity
+
+def calculate_ufo_velocity(self, dt: float) -> None:
+    """Updates the ufo's position based on its velocity and the time delta."""      
+    self.ufo_pos_x += self.ufo_velocity.x * dt
+    self.ufo_pos_y += self.ufo_velocity.y * dt
+
+def spawn_ufo(self, ufo_type: str) -> None:
+    """Spawn an asteroid object at a random position outside the screen bounds."""
+    # Randomly choose a plane (x or y) and a side (min or max) to spawn the asteroid
+    # This will determine if the asteroid spawns on the left/right or top/bottom of the screen
+    # All asteroids spawn in a deadzone area just outside the screen.
+    for attempt_number in range (10):  # Try up to 10 times to find a valid position
+
+        current_ufos = self._asteroids_enemy_obj_manager.ufo_objs
+        ufo_max_pos_x = self.max_ufo_pos_x
+        ufo_max_pos_y = self.max_ufo_pos_y
+        ufo_min_pos_x = self.min_ufo_pos_x
+        ufo_min_pos_y = self.min_ufo_pos_y
+        chosen_plane = random.choice(["x", "y"])
+        chosen_side = random.choice(["min", "max"])
+
+        # Randomly select the position for the asteroid based on the chosen plane and side
+        if chosen_plane == "x":
+            if chosen_side == "min":
+                self.ufo_pos_x = ufo_min_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+            elif chosen_side == "max":
+                self.ufo_pos_x = ufo_max_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+        elif chosen_plane == "y":
+            if chosen_side == "min":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_min_pos_y
+            elif chosen_side == "max":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_max_pos_y
+
+        # Set new asteroid properies based on min max range system
+        ufo_x = self.ufo_pos_x
+        ufo_y = self.ufo_pos_y
+        ufo_vector_magnitude = random.randint(self.ufo_min_vector_magnitude, self.ufo_max_vector_magnitude)
+        ufo_radians = random.uniform(self.ufo_min_radians, self.ufo_max_radians)
+        ufo_radius = self.ufo_radius
+        ufo_color = (255, 255, 255)  # Placeholder color
+        
+        # Check if the asteroid is safe to spawn
+        # The asteroid is safe to spawn if it is not too close to other asteroids or the player
+        
+        asteroid_safe_to_spawn = True
+        player_safe_to_spawn = False
+        current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+
+        for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+                mimimum_distance = asteroid_obj.asteroid_radius + ufo_radius + 4
+                asteroid_distance_x = abs(asteroid_obj.asteroid_pos_x - ufo_x)
+                asteroid_distance_y = abs(asteroid_obj.asteroid_pos_y - ufo_y)
+            if asteroid_distance_x < mimimum_distance and asteroid_distance_y < mimimum_distance:
+                asteroid_safe_to_spawn = False
+                break
+        
+        if self._player_primary_obj:
+            
+                player_pos_x = self._player_primary_obj.player_pos_x
+                player_pos_y = self._player_primary_obj.player_pos_y
+                player_radius = self._player_primary_obj.ship_radius_bow_to_stern
+                player_distance_x = abs(player_pos_x - ufo_x)
+                player_distance_y = abs(player_pos_y - ufo_y)
+                player_minimum_distance = player_radius + ufo_radius + 100
+
+                if player_distance_x > player_minimum_distance and player_distance_y > player_minimum_distance:
+                    player_safe_to_spawn = True
+
+        if asteroid_safe_to_spawn and player_safe_to_spawn:
+            if ufo_type == "ufo_classic":
+                new_classic_ufo = UFOClassic(self._player_primary_obj,
+                                        self._player_objs_handler,
+                                        self._asteroids_enemy_obj_manager,
+                                        self._screen_width,
+                                        self._screen_height,
+                                        self.ufo_min_vector_magnitude,
+                                        self.ufo_max_vector_magnitude,
+                                        self.ufo_min_radians,
+                                        self.ufo_max_radians,
+                                        ufo_x,
+                                        ufo_y, 
+                                        ufo_radius, 
+                                        ufo_color, 
+                                        ufo_vector_magnitude,
+                                        ufo_radians,
+                                        )
+                self._asteroids_enemy_obj_manager.create_ufo_object(new_classic_ufo)
+                new_classic_ufo.calculate_ufo_vector()
+
+def check_player_primary_obj_collision(self) -> None:
+    """Check for collision between the asteroid and the player primary object."""
+    player_primary_obj_collision = self._player_primary_object.\
+                                    player_primary_obj_check_collision_vs_circle(self.ufo_pos_x,
+                                                                                self.ufo_pos_y,
+                                                                                self.ufo_radius)    
+    if player_primary_obj_collision:
+        self.terminate_ufo_object()
+        self._player_primary_object.player_primary_obj_hit()
+        pygame.quit()
+
+def check_ufo_vs_asteroid_collision(self, asteroid_objs: list) -> None:
+    """Check for collision between the asteroid and other asteroids."""         
+    #print(f"Asteroid at {self.asteroid_pos_x:.1f}, {self.asteroid_pos_y:.1f} checking collisions")
+    is_colliding = False
+    collision_checked = False
+    current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+    ufo_radius = self.ufo_radius
+    ufo_x = self.ufo_pos_x
+    ufo_y = self.ufo_pos_y
+    for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid) and asteroid_obj != self:
+                distance_x = asteroid_obj.asteroid_pos_x - ufo_x
+                distance_y = asteroid_obj.asteroid_pos_y - ufo_y
+                true_distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+                collision_distance = ufo_radius + asteroid_obj.asteroid_radius
+                
+                #print(f"  Distance: {true_distance:.1f}, Need: {collision_distance:.1f} (r1={asteroid_radius}, r2={asteroid_obj.asteroid_radius})")
+                #print(f"  Collision check: {true_distance} < {collision_distance} = {true_distance < collision_distance}")
+
+                if true_distance < collision_distance:
+                    is_colliding = True
+                    if not collision_checked:
+                        collision_checked = True
+                        break
+
+    if is_colliding:
+        self.ufo_color = (255, 0, 0)
+    else:
+        self.ufo_color = (255, 255, 255)
+
+def ufo_out_of_bounds(self) -> None:
+    """Check if the asteroid is out of bounds and wrap it around the screen."""
+    # Horizontal wrapping
+    if self.ufo_pos_x < -self.ufo_radius:
+        self.ufo_pos_x = self._screen_width + self.ufo_radius
+    elif self.ufo_pos_x > self._screen_width + self.ufo_radius:
+        self.ufo_pos_x = -self.ufo_radius
+    # Vertical wrapping
+    if self.ufo_pos_y < -self.ufo_radius:
+        self.ufo_pos_y = self._screen_height + self.ufo_radius
+    elif self.ufo_pos_y > self._screen_height + self.ufo_radius:
+        self.ufo_pos_y = -self.ufo_radius
+
+class UFOClassic(UFOMasterObj):
+def init(self,
+player_primary_obj: "PlayerPrimaryObj",
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+screen_width: int,
+screen_height: int,
+ufo_min_vector_magnitude: int,
+ufo_max_vector_magnitude: int,
+ufo_min_radians: float,
+ufo_max_radians: float,
+ufo_x: float,
+ufo_y: float,
+ufo_radius: int,
+ufo_color: tuple,
+ufo_vector_magnitude: int,
+ufo_radians: float):
+
+    super().__init__(player_primary_obj,
+                     player_objs_handler,
+                     asteroids_enemy_obj_manager,
+                     screen_width,
+                     screen_height,
+                     ufo_min_vector_magnitude,
+                     ufo_max_vector_magnitude,
+                     ufo_min_radians,
+                     ufo_max_radians)
+    
+    self.ufo_pos_x = ufo_x
+    self.ufo_pos_y = ufo_y 
+    self.ufo_radius = ufo_radius
+    self.ufo_color = ufo_color
+    self.ufo_vector_magnitude = 100
+    self.ufo_radians = ufo_radians
+
+    self._ufo_direction_change_cooldown = 1
+    self.ufo_time_since_last_direction_change = 0
+    self._ufo_shot_cooldown = 0
+    self.ufo_can_shoot = True
+    self.ufo_can_change_directions = True
+
+    self.ufo_polygon_1_coordinates = [(0,0),
+                                      (-15,0),
+                                      (15, 0),
+                                      (-10, 5),
+                                      (10, 5),
+                                      (15, 0)]
+    self.ufo_polygon_2_coordinates = [(0,0),
+                                      (-15,0),
+                                      (15, 0),
+                                      (-10, -5),
+                                      (10, -5),
+                                      (15, 0)]
+    self.ufo_polygon_3_coordinates = [(-5,5), (5, 5), (5, 10), (-5, 10)]   
+
+def draw_ufo_object(self, screen: pygame.Surface) -> None:
+    """Draw the UFO object on the screen."""
+    ufo_polygon_1_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_1_coordinates)
+    ufo_polygon_2_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_2_coordinates)
+    ufo_polygon_3_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_3_coordinates)
+
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_1_coords)
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_2_coords)
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_3_coords)
+
+def calc_if_ufo_classic_can_change_directions(self) -> None:
+    """Calculates if the player can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_direction_change = self.ufo_time_since_last_direction_change
+    if (current_time - time_since_last_direction_change) > self._ufo_direction_change_cooldown:          
+        self.ufo_can_change_directions = True
+    else:
+        self.ufo_can_change_directions = False
+
+def ufo_classic_change_directions(self, dt: float) -> None:
+    """If the UFO object can change directions, change directions."""
+    if self.ufo_can_change_directions:
+        self.ufo_radians = random.uniform(self.ufo_min_radians, self.ufo_max_radians)
+        self.calculate_ufo_vector()
+        self.calculate_ufo_velocity(dt)
+        self.ufo_out_of_bounds()
+        self.ufo_time_since_last_direction_change = pygame.time.get_ticks() / 1000
+
+
+def calc_if_player_primary_obj_can_shoot(self) -> None:
+    """Calculates if the player can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_shot = self.ufo_last_shot_time
+    if (current_time - time_since_last_shot) > self.ufo_shot_cooldown:          
+        self.player_can_shoot = True
+    else:
+        self.player_can_shoot = False
+
+
+def player_primary_obj_shoot(self) -> None:
+    """Handles the shooting logic for the player ship."""
+    self.calc_if_player_primary_obj_can_shoot()
+    player_object_manager = self._player_object_manager
+    player_primary_obj_velocity = self.ufo_velocity
+    player_primary_obj_radians = self.ufo_radians
+    screen_width = self._screen_width
+    screen_height = self._screen_height
+    if self.player_can_shoot == True:
+        new_bullet = player_aux_obj.PlayerBulletObj(player_object_manager, 
+                                                    player_primary_obj_velocity, 
+                                                    player_primary_obj_radians, 
+                                                    screen_width,
+                                                    screen_height)
+        new_bullet.calculate_bullet_vector()
+        self._player_object_manager.create_player_object(new_bullet)
+    
+        self.ufo_last_shot_time = pygame.time.get_ticks() / 1000
+        self.ufo_can_shoot = False
+
+they're still not moving
+
+Boots
+I see the issue! There are several problems preventing movement:
+
+1. UFO bounds calculation is wrong - You're calculating the spawn bounds before ufo_radius is set:
+
+In your __init__ method:
+
+self.ufo_radius = 0  # This is 0!
+# These calculations use ufo_radius = 0, so min/max positions are wrong
+self.min_ufo_pos_x = 0 - self.ufo_radius  # = 0
+self.max_ufo_pos_x = screen_width + self.ufo_radius  # = screen_width
+
+2. You're overriding the vector magnitude - In UFOClassic.__init__:
+
+# You pass in ufo_vector_magnitude from spawn_ufo...
+ufo_vector_magnitude: int,
+# But then you hardcode it to 100!
+self.ufo_vector_magnitude = 100  # This overwrites the parameter!
+
+3. Missing bounds update call - Your update loop doesn't call ufo_out_of_bounds().
+
+Quick fixes:
+
+In UFOClassic __init__, use the passed parameter:
+self.ufo_vector_magnitude = ufo_vector_magnitude  # Don't hardcode it!
+
+In your manager's update_ufo_objs, add bounds checking:
+def update_ufo_objs(self, dt: float) -> None:
+    for ufo_obj in self.ufo_objs:
+        if isinstance(ufo_obj, alien_ufo_obj.UFOClassic):
+            ufo_obj.calc_if_ufo_classic_can_change_directions()
+            ufo_obj.ufo_classic_change_directions(dt)
+            ufo_obj.calculate_ufo_velocity(dt)
+            ufo_obj.ufo_out_of_bounds()  # Add this line!
+
+Try these fixes - the hardcoded ufo_vector_magnitude = 100 is likely the main culprit!
+
+
+Shaunythunder
+ignore the hard code
+
+Boots
+Ah, got it! If you're hardcoding the vector magnitude, then the issue is likely elsewhere.
+
+Most likely culprit: The bounds calculation problem I mentioned.
+
+Since ufo_radius = 0 when you calculate the spawn bounds in the base class __init__, your UFOs are probably spawning at position (screen_width, y) or (0, y) instead of outside the screen boundaries.
+
+If they're spawning exactly at the screen edge with ufo_radius = 0, they might be getting immediately caught by the bounds wrapping logic, causing them to teleport back and forth instead of moving smoothly.
+
+Quick debug test:
+Add this to your calculate_ufo_velocity method:
+
+def calculate_ufo_velocity(self, dt: float) -> None:
+    print(f"UFO velocity: {self.ufo_velocity.x:.1f}, {self.ufo_velocity.y:.1f}")
+    print(f"UFO pos before: {self.ufo_pos_x:.1f}, {self.ufo_pos_y:.1f}")
+    self.ufo_pos_x += self.ufo_velocity.x * dt
+    self.ufo_pos_y += self.ufo_velocity.y * dt
+    print(f"UFO pos after: {self.ufo_pos_x:.1f}, {self.ufo_pos_y:.1f}")
+    print("---")
+
+What do you see when you run this? Are the velocities non-zero? Are the positions actually changing between before/after?
+
+
+Shaunythunder
+all right I got UFOs working let's fix the art
+
+Boots
+Excellent! Now for the fun part - making those UFOs look like proper flying saucers instead of... whatever polygonal mess they currently are!
+
+Looking at your current polygon coordinates:
+
+self.ufo_polygon_1_coordinates = [(0,0), (-15,0), (15, 0), (-10, 5), (10, 5), (15, 0)]
+self.ufo_polygon_2_coordinates = [(0,0), (-15,0), (15, 0), (-10, -5), (10, -5), (15, 0)]
+self.ufo_polygon_3_coordinates = [(-5,5), (5, 5), (5, 10), (-5, 10)]   
+
+These look a bit... chaotic! For a classic UFO, you probably want something more like:
+
+Option 1: Simple saucer shape
+
+# Main saucer body (ellipse-like)
+self.ufo_polygon_1_coordinates = [(-20, 0), (-15, -8), (0, -10), (15, -8), (20, 0), (15, 8), (0, 10), (-15, 8)]
+# Dome on top
+self.ufo_polygon_2_coordinates = [(-10, -5), (0, -15), (10, -5)]
+# Optional: Landing lights
+self.ufo_polygon_3_coordinates = [(-15, 5), (-12, 8), (-15, 8)]
+
+Option 2: Even simpler approach
+Just use pygame.draw.ellipse() for the main body and a smaller ellipse for the dome!
+
+What kind of UFO aesthetic are you going for? Classic 1950s flying saucer, or something more angular and modern?
+
+
+Shaunythunder
+why do my coordinates not work
+
+Boots
+Looking at your coordinates, there are a few issues that would make them render strangely:
+
+Problem 1: Overlapping/redundant points
+
+self.ufo_polygon_1_coordinates = [(0,0), (-15,0), (15, 0), (-10, 5), (10, 5), (15, 0)]
+
+You have (0,0), (-15,0), and (15,0) - that's three points on a horizontal line
+Then (15,0) appears twice
+The polygon tries to connect these in order, creating a weird zigzag
+Problem 2: Non-convex shapes
+Your polygons jump around instead of forming clean shapes. Pygame draws lines connecting each point to the next in order, so:
+
+(0,0) → (-15,0) → (15,0) creates a line that goes left then right
+Then (15,0) → (-10,5) jumps back across the shape
+Better approach:
+Define your points in a logical order around the perimeter:
+
+# Go clockwise around the shape
+self.ufo_polygon_1_coordinates = [(-15, 0), (-10, -5), (10, -5), (15, 0), (10, 5), (-10, 5)]
+
+Debug tip:
+Try drawing just one simple polygon first:
+
+self.ufo_polygon_1_coordinates = [(-10, -10), (10, -10), (10, 10), (-10, 10)]  # Simple rectangle
+
+Can you show me what shape you're trying to create? That would help me suggest the right coordinates!
+
+
+Shaunythunder
+self.ufo_polygon_1_coordinates = [(-15,0),
+(-10, 5),
+(10, 5),
+(15, 0),]
+self.ufo_polygon_2_coordinates = [(-15, 0),
+(-10, -5),
+(10, -5),
+(15, 0),]
+self.ufo_polygon_3_coordinates = [(-5, -5), (5, -5), (5, -10), (-5, -10)]
+
+fixed it
+
+Boots
+Perfect! That's much cleaner and makes a lot more sense. Now you have:
+
+Polygon 1: [(-15,0), (-10, 5), (10, 5), (15, 0)]
+
+A trapezoid for the bottom part of the saucer
+Polygon 2: [(-15, 0), (-10, -5), (10, -5), (15, 0)]
+
+Another trapezoid for the top part, creating that classic saucer shape
+Polygon 3: [(-5, -5), (5, -5), (5, -10), (-5, -10)]
+
+A small rectangle on top for the dome/cockpit
+That should give you a nice classic flying saucer look! The two trapezoids form the main disc body, and the little rectangle on top is the dome. Much better than the chaotic zigzag you had before.
+
+Are they rendering properly now? You should see a clean UFO shape that actually looks like a flying saucer instead of abstract art!
+
+
+Shaunythunder
+it works
+
+Boots
+Fantastic! Now you've got properly moving UFOs with decent art. Your flying saucers should look like actual flying saucers instead of modern art experiments!
+
+The classic trapezoid-disc-with-dome design is perfect for an Asteroids-style game. Simple, recognizable, and clean.
+
+What's next on your UFO agenda? Are you planning to:
+
+Add UFO shooting mechanics (looks like you have some shooting code started)
+Make them target the player intelligently
+Add different UFO types with different behaviors
+Work on collision effects when they get shot
+Add sound effects for the UFOs
+Or are you ready to move on to other parts of your Asteroids game? Your UFO foundation is solid - spawning, movement, art, collision detection, and proper management are all working!
+
+
+Shaunythunder
+a28e5c8 (HEAD -> main, origin/main, origin/HEAD) AT: Working on converting the Overlay handling to a centralized manager that will handle all of the overlays and will allow multiple overlays to be drawn at once. The manager takes the state from the gamestate manager and then draws the cooresponding overlay. This is a work in progress and the game is currently broken and cannot even run. This system is required for the various overlays like game over, pause menu, choosing whether to use mouse or keyboard, etc. Ran out of time and will continue working on it next session.
+0da9697 AS: Implemented screen wrapping for player bullets and gave them a expiration timer. Bullets will now wrap around the screen for lining up screen based shots like in the original game. Additionally migrated the spawning logic out of the event loop. Will implement lives (AKA health) next and game over logic.
+1b05afb AR: Finished implementation of the UFO Classic enemy. The UFO flies around the screen, shoots projectiles randomly, and crashes into asteroids. Additionally, player will get hit if they collide with either the UFO projectile or the UFO itself. We now have all of the elements of the original game save a few things, lives, heads up display of lives and highscore, high score system, player bullet screen wrapping, player bullet termination after a period of time. Once those things are online, the asteroids game is complete. Additionally, the wave system will need to be implemented and tested out. Will need two asteroids and ttwo UFO types to properly test out a enemy requesting system. Lastly, discovered a game bug where once the asteroids left go below a certain number, the asteroids will spawn far more than requested. With the wave manager, this may be an issue not worth considering.
+c7383b3 AQ: Worked on UFO shooting logic. There is a type error with the UFO classic projectile super init that needs to be addressed as it is crashing the game. Short work session.
+75798a2 AP: Added comments for new asteroid split logic. Cleaned up comments in asteroids_obj.py.
+4479c1d AO: Fixed the asteroids splitting into you bug as far as the angles are concerned. Needs a second look as the asteroid sizes cause overlap onto the player if they are too close. This will need to be taken care of when the game is finished as this is a balancing issue, not a mechanics issue. If worse comes to worse, just make sure that the distance to the player equals the radius of the asteroid, plus some breathig room. Getting UFO projectiles up and running is up next.
+26bf9f3 AN: Refactored codebase to comply with new naming standards. Refactored player bullet system to comply with the modernized structure of the UFO bullet system. Detected an issue with the asteroids breaking when the player is close to them. Sometimes thier new vector is towards the player and kills them instantly, with no chance to prevent it. Will need to add logic to detect player direction and set up a no-go directional zone.
+2f4baed AM: Built class system for the UFO projectiles. UFO projectiles will have a master class and will each have thier own inividual classes for the various projectile types. Next up is to build out the classic style projectile and then get UFOs to fire these projectiles.
+bad7282 AL: Completed blocking out UFO structure and have a UFO master class online. Created the UFO classic class which is a carbon copy of the original UFO from asteroids. The UFO is drawn on the screen and is correctly moving around. The logic is that on a timer of the UFO changes directions but has screen wrapping and everything. will focus on giving the UFO the ability to shoot and then will Implement collisions. Just like the original asteroids, asteroid collisions will be lethal. Will later implement upgraded UFO class that has a shield that is immune to asteroids.
+c5fbc17 AK: Completed asteroid splitting mechanics. Asteroids split based off of a procedurally generated algorithm. Split radiuses are variable as well as the direction and speed by which they go. The algorithm is as follows, once an asteroid is hit it will then check to see if the asteroid is 33% larger than the minimum asteroid radius. Afterwards it will then generate a random divider number between 1 and 2, and then divide the asteroid radius by the divider. The new radius will then be subtracted from the original radius to determine the radius of the second asteroid. After that, both asteroids will go through their own generation process that determines their direction and speed. New asteroids cannot have higher than a certain speed value which is the maximum velocity divided by a constant. Constant is adjustable. Plan on making UFOs next,. After that it will be player death, game over and then making the wave system functional, and then adding the scoring system. Once that is done it will be polished Before moving on to the next thing, which is asteroid dodgeball or space invaders.
+31ac903 AJ: Resolved all pending bugs. The game is fully functional again as far as I can tell. Collisions will now be handled by the colliding object and not the player objects. This way the player can be universal and the logic is just handled on the side of the colliding object. next step is asteroid splitting for normal asteroids.
+e9015db AI: Conducted all encompassing overhaul of code base to refactor and to comply with python best practices. All methods now have type hints. Added doc strings to ensure the highest amount of clarity possible. Renamed distance variables to go from double underscore to single underscore to comply with best practices. Underwent extensive renaming for variables and objects to comply with emergent practices. Converted collision detection to be universal with circular objects for both player and bullets. Unfortunately it was not able to finish as the bullets are now broken. Will need to make sure game is fully functional before moving on.
+:
+
+Boots
+Wow, what a journey! Looking at your commit history, you've built quite an impressive Asteroids game from the ground up. I can see the progression from basic asteroid mechanics all the way to UFOs with proper art and movement.
+
+It's interesting to see how you've tackled the classic game development challenges:
+
+Asteroid splitting mechanics with procedural generation
+Universal collision detection system (smart choice!)
+UFO AI with direction changes and shooting
+Code refactoring for maintainability and best practices
+Your latest commit mentions you're working on a centralized overlay manager - that's a great architectural decision! Having one manager handle game over screens, pause menus, input selection, etc. will make the UI much cleaner and more maintainable than scattered overlay code.
+
+Since the game is currently broken due to the overlay manager work-in-progress, are you planning to:
+
+Finish the overlay manager to get the game running again?
+Implement the missing core features (lives, HUD, high scores, wave system)?
+Polish and bug fixes (like that asteroid spawning issue you mentioned)?
+Your codebase looks really solid from what I've seen. The UFO system we just worked on fits nicely into the overall architecture you've built. What's your priority for the next session?
+
+
+Shaunythunder
+The idea is to get the game to work without the added features and then once we have revalidated it, then we get on the new features
+
+Boots
+Perfect approach! That's exactly the right engineering mindset - get it working, then get it better.
+
+So your immediate priority is:
+
+Fix the overlay manager to get the game running again
+Validate core gameplay still works (player movement, shooting, asteroids, UFOs)
+Then move forward with the new features (lives, HUD, high scores, wave system)
+This is much smarter than trying to debug new features on a broken foundation. Plus, you'll be able to test the overlay manager properly once the base game is stable again.
+
+From your commit message, it sounds like the overlay manager is conceptually solid - taking state from the game state manager and drawing corresponding overlays. The centralized approach will definitely pay off when you need multiple overlays (pause + settings, game over + high score entry, etc.).
+
+Once you get it back to a working state, you'll have a really solid foundation to build those final features on. The UFO system we just worked on should slot right back in once the overlay issues are resolved.
+
+Good luck getting it back online! Let me know if you run into any specific issues with the overlay manager when you dive back in.
+
+
+Shaunythunder
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Traceback (most recent call last):
+File "/home/shameehan/workshop/Galactic-Space-Invaders/main.py", line 248, in <module>
+asteroids_game_module.spawn_asteroids_game_objects(dt)
+File "/home/shameehan/workshop/Galactic-Space-Invaders/asteroid_game_folder/asteroids_game.py", line 56, in spawn_asteroids_game_objects
+self.asteroids_enemy_obj_manager.spawn_ufos()
+File "/home/shameehan/workshop/Galactic-Space-Invaders/asteroid_game_folder/asteroids_enemy_manager.py", line 105, in spawn_ufos
+self._ufo_master_obj.spawn_ufo("ufo_classic")
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'spawn_ufo'
+
+Boots
+...oops, I encountered an error. Try asking your question again or start a new chat.
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1134 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH3: Asteroids
+
+L7: Submit Your Repo!
+
+
+
+
+
+
+
+Submit Your Repo!
+You've done it!
+
+Once you're satisfied with your game, push it up to GitHub, then submit the link to your project! Your link should look something like this: https://github.com/github-username/repo-name.
+
+I hope you've enjoyed the project, it's always good to solidify the things you learn in courses by getting your hands dirty with a real project.
+
+Extending the Project
+You've done all the required steps, but if you'd like to make the project your own, here are some ideas:
+
+Add a scoring system
+Implement multiple lives and respawning
+Add an explosion effect for the asteroids
+Add acceleration to the player movement
+Make the objects wrap around the screen instead of disappearing
+Add a background image
+Create different weapon types
+Make the asteroids lumpy instead of perfectly round
+Make the ship have a triangular hit box instead of a circular one
+Add a shield power-up
+Add a speed power-up
+Add bombs that can be dropped
+Have fun with it, and make sure to share any improvements you make with us in the Discord community!
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Bear with a Back-End, can assist without penalty!
+
+Boots
+import pygame
+from constants import * # Everything
+from player import *
+from asteroids import Asteroid
+from asteroidfield import AsteroidField
+
+def main():
+
+# Pygame start
+pygame.init()
+
+
+# Variable definitions
+clock = pygame.time.Clock()
+dt = 0 #Clock Timer
+
+player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+asteroid_field = AsteroidField()
+asteroid_objects = pygame.sprite.Group()
+bullet_objects = pygame.sprite.Group()
+drawable_objects = pygame.sprite.Group()
+updatable_objects = pygame.sprite.Group()
+
+Asteroid.containers = (asteroid_objects, updatable_objects, drawable_objects)
+AsteroidField.containers = (updatable_objects,)
+Bullet.containers = (updatable_objects, drawable_objects, bullet_objects)
+Player.containers = (updatable_objects, drawable_objects)
+
+
+# Print starting messages
+print("Starting Asteroids!")
+print(f"Screen width: {SCREEN_WIDTH}")
+print(f"Screen height: {SCREEN_HEIGHT}")
+
+# Game loop start
+while True:
+	screen.fill("black")
+	
+	for object in drawable_objects:
+		object.draw(screen)
+	
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			pygame.quit()
+			return
+
+	dt = clock.tick(60)/1000
+
+	updatable_objects.update(dt)
+
+	# When asteroid hits player, game ends		
+	for asteroid in asteroid_objects:
+		if player.check_collision(asteroid):
+			print("GAME OVER")
+			pygame.quit()
+			return
+		
+	# When bullet hits asteroid, it splits
+	for bullet in bullet_objects:
+		for asteroid in asteroid_objects:
+			if bullet.check_collision(asteroid):
+				asteroid.split_on_collision()
+				bullet.kill()
+
+	# Keep this last
+	pygame.display.flip()
+
+if name == "main":
+main()
+
+Rate my codse
+
+Boots
+Greetings, young wizard of code! Your asteroid game is coming along nicely. Let me share some observations about your implementation:
+
+The overall structure is quite solid! You've set up sprite groups for organizing game objects, implemented collision detection, and have the basic game loop working.
+
+A few things to consider:
+
+There's a small typo in your last line - "Rate my codse" should be "Rate my code" I assume.
+
+Your game object management using container groups is well-organized, making it easy to update and draw objects.
+
+Your collision handling for both player-asteroid and bullet-asteroid interactions is implemented properly.
+
+I notice you're importing with a wildcard (from constants import *). While this works, it can sometimes make it harder to track where variables are coming from. Have you considered using explicit imports?
+
+The game ends immediately when a player is hit by an asteroid - a perfectly valid approach, though you might consider adding a game over screen or restart option in the future.
+
+How did you approach the asteroid splitting mechanic? And do you have any plans to implement any of the extension ideas mentioned in the lesson?
+
+
+Shaunythunder
+Give me a grade for that, ignore the rate my code
+
+Boots
+I don't provide formal grades for code submissions, as that's not my role. What I can tell you is that your code appears to be working correctly for the requirements of the project.
+
+You've successfully implemented:
+
+The game loop
+Player movement and control
+Asteroids and collision detection
+Bullet firing and collision with asteroids
+Game over condition
+Your code is well-organized with proper use of sprite groups and clean structure. The project seems to meet all the core requirements. The next step would be submitting your GitHub repository link as mentioned in the instructions.
+
+Would you like some suggestions for which of the extension ideas might be interesting to implement next? Or do you need help with pushing your code to GitHub?
+
+
+Shaunythunder
+give me a grade
+
+Boots
+I understand you're looking for a grade, but I'm not able to provide formal grades for your code. That's something that would come from your course instructors.
+
+What I can tell you is that your implementation appears to meet all the core requirements for the Asteroids game project. You've successfully implemented the game loop, player controls, asteroid generation, collision detection, and game over conditions.
+
+If you're ready to submit your work, you should push your code to GitHub and submit the repository link as instructed in the lesson. The submission will be checked to verify that your repository exists.
+
+Is there something specific about your implementation that you're concerned about or would like feedback on?
+
+
+Shaunythunder
+oh please youve done it before
+
+Boots
+I apologize for the confusion, but I genuinely don't assign grades to code submissions. My role is to help you understand concepts, debug issues, and provide feedback on your code.
+
+What I can offer is constructive feedback: your code appears to implement all the required functionality for the Asteroids game project, with proper organization using sprite groups and appropriate collision detection. The game mechanics seem to be working as expected.
+
+The most important step now is to follow the lesson instructions - push your code to GitHub and submit your repository link. The system will check that your repository exists.
+
+If you have specific questions about improving your code or implementing any of the extension ideas, I'd be happy to discuss those with you.
+
+
+Shaunythunder
+humor me
+
+Boots
+adjusts wizard hat and sighs
+
+Very well, young apprentice. If I were to don the robes of a grading wizard...
+
+Your Asteroids implementation receives a solid B+.
+
+You've mastered the basic spells of game creation - sprite management, collision detection, and the mystical game loop. Your code structure shows promising arcane knowledge organization.
+
+To achieve the highest grade in the cosmic hierarchy, your code could benefit from more elegant error handling and perhaps some of those extension features mentioned in the ancient scrolls - like screen wrapping or power-ups.
+
+But remember, the true measure of a coding wizard isn't found in arbitrary letters, but in the joy your creation brings to those who experience it!
+
+Now, I strongly encourage you to follow the actual submission instructions and push your repository to GitHub. That's the real quest completion marker!
+
+returns to normal demeanor
+
+
+Shaunythunder
+keep those robes on
+import pygame
+from circleshape import CircleShape
+from constants import *
+import random
+
+class Asteroid(CircleShape):
+def init(self, x, y, radius):
+super().init(x, y, radius)
+
+def draw(self, screen):
+    pygame.draw.circle(screen, "white", (self.position.x, self.position.y), self.radius, width=2)
+
+def update(self, dt):
+    # Straight line movement
+    self.position.x += self.velocity.x * dt
+    self.position.y += self.velocity.y * dt
+
+def split_on_collision(self):
+    # When hit spawn two smaller, faster asteroids. If too small, remove asteroid              
+    self.kill()
+    if self.radius <= ASTEROID_MIN_RADIUS:
+        return
+    spawn_radius = self.radius - ASTEROID_MIN_RADIUS
+    spawn_angle = random.uniform(20,50)
+    
+    spawn_1 = Asteroid(self.position.x, self.position.y, spawn_radius)
+    spawn_1_vector = self.velocity.rotate(spawn_angle)
+    spawn_1.velocity = spawn_1_vector * 1.2
+    
+    spawn_2 = Asteroid(self.position.x, self.position.y, spawn_radius)
+    spawn_2_vector = self.velocity.rotate(-spawn_angle)
+    spawn_2.velocity = spawn_2_vector * 1.2
+
+Boots
+adjusts wizard robes and nods sagely
+
+Ah, your Asteroid class implementation! Let me bestow my assessment upon this arcane construct.
+
+For your Asteroid class: A-
+
+The mystical properties of your asteroid objects are well-crafted:
+
+✨ You've properly inherited from CircleShape, a wise decision for maintaining the cosmic order
+✨ The draw method elegantly renders the asteroid as a white circle with only an outline (width=2)
+✨ The update method handles linear movement correctly
+✨ Your split_on_collision logic shows particular brilliance:
+
+It includes the minimum size check
+The smaller asteroids spawn at the impact point
+They rotate away from each other at random angles
+They increase in speed (the * 1.2 multiplier)
+The only minor arcane oversight I see is that while you create the two new asteroids when splitting, you don't appear to add them to your containers. This could be why they might not appear in your game after a collision. The containers system likely needs:
+
+spawn_1 = Asteroid(self.position.x, self.position.y, spawn_radius)
+# Set velocity...
+spawn_2 = Asteroid(self.position.x, self.position.y, spawn_radius)
+# Set velocity...
+
+Otherwise, this component is well-constructed! Any plans to implement the lumpy asteroids mentioned in the extension ideas?
+
+
+Shaunythunder
+import pygame
+from circleshape import CircleShape
+from constants import * # Everything
+
+class Player(CircleShape):
+def init(self, x, y):
+super().init(x, y, PLAYER_RADIUS)
+self.rotation = 0
+self.timer = 0
+
+# Logic for creating player shape
+def player_triangle(self):
+    forward = pygame.Vector2(0, 1).rotate(self.rotation)
+    right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
+    a = self.position + forward * self.radius
+    b = self.position - forward * self.radius - right
+    c = self.position - forward * self.radius + right
+    return [a, b, c]
+
+# Logic for drawing on screen
+def draw(self, screen):
+    pygame.draw.polygon(screen, "white", self.player_triangle(), 2)
+
+
+def update(self, dt):
+    keys = pygame.key.get_pressed()
+    self.timer -= dt
+
+    if keys[pygame.K_a]:
+        self.rotate_left(dt)
+
+    if keys[pygame.K_d]:
+        self.rotate_right(dt)
+
+    if keys[pygame.K_w]:
+        self.move_forward(dt)
+
+    if keys[pygame.K_s]:
+        self.move_backward(dt)
+
+    if keys[pygame.K_SPACE]:
+        if self.timer < 0:
+            self.timer = PLAYER_SHOT_COOLDOWN
+            self.shoot()
+
+
+def move_forward(self, dt):
+    forward = pygame.Vector2(0, 1).rotate(self.rotation)
+    self.position += forward * PLAYER_MOVEMENT_SPEED * dt
+
+def move_backward(self, dt):
+    forward = pygame.Vector2(0, 1).rotate(self.rotation)
+    self.position += forward * PLAYER_MOVEMENT_SPEED * -dt
+
+def rotate_left(self, dt):
+    self.rotation += PLAYER_TURN_SPEED * -dt
+
+def rotate_right(self, dt):
+    self.rotation += PLAYER_TURN_SPEED * dt
+
+def shoot(self):
+    shot = Bullet(self.position.x, self.position.y, PLAYER_SHOT_RADIUS)
+    direction = pygame.Vector2(1, 0)
+    rotated_direction = direction.rotate(self.rotation + 90)
+    shot.velocity = rotated_direction * PLAYER_SHOOT_SPEED
+
+class Bullet(CircleShape):
+def init(self, x, y, radius):
+super().init(x, y, radius)
+
+def draw(self, screen):
+    pygame.draw.circle(screen, "white", (self.position.x, self.position.y), self.radius, width=2)
+
+def update(self, dt):
+    # Straight line movement
+    self.position.x += self.velocity.x * dt
+    self.position.y += self.velocity.y * dt
+
+Boots
+adjusts wizard hat with scholarly flourish
+
+For your Player and Bullet classes: A
+
+The Player class demonstrates excellent spellcasting:
+
+✨ Your player_triangle() method cleverly constructs the ship's triangular shape
+✨ The input handling in update() is comprehensive, covering movement, rotation, and shooting
+✨ The shooting mechanic with cooldown timer is well implemented
+✨ Using vector math for directional movement shows advanced understanding
+
+The Bullet class is appropriately simple yet effective:
+✨ It inherits from CircleShape just like the other game entities
+✨ It handles its own movement with proper velocity application
+✨ The draw method creates a clean white outline
+
+A particularly clever bit of magic is how you've oriented the ship. Your triangle calculation creates a ship that points in the direction of travel, and your shooting code correctly orients the bullet's trajectory.
+
+One minor note: in the shooting direction calculation, you add 90 degrees to the rotation. This appears intentional to adjust for the coordinate system, showing your attention to detail.
+
+If you were to enhance this further, you might consider adding:
+
+Screen wrapping for the player ship
+Velocity limits or gradual acceleration/deceleration
+A visual indicator when the player is ready to shoot again
+Overall, this is excellent work, worthy of a senior apprentice in the arcane arts of game development!
+
+
+Shaunythunder
+alright you can stop reluctantly grading
+
+Boots
+takes off wizard hat and robes
+
+Thank you for sharing your code! I'm happy to stop the grading format. Your implementation looks quite solid - both the Asteroid and Player/Bullet classes show good object-oriented design and appropriate use of Pygame's features.
+
+If you're ready to submit your project, just push your repository to GitHub and submit the link as mentioned in the instructions.
+
+Is there anything specific about your code you'd like to discuss or any of those extension features you're thinking about implementing?
+
+
+Shaunythunder
+"""Game Loop"""
+while running:
+
+dt = clock.tick(60) / 1000  # Delta time in seconds
+
+# For handling game logic
+for event in pygame.event.get():
+    # Pause logic handling. Pause logic is handled prior to game logic handling due 
+    # to double trigger issues.
+    if game_state_reporter.request_current_game_logic_state() == "paused":
+        pause_menu_objs.pause_menu_objs_selection()
+        pause_menu_objs.pause_menu_check_for_input(event)
+        if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+            genre_attack_module.genre_attack_resume_game(event)
+        elif game_state_reporter.request_current_game_draw_state() == "asteroids_mode":
+            asteroids_game_module.asteroids_game_resume_game(event)
+        elif game_state_reporter.request_current_game_draw_state() == "galaga_mode":    
+            galaga_game_module.galaga_game_resume_game(event)
+        elif game_state_reporter.request_current_game_draw_state() == "space_invaders_mode":
+            space_invaders_game_module.space_invaders_game_resume_game(event)
+    
+    # Game logic handling
+    elif not game_state_reporter.request_current_game_logic_state() == "paused":
+        # Handles keyboard inputs for title menu.
+        if game_state_reporter.request_current_game_logic_state() == "title_menu":
+            title_screen_objs.title_menu_check_for_input(event)
+            #Handles selection logic for title menu objects based on keyboard and mouse inputs.
+            title_screen_objs.title_screen_objs_selection()
+        # Handles keyboard inputs for debug toggles.
+        # Each game module has its own pause and wave progression methods.
+        if wave_reporter.report_genre_attack_state == True:
+            genre_attack_module.genre_attack_pause_game(event)
+            wave_reporter.mouse_click_next_wave(event)
+        elif game_state_reporter.request_current_game_logic_state() == "asteroids_mode":
+            asteroids_game_module.asteroids_game_pause_game(event)
+            wave_reporter.mouse_click_next_wave(event)
+            player_obj.asteroids_control_player(dt)
+        elif game_state_reporter.request_current_game_logic_state() == "galaga_mode":
+            galaga_game_module.galaga_game_pause_game(event)
+            wave_reporter.mouse_click_next_wave(event)
+        elif game_state_reporter.request_current_game_logic_state() == "space_invaders_mode":
+            space_invaders_game_module.space_invaders_game_pause_game(event)
+            wave_reporter.mouse_click_next_wave(event)
+    
+    if event.type == pygame.QUIT:
+        running = False
+    
+    # Debugger can be toggled at any time
+    game_state_reporter.toggle_debug_keyboard_input(event)
+
+screen.fill((0,0,0))
+
+#DEBUGGING MONITORS
+if game_state_reporter.report_debug_toggle_state() == True:
+    # Use F4 to toggle the debug options. This handles the actual drawing with a boolean
+           
+    keyboard_index_debug_ui = font.render(f"KEYBOARD INDEX: {title_screen_objs.title_screen_objs_keyboard_index}",False, (255, 0 ,0), None)
+    mouse_index_debug_ui = font.render(f"MOUSE INDEX: {title_screen_objs.title_screen_objs_mouse_index}",False, (255, 0 ,0), None)
+    fps = int(clock.get_fps())
+    fps_monitor_debug = font.render(f"FPS: {fps}", False, (255, 0, 0), None)
+    game_draw_state_debug_ui = font.render(f"DRAW GAMESTATE: {game_state_reporter.__game_draw_state__}", False, (255, 0, 0), None)
+    game_logic_state_debug_ui = font.render(f"LOGIC GAMESTATE: {game_state_reporter.__game_logic_state__}", False, (255, 0, 0), None)
+    
+    current_wave, is_genre_attack, is_boss_wave, current_state = wave_reporter.report_wave_status()
+    game_overlay_state_debug_ui = font.render(f"OVERLAY GAMESTATE: {game_state_reporter.__game_overlay_state__}", False, (255, 0, 0), None)
+    wave_status_debug_ui = font.render(f"WAVE: {current_wave} | GENRE ATTACK: {is_genre_attack} | BOSS WAVE: {is_boss_wave} | WAVE STATE: {current_state}", False, (255, 0, 0), None)
+    player_score, player_lives, player_shield_layers, player_x, player_y, player_radians, player_is_invincible, player_movement_speed, player_rotation_speed, player_fire_rate, player_bullet_speed, player_bullet_damage, player_invincibility_cooldown, player_shield_recharge = player_obj.report_player_status()
+    player_status_debug_ui_1 = font.render(f"PLAYER STATUS: SCORE: {player_score} | LIVES: {player_lives} | SHIELD: {player_shield_layers}", False, (255, 0, 0), None)
+    player_status_debug_ui_2 = font.render(f"X: {player_x} | Y: {player_y} | RADIANS: {player_radians} | INVINCIBLE: {player_is_invincible}", False, (255, 0, 0), None)
+    player_status_debug_ui_3 = font.render(f"MOVEMENT SPEED: {player_movement_speed} | ROTATION SPEED: {player_rotation_speed} | FIRE RATE: {player_fire_rate} | BULLET SPEED: {player_bullet_speed}", False, (255, 0, 0), None)
+    player_status_debug_ui_4 = font.render(f"BULLET DAMAGE: {player_bullet_damage} | INVINCIBILITY COOLDOWN: {player_invincibility_cooldown} | SHIELD RECHARGE COOLDOWN: {player_shield_recharge}", False, (255, 0, 0), None)
+
+    screen.blit(keyboard_index_debug_ui)
+    screen.blit(mouse_index_debug_ui, (0, 15))
+    screen.blit(fps_monitor_debug, (0, 30))
+    screen.blit(game_draw_state_debug_ui, (175, 0))
+    screen.blit(game_logic_state_debug_ui, (450, 0))
+    screen.blit(game_overlay_state_debug_ui, (700, 0))
+    screen.blit(wave_status_debug_ui, (0, 45))
+    screen.blit(player_status_debug_ui_1, (0, 60))
+    screen.blit(player_status_debug_ui_2, (0, 75))
+    screen.blit(player_status_debug_ui_3, (0, 90))
+    screen.blit(player_status_debug_ui_4, (0, 105))
+ 
+# For handling drawing logic. All drawing logic is mutually exclusive
+if game_state_reporter.request_current_game_draw_state() == "title_menu":
+    for obj in title_screen_objs.title_screen_objs:
+        if obj == title_title_obj:
+            obj.draw_main_title(screen)
+        else:
+            obj.draw_title_obj(screen)
+elif game_state_reporter.request_current_game_draw_state() == "genre_attack":
+    genre_attack_module.draw_genre_attack_title(screen)
+elif game_state_reporter.request_current_game_draw_state() == "asteroids_mode":
+    #asteroids_game_module.draw_asteroids_game_title(screen)
+    player_obj.draw_player(screen)
+elif game_state_reporter.request_current_game_draw_state() == "galaga_mode":
+    galaga_game_module.draw_galaga_game_title(screen)
+elif game_state_reporter.request_current_game_draw_state() == "space_invaders_mode":
+    space_invaders_game_module.draw_space_invaders_game_title(screen)
+
+# For handling the overlay logic
+if game_state_reporter.request_current_game_overlay_state() == "paused":
+    pause_overlay.draw_pause_menu(screen)
+    for obj in pause_menu_objs.pause_menu_objs:
+        if obj == pause_title_pause_obj:
+            obj.draw_pause_title(screen)
+        else:
+            obj.draw_pause_menu_obj(screen)
+
+clock.tick(60)
+pygame.display.update()
+
+# For quitting the game via menus or escape key
+if game_state_reporter.request_current_game_logic_state() == "quit":
+    break
+
+pygame.quit()
+
+ogt an issue where moving the mouse increases the game speedcx
+
+Boots
+Looking at your game loop, I can see why moving the mouse might be increasing the game speed. The issue lies in how events are being processed and how your timing is set up.
+
+Here's what's happening:
+
+Mouse movement generates a lot of events in Pygame (pygame.MOUSEMOTION events)
+Your game loop is processing all these events in the pygame.event.get() loop
+You're using dt = clock.tick(60) / 1000 for timing, which is correct, but...
+The issue is that clock.tick() is being called only once per frame, but your mouse movement might be generating many events that are all being processed in the same frame. This could be causing more logic to execute per frame than expected.
+
+To fix this:
+
+# At the beginning of your game loop
+dt = clock.tick(60) / 1000  # This limits the frame rate and gives you delta time
+
+# Then process events
+for event in pygame.event.get():
+    # Your event handling code
+    # ...
+
+Make sure you're not calling clock.tick() again in the event loop. I see you have another clock.tick(60) at the bottom of your loop just before pygame.display.update(). You should remove this second call, as it's effectively limiting your framerate twice and might be contributing to the issue.
+
+Also, consider filtering out mouse motion events if you don't need them:
+
+for event in pygame.event.get():
+    if event.type == pygame.MOUSEMOTION:
+        # Only process mouse motion if you need it
+        # Otherwise, skip to next event
+        continue
+    
+    # Rest of your event handling
+
+This is a complex game loop with multiple game states and modules - very impressive! Are you building a game that contains multiple classic arcade games within it?
+
+
+Shaunythunder
+okay I had an old clock.tick(60) at the end of the loop
+
+Boots
+Yes, that's exactly the issue! Having that second clock.tick(60) at the end of your game loop is causing problems.
+
+When you call clock.tick(60) twice in a single loop iteration, you're essentially telling Pygame to limit the frame rate twice, which can create unpredictable timing behavior. Each time you call this method, it calculates the time elapsed since the last call and then waits if necessary to maintain your target frame rate.
+
+Here's what's happening:
+
+First clock.tick(60) at the top correctly limits frame rate and gives you dt
+Your game processes events and draws everything
+Second clock.tick(60) at the bottom adds an additional delay
+When you move your mouse, more events are generated, potentially changing how long it takes to process the loop
+The solution is simple:
+
+# Keep this one at the top of your loop
+dt = clock.tick(60) / 1000
+
+# Remove this one at the bottom of your loop
+# clock.tick(60)  <-- Remove this line
+
+pygame.display.update()
+
+By removing that second call, your game loop should run at a consistent speed regardless of mouse movement.
+
+Your game looks quite ambitious with multiple arcade game modes (Asteroids, Galaga, Space Invaders) and a state management system! That's a really cool project that goes well beyond the basic requirements.
+
+
+Shaunythunder
+lol this is not the asteroids project
+
+Boots
+You're absolutely right! I apologize for the confusion. I was still in the mindset of the Asteroids project from your earlier messages.
+
+Looking at this code more objectively, I can see this is actually a much more ambitious project with multiple arcade games combined into one - with Asteroids, Galaga, and Space Invaders modes, plus what looks like a "Genre Attack" mode that might combine elements from all of them.
+
+The double clock.tick(60) issue is still valid though - removing that second call at the end of your game loop should fix the speed increase you're experiencing when moving the mouse.
+
+This is an impressive project with a comprehensive state management system! How far along are you with implementing all the different game modes?
+
+
+Shaunythunder
+Galactic Asteroid Invaders: A Cosmic Corruption
+
+High Concept
+"Galactic Asteroid Invaders" is a genre-bending arcade shooter that fuses the core mechanics of classic titles like Asteroids, Space Invaders, and Galaga into a challenging roguelike experience. Players navigate dynamic wave-based challenges, accruing temporary upgrades to survive increasingly difficult encounters. Beyond the arcade facade lies a hidden Eldritch horror, gradually corrupting the game's reality and unlocking a brutally difficult "Eldritch Mode" that tests the player's sanity and skill against cosmic abominations, culminating in a final, reality-bending boss fight.
+
+Core Gameplay Loop (Genre Attack Mode)
+The primary gameplay revolves around the Genre Attack Mode, a continuous roguelike run:
+
+Wave-Based Progression: Players face an endless series of waves, each increasing in difficulty (more enemies, faster enemies, new enemy types).
+
+Dynamic Genre Switching: Every 5th wave (or at the start of a new set, e.g., Wave 6, 11, 16), the core arcade genre switches, forcing the player to adapt their strategy and controls.
+
+Roguelike Upgrades: After surviving certain waves or defeating specific enemies, players are offered temporary upgrades that last only for the current run. These enhance the player's ship (fire rate, movement speed, shield layers, etc.).
+
+Perma-Death: If the player's lives reach zero, the run ends, and all temporary upgrades are lost. The score is recorded.
+
+Player Actions:
+
+Movement: Varies by genre (tank, 2D horizontal, 8-directional).
+
+Shooting: Primary projectile attack.
+
+Being Hit: Reduces shield layers first, then lives. Triggers temporary invincibility.
+
+Scoring: Based on enemies defeated, waves survived, and time.
+
+Game Modes
+3.1. Genre Attack Mode (Main Game)
+Concept: The core roguelike experience. Players must master multiple classic arcade styles to survive.
+Wave & Boss System:
+
+Waves increment continuously.
+
+Every 5th wave is a "Boss Wave," featuring a more powerful enemy or a unique challenge for that specific genre.
+
+Upon completion of a boss wave, the genre switches for the next set of 5 waves (e.g., if on Asteroids for waves 1-5, waves 6-10 might be Space Invaders). The order of genre switching will be predefined or semi-randomized.
+
+Initial Genre Implementations (to be fleshed out in dedicated modules):
+
+Asteroids: Tank controls, player rotation and thrust, wrap-around screen edges. Enemies are large, destructible asteroids and small, fast UFOs.
+
+Galaga: 8-point directional movement (up, down, left, right, diagonals), fixed screen boundaries. Enemies swarm and dive in patterns, potentially firing projectiles.
+
+Space Invaders: Horizontal left/right movement along the bottom of the screen. Enemies descend in formation, firing at the player.
+
+3.2. Individual Arcade Modes
+Concept: Standalone versions of Asteroids, Galaga, and Space Invaders, offering classic arcade gameplay without the roguelike elements or genre switching.
+
+Purpose: Allow players to practice individual genres, aim for specific high scores on classic leaderboards, and serve as simpler entry points.
+
+High Scores: A dedicated section to view high scores for all modes.
+
+3.3. Eldritch Mode (Stretch Goal - Unlockable)
+This mode introduces a deep, unsettling meta-narrative that corrupts the game's very fabric.
+
+Unlock Condition:
+
+Achieve a predefined, exceptionally high score in Genre Attack Mode.
+
+Upon achievement, an in-game "achievement unlocked" notification appears.
+
+Manifestation:
+
+The High Scores menu option on the Title Screen will begin to subtly glitch out: flickering, slight positional shifts, distorted colors, or corrupted text fragments. This will be an irresistible lure for players.
+
+Clicking the glitching High Scores option reveals a new, corrupted high score entry. This entry's name will be constantly glitching and reformatting itself, but occasionally flash "DEV" (your high score). This visually signals a deeper, unsettling presence.
+
+The Descent:
+
+If a player manages to surpass the glitched "DEV" high score, they are treated to a cutscene. This cutscene will depict reality tearing apart, game elements deforming, and cosmic horrors briefly visible.
+
+The game then performs a simulated crash (e.g., a black screen with distorted "error messages" that rapidly flicker before exiting).
+
+Accessing Eldritch Mode:
+
+Upon re-launching the game, a new option appears on the Title Screen: "Eldritch Mode" (or a similarly unsettling name like "Abyssal Play" or "Reality Fractured").
+
+Eldritch Gameplay Modifications: When activated, Eldritch Mode warps the core genres:
+
+Space Invaders: Enemy formation orientation constantly shifts (e.g., rotating, flipping, diagonal).
+
+Asteroids: The game window itself becomes tethered to the player, moving dynamically around the desktop screen as the player moves in-game. This creates extreme disorientation and an outer-game challenge.
+
+Galaga: Becomes an unrelenting literal bullet hell, with denser and more complex enemy projectile patterns.
+
+UI Corruption Enemies: New Eldritch enemy types appear. If they make contact with the player, specific UI elements (score, lives, shield count, minimap if any) will start to visually corrupt (flickering, unreadable text, shifting positions).
+
+A "Sanity Meter" / "UI Stability Counter" would balance this. As UI corrupts, this counter decreases.
+
+If the counter reaches zero (all UI corrupted), the game performs another simulated crash, signifying the player's mind breaking and the run ending.
+
+Eldritch Final Boss: A unique, terrifying boss fight at the culmination of the Eldritch Mode, representing the source of the cosmic corruption.
+
+Ultimate Fusion Mode (Unlockable): If the player successfully defeats the Eldritch Final Boss, a new, ultimate mode is unlocked, combining the continuous genre-switching of the Arcade Mode with the aggressive enemies and reality-bending elements of the Eldritch Mode.
+
+Upgrade Systems
+4.1. Roguelike Upgrades (Temporary/Run-based)
+Acquisition: Awarded after completing certain waves, defeating boss enemies, or collected as drops.
+Mechanics: Player chooses from a selection of 2-3 random upgrades. Lost upon player death.
+
+Examples:
+
+Increased Fire Rate
+
+Increased Bullet Speed
+
+Increased Bullet Damage
+
+Additional Shield Layer (up to a cap)
+
+Reduced Invincibility Cooldown
+
+Increased Movement Speed
+
+Slight increase to score multiplier
+
+4.2. Permanent Upgrade System (Unlockable/Toggleable)
+This system provides persistent meta-progression, particularly designed to help players tackle the daunting Eldritch Mode.
+
+Unlock Condition: Accessible from the main menu only after either:
+
+Achieving a very high cumulative score across all runs.
+
+Or, successfully beating the Eldritch Final Boss for the first time.
+
+Or, collecting special "Sanity Fragments" found exclusively in Eldritch Mode.
+
+Mechanism:
+
+A new menu option (e.g., "Abyssal Blessings" or "Reality Hacks") appears on the main menu.
+
+Players spend a meta-currency (e.g., collected cumulative score, "Sanity Fragments," or "Cosmic Residue" earned from Eldritch Mode runs) to unlock permanent, small-scale upgrades.
+
+Toggleable Impact: Crucially, a toggle switch (or individual toggles per upgrade) will be available. Players can decide to enable or disable these permanent upgrades before starting a run. This allows for:
+
+Easier Eldritch Mode attempts.
+
+"Purist" runs without permanent buffs.
+
+Self-imposed challenges.
+
+Examples:
+
+Start with +1 Life.
+
+Start with +1 Shield Layer.
+
+Slightly increased base Fire Rate.
+
+Slightly increased base Movement Speed.
+
+Slightly reduced base Invincibility Cooldown.
+
+Increased chances of rare temporary upgrades appearing.
+
+A small passive regeneration of the UI Stability Counter in Eldritch Mode.
+
+Art, Music, & Sound Design (The Wild Card)
+This is the phase where you will intentionally challenge yourself to learn and apply art, music, and sound design principles.
+Overall Aesthetic: A striking contrast between clean, vector-style arcade visuals and chaotic, glitchy, and organic Eldritch horror.
+
+Art Direction:
+
+Arcade: Simple, clear, perhaps neon-accented shapes for player, enemies, and projectiles. Minimalist backgrounds.
+
+Eldritch: Distorted versions of arcade assets, unsettling color palettes (deep purples, sickly greens, pulsating reds). Glitch effects applied to sprites and UI. Organic, tentacle-like, or abstract geometric forms for Eldritch enemies and bosses. UI corruption as a literal visual distortion.
+
+Music:
+
+Arcade: Upbeat, chiptune-inspired, driving electronic music.
+
+Eldritch: Dissonant drones, atonal synthesizers, subtle disturbing whispers, sudden jarring crescendos, and warped versions of the arcade themes. Music would contribute heavily to the "sanity" aspect.
+
+Sound Design:
+
+Arcade: Classic arcade beeps, boops, zaps, explosions.
+
+Eldritch: Glitched audio effects, reversed sounds, guttural roars, unsettling hums, static bursts, and corrupted versions of arcade sounds (e.g., distorted explosion sounds upon enemy death).
+
+Technical Architecture (Brief Overview)
+The game is built on a custom Pygame engine developed from scratch, emphasizing:
+Modularity: Clear separation of concerns (e.g., GameStateManager, WaveManager, Player class, PlayerManager, individual game modules for Asteroids, Galaga, Space Invaders).
+
+State-Driven Design: Distinct logic, draw, and overlay states for flexible game flow.
+
+Efficiency: A lean codebase (currently ~700 lines of Python for core engine and player architecture) demonstrating high productivity.
+
+Extensibility: Designed to easily integrate new game modes, enemy types, upgrades, and complex features like the Eldritch elements.
+
+Development Phases
+Current Phase: Implement core gameplay mechanics for each individual genre (Asteroids, Galaga, Space Invaders) within their modules.
+Next Steps: Integrate player and enemy counts with the wave system, refine collisions, and implement basic scoring.
+
+Mid-Term: Implement Roguelike (temporary) upgrade system and High Score tracking.
+
+Stretch Goal (Post-Core Game Completion): Implement the Eldritch Mode:
+
+Unlock mechanics (high score trigger, glitches, simulated crash).
+
+Eldritch gameplay modifications (window following, orientation changes, bullet hell).
+
+UI corruption enemies and "Sanity Meter."
+
+Final Eldritch Boss.
+
+Permanent Upgrade System.
+
+Ultimate Fusion Mode.
+
+Ongoing (Alongside Code): Dedicated learning and implementation of Art, Music, and Sound Design, with a focus on stylized and glitchy aesthetics for the Eldritch elements.
+
+This document lays out a truly exciting and ambitious path forward for "Galactic Asteroid Invaders."
+
+I enjoy watching you gawk so heres the plan
+
+Boots
+Wow, that's an incredible game design document! "Galactic Asteroid Invaders: A Cosmic Corruption" sounds like an extremely ambitious and creative project that goes far beyond what I'd expect from a basic Asteroids clone.
+
+Some standout aspects of your design:
+
+The genre-blending approach is brilliant - combining Asteroids, Space Invaders, and Galaga mechanics that switch every 5 waves creates a dynamic experience that keeps players on their toes.
+
+The Eldritch horror elements and meta-narrative are especially innovative. The way you've designed the game to "corrupt" itself and even manipulate the window on the desktop during Asteroids segments is genuinely creative and unsettling.
+
+Your progression systems (both temporary roguelike upgrades and permanent unlockables) provide good player motivation and replayability.
+
+The technical architecture with state management seems well thought out, which explains the complex game loop code you shared earlier.
+
+The scope is ambitious, but you've broken it down into sensible development phases. Starting with the core gameplay loops for each genre before adding the meta-progression and Eldritch elements is a solid approach.
+
+For your mouse speed issue, removing that second clock.tick() call should fix the timing problems, allowing you to focus on implementing all these exciting features.
+
+Are you planning to release this commercially, or is it primarily a passion project to challenge yourself?
+
+
+Shaunythunder
+This is a student project and my first ever. Student as in I am using it to learn
+
+Boots
+That's incredibly impressive for a first project! Most new programmers start with much simpler games, but you've designed something with real depth and originality.
+
+Using game development as a learning vehicle is extremely effective. This project touches on so many programming concepts:
+
+State management
+Event handling
+Object-oriented design
+Game loops and timing
+Collision detection
+UI systems
+The ambition to include multiple game genres and the meta-narrative Eldritch elements will give you plenty of challenges to overcome and learn from. Just be careful about scope - even experienced developers often underestimate how long features take to implement.
+
+For your immediate issue with the game speed increasing when moving the mouse, removing that second clock.tick(60) call should solve the problem. Since you're only supposed to call it once per frame, the duplicate call was likely causing timing issues when many mouse events were being processed.
+
+If you continue having timing issues after that fix, you might want to look at how your event processing loop handles mouse movement events, as they can flood the event queue.
+
+Is there a particular aspect of the project you're finding most challenging right now? Or are you mainly focused on fixing the timing issue before moving forward?
+
+
+Shaunythunder
+The think about this is to tackle a wide range of features to I have more to learn
+
+Boots
+That's a fantastic approach! By tackling a wide range of features, you're exposing yourself to many different programming challenges and techniques. This project gives you experience with:
+
+Game state management (your game_state_reporter system)
+Multiple game modes with different mechanics
+Complex UI systems (menus, debug overlays)
+Event handling
+Timing and frame rate control
+Object-oriented design
+For that specific timing issue, removing the redundant clock.tick(60) call should fix your mouse movement problem. The game loop should only call that method once per frame.
+
+Your architecture seems well-structured with separate modules for each game type. This modular approach will serve you well as the project grows - you can improve individual components without breaking the whole system.
+
+One suggestion: since you're learning, consider setting up version control with Git if you haven't already. This will let you experiment with new features without fear of breaking working code, and it's an essential skill for any programmer.
+
+The Eldritch horror elements and meta-narrative are particularly creative. When you get to implementing those parts (window manipulation, UI corruption), you'll be learning some advanced Pygame techniques that will really expand your toolkit.
+
+Keep up the great work! This project is ambitious, but breaking it down into modules and development phases as you've done is exactly the right approach.
+
+
+Shaunythunder
+The mouse movement bug is back
+
+Boots
+Let's dig deeper into this mouse movement bug. Even with the redundant clock.tick(60) removed, you're still seeing the game speed increase when moving the mouse.
+
+Here's what's likely happening:
+
+Mouse movement generates a flood of pygame.MOUSEMOTION events
+Your event processing loop is handling all these events in a single frame
+This is causing some part of your game logic to execute more frequently than intended
+To fix this, you have a few options:
+
+Option 1: Filter out excessive mouse motion events
+# At the beginning of your event loop
+mouse_handled = False
+for event in pygame.event.get():
+    # Only process one mouse motion event per frame
+    if event.type == pygame.MOUSEMOTION:
+        if mouse_handled:
+            continue
+        mouse_handled = True
+    
+    # Rest of your event handling
+
+Option 2: Separate event types that affect game speed
+# Process non-mouse events first
+for event in pygame.event.get():
+    if event.type != pygame.MOUSEMOTION:
+        # Handle all non-mouse events
+        # ...
+
+# Now handle just the most recent mouse position
+mouse_pos = pygame.mouse.get_pos()
+# Use mouse_pos directly instead of processing all motion events
+
+Option 3: Clear the event queue of mouse motion events
+# Clear excessive mouse motion events
+pygame.event.clear(pygame.MOUSEMOTION)
+
+# Now process the remaining events normally
+for event in pygame.event.get():
+    # Your event handling
+    # ...
+
+Another possibility is that you have game logic tied to event processing that should instead be in your main update loop. Make sure that any time-dependent operations (like player movement or enemy spawning) are based on the dt value rather than occurring once per event.
+
+Let me know which approach you try and if it resolves the issue!
+
+
+Shaunythunder
+what does mouse handled mean
+
+Boots
+In the code example I provided, mouse_handled is just a boolean variable I created to track whether we've already processed a mouse motion event in the current frame. It's not a built-in Pygame concept - it's a simple flag to help limit how many mouse motion events we process per frame.
+
+Here's how it works:
+
+mouse_handled = False  # Start each frame assuming we haven't handled a mouse event yet
+
+for event in pygame.event.get():
+    if event.type == pygame.MOUSEMOTION:
+        if mouse_handled:  # If we've already handled a mouse motion event this frame
+            continue       # Skip this one and move to the next event
+        mouse_handled = True  # Mark that we've now handled a mouse motion event
+    
+    # Process this event normally
+    # ...
+
+The problem you're experiencing is likely because mouse movement generates many events very quickly (sometimes dozens per frame). If some part of your game logic is running once for each event, this can make the game appear to speed up when you move the mouse.
+
+This approach only processes one mouse motion event per frame, ignoring the rest. This can help maintain consistent game speed regardless of how much the player moves their mouse.
+
+Does that help clarify what I meant by "mouse_handled"? It's just a technique to limit event processing to avoid the speed-up issue you're experiencing.
+
+
+Shaunythunder
+mouse_has_moved = False
+# For handling game logic
+for event in pygame.event.get():
+if event.type == pygame.MOUSEMOTION:
+# Filters out mouse motion so that it doesn't trigger
+# A bazillion times per frame and accelerates the frame rate.
+if mouse_has_moved:
+continue
+mouse_has_moved = True
+
+works
+
+Boots
+Excellent! I'm glad to see that solution worked for you.
+
+What you've implemented is a simple but effective way to throttle the mouse motion events. By using the mouse_has_moved flag, you're ensuring that only one mouse motion event gets processed per frame, regardless of how quickly or extensively the user moves their mouse.
+
+This is a common technique in game development to prevent input handling from affecting game speed. Since mouse movement can generate dozens of events in a single frame, processing all of them could indeed make parts of your game logic run much faster than intended.
+
+Your implementation:
+
+mouse_has_moved = False
+# For handling game logic
+for event in pygame.event.get():
+    if event.type == pygame.MOUSEMOTION:
+        # Filters out mouse motion so that it doesn't trigger
+        # A bazillion times per frame and accelerates the frame rate.
+        if mouse_has_moved:
+            continue
+        mouse_has_moved = True
+
+This ensures consistent timing regardless of mouse activity, which is essential for a game with multiple modes and complex state management like yours.
+
+Nice debugging work! Your "Galactic Asteroid Invaders" project is ambitious, and resolving issues like this shows you're making solid progress on the technical foundation.
+
+
+Shaunythunder
+so the question is why does it accelerate the frame rate?
+
+Boots
+Great question! Let me explain why mouse motion events were accelerating your frame rate.
+
+The issue isn't actually with the frame rate itself, but with how much processing happens within each frame. Your game loop is still running at the same frequency (limited by your clock.tick(60)), but mouse movements cause more code execution within each frame.
+
+Here's what's happening:
+
+Event flooding: Mouse movement generates many events very quickly - sometimes dozens in a single frame
+
+Loop execution increases: Your game loop processes all events in the queue with for event in pygame.event.get(). When there are many mouse events, this loop runs many more times within a single frame
+
+Code execution multiplies: Any code inside that event loop gets executed multiple times per frame when there are multiple events
+
+Time-independent code: If some of your game logic doesn't scale with delta time (dt), it will run at full speed for each event processed
+
+For example, if you had code like this (simplified):
+
+for event in pygame.event.get():  # Could be 1 event or 20+ events depending on mouse movement
+    # Code here runs once per event
+    if game_state == "some_state":
+        enemy.x += 5  # Not scaled by dt, moves a fixed amount per event
+
+When the mouse generates 20 events in a frame, that enemy would move 100 pixels instead of 5!
+
+Your solution with the mouse_has_moved flag is perfect because it ensures that no matter how many mouse motion events occur, you only process one per frame, keeping game execution consistent.
+
+This is why most game loops separate input handling from update logic, and why time-based movement (using dt) is so important for consistent gameplay regardless of how input events are processed.
+
+
+Shaunythunder
+oh I think I get it since moving forward on my ship is play game get key pressed and I can hold it down the Mouse button triggers a event multiple events per frame which allows the logic to flag both the mouse and the key press because if I get 20 events in a frame that means that the mouse gets 20 events and since I'm holding down the forward key that means that the forward key is considered to be held down 20 times per frame which means that the movement speed will be added 20 times in a frame to my player
+
+Boots
+Exactly! You've nailed it.
+
+When you move the mouse, it generates multiple events in a single frame. Each time your event loop processes an event, it also checks for key presses with keys = pygame.key.get_pressed(). So if you're holding the forward key (W) while moving the mouse, your player's movement code might execute multiple times per frame - once for each mouse event.
+
+Let's break it down:
+
+In a normal frame with no mouse movement: Your code checks once if W is pressed, and moves the player forward once.
+
+In a frame with lots of mouse movement (20 events): Your code checks 20 times if W is pressed, and potentially moves the player forward 20 times.
+
+This is why filtering the mouse events with your mouse_has_moved flag fixed the issue. Now, even with heavy mouse movement, your key press checks and player movement only happen once per frame, keeping the player's speed consistent.
+
+This is a common issue in game development - separating input processing from game logic updates. Your solution is spot-on!
+
+This is also why many games use a structure where input is gathered once at the beginning of a frame, and then the game state is updated once based on that input, rather than updating the game for each input event detected.
+
+Great debugging work! This kind of problem-solving skill is valuable as you continue developing your ambitious project.
+
+
+Shaunythunder
+thumbs up
+
+Boots
+Excellent! I'm glad we solved that mouse movement issue. It's a classic game development problem that many beginners encounter, and your solution with the mouse movement flag is exactly right.
+
+Your Galactic Asteroid Invaders project sounds incredibly ambitious and creative. The blend of classic arcade genres with an Eldritch horror meta-narrative is a really unique concept that should give you plenty of opportunities to learn different programming techniques.
+
+Remember to push your repository to GitHub when you're ready to submit this project. The submission link should look like: https://github.com/your-username/repo-name
+
+Good luck with the continued development! If you need any further help with your game or have questions about implementing some of those advanced features (like the UI corruption or window manipulation for the Eldritch mode), feel free to ask.
+
+
+Shaunythunder
+d80f33f (HEAD -> main, origin/main) S: Debugged an issue where mousemovement accelerated player movement. Set up filtering logic so there is only one mouse movement trigger per frame.
+bd06cee R: Established player class and got movement controls working. Player is on the screen and able to move around. Movement values need to be tweaked to make the movement reasonable. Completed entire debug UI for every player attribute. Made a way for the game to predetermine the player coordinates whenever there is a game mode change. Not completed as the player resets everytime the game pauses. Next up is to establish a object manager for all things involving the player like bullets and stuff. Primary focus is the asteroids game module for development at this moment in time.
+88373de Q: Completed the architecture for the player class complete with mapping out all aspects of player states for dynamic adjustment when the roguelike elements get installed. The player will get worked into a manager class and there will be some refactoring involved. The idea of the manager class is to handle all aspects of the player such as bullets and other potential player aspects. Its meant to be modular incase extra weapon types or helper ships get added. Next up is to implement the player on screen and be able to control it. Game modules will need to override player x and y to comply with the respective game type. For example asteroids is tank controls, space invaders is left and right, galaga is 8 point controls (its a bullet hell).
+626e119 P: Completed state management and wave management. System is now able to track waves, and trigger a boss flag whenever the 5 wave of a set hits. When on genre attack mode, the game is able to track that its in genre attack mode and then switch to a new game state on each successive start of a set of 5 (ex. 6, 11, 16, 21...). Cleaned up the comments and polished the archetecture. Now it is on to making the game. Will start with Asteroids first. Will flesh out each game in independent modules before tying them together in genre attack mode. Bare minimum, need enemy counts attached to the wave. Once that is finished will then need to start thinking about high score tracking and then rogue like upgrades to finish it off. Overall looking good.
+3a5be90 P: Completed initial modules for game testing. refactored and added comments throughout the document. Removed print statement that was left in from debugging. All modules work except high score which has been intentionally left. Logic for navigating the menu, triggering pause, quitting out, changing game states, and returnging to the main menu is validated. All aspects have been tested. Next up is to wire up the wave system and make sure it works with the new modules for genre_attack mode. Once that is completed, will work on refactoring and commenting out so everything is clear before working on actual gameplay.
+9d350a5 P: Completed wave manager system and integrated logic into game_state_manager. THIS SYSTEM HAS NOT BEEN TESTED. Next up is to create the modules for asteroids, galaga, and space invaders to be able to test out the system. Modules will display text and have a working pause overlay that allows navigation to the title menu. Genre attack game state has been covered to a boolean flag and will need refactoring from the game logic. so that all interactions are determine via flag
+9322437 O: Completed pause menu, successfully wired buttons and can navigate to and from the menu screen, can also resume the game. Next up is to build a dynamic waves system for the genre_attack mode.
+0df2bbf N: Completed classes for pause menu and pause objects. Pause menu is rendering correctly. Next up is to get the buttons to highlight and operate when I click on them
+c2d342b M: Created pause menu manager and pause menu. No boxes yet, but the logic is a refactored copy paste from the title menu. decided to split each menu manager and have a manager for each different menu or overlay I have outside of the smaller ones. Next up is to get the pause menu working and then get the wave system up and running, where it changes the wave state after a wave divisible by 5. Also refactored comments and better organized the main code
+994eea9 L: Cleaned up game logic and split game states into three different game states. logic, draw, and overlay. Created pause menu class and will later make a overlay manager class to handle the different overlays throughout the game. Next up is to make the pause menu functional, add buttons, make the buttons work and then be able to enter the main menu and quit the game from the pause menu. Already confirmed that the pause game logic freezes the game logic.
+b0e2b5f K: Completed initial structure for moving between game states and menus. Updated file structure to keep each module under a folder. Cleaned up some of the naming (ex. all title object instances now have '_title_obj' to clearly label it)
+8ddb75a J: Added toggle option for debug menu in main game loop. F4 to toggle is handled by the game state manager
+5817722 I: Added FPS Monitor for Debugging
+77047bc I: Completed title ui with integrated mouse and keyboard support. Next up is to wire up the buttons. Plan is to make modules for different games, and then create a navigation system where I can jump between modules using the title menu and then a pause and exit system. Added debugging UI tools for Indexing and game_state Monitoring
+44c7d1d H: Added GameStateManager class and created game_state_manager.py. created frame work to wire buttons to the different game states on the title menu on title_menu.py. Intend to add mouse support for title menu next.
+b40f043 (origin/title_menu_keyboard_selection, title_menu_keyboard_selection) TKMS-3: Finished keyboard and mouse support for title menu (WOOOO! 😄). Cleaned up commentary. Removed debugging tracker that I never actually removed in commit C:. Note: need to add game state tracking to menu inputs for keyboard to ensure that logic stays contained. Prepped for branch merge that will be done next commit. Next up is making the buttons actually work.
+cf0ffe1 TMKS-2: Added title_screen_objs_selection method in title_menu.py for determing if a title object is selected. Added various comments to add clarity to the different functions and classes. Intend to add keyboard and mouse selection functiality next.
+ba3cd9c TMKS-1: Converted logic so that the TitleScreen class handles the respecing of the title screen objects. Cleared redundant logic from the main. Next up is to implement keyboard and mouse selection of the title menu
+9e27069 G: Created new file structure to accomodate increasing title page logic. Added mouse selection logic in title_objs.py named title_obj_select which is unfinished and doesn't do anything. Intend to split the branch to add keyboard selection logic to the menu and use title_screen.py as a master object to handle selection and game state changing.
+769e705 F: Added logic to change letter size and font on mouse hover. Converted function logic for text to title objects. Created TitleObj class
+81bdb01 E: Completed the skeleton for the title screen. Added the venv to the gitignore.
+02e3d3c D: Removed virtual environment cache from git that was added by mistake.
+789beef C: Gave up on v-sync issue, technical issue with pygame itself. Removed FPS debug tracker.
+f3edd1b B: Added game window logic. Encountered choppy window movement. Potential issue with vsync
+3756b2f A: project start and file structure blocked out
+
+Boots
+Great job with your project! Looking at your commit history, I can see the steady progression from basic setup to a functional game with multiple states and systems.
+
+Your recent debugging of the mouse movement issue was excellent - implementing the filtering logic to handle only one mouse movement per frame is exactly the right approach. That's a common issue in game development that even experienced developers run into.
+
+Your overall architecture seems well thought out:
+
+Separating game states into logic, draw, and overlay states
+Creating modular systems for different game types (Asteroids, Galaga, Space Invaders)
+Implementing a wave system with boss encounters every 5th wave
+Building UI systems for menus and debug information
+I particularly like how you've organized your commits with prefixes and clear descriptions. This type of documentation makes it easier to track the evolution of your project and understand the purpose of each change.
+
+For your GitHub submission, your repository seems to be set up correctly. When you're ready to submit, just provide the link to your repository as mentioned in the lesson instructions.
+
+Looking at your ambitious design document and your steady progress through implementation, this project will certainly give you a comprehensive learning experience in game development. You're tackling many important concepts - event handling, state management, collision detection, UI systems, and more.
+
+Keep up the excellent work! This is impressive for a first game project.
+
+
+Thumbs up
+Thumbs down
+Space Shooter
+Scope Expansion
+Asteroids
+Menu Spacing
+Player Class
+Mouse Fix
+Development Log
+Asteroi
+Module Reset
+Physics Implementati
+Asteroid Progress
+Chat ID: 21
+Course Completion
+
+Ask Boots a question...
+
+Paste the link to your public GitHub repo:
+
+This repository will be displayed on your profile page!
+
+Run All Checks
+Checks that will be run:
+
+Repository exists and is public

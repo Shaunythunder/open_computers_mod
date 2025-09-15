@@ -1,0 +1,1649 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+🙋 Speech Recognition commands
+portion of it …
+
+Hi boots I need a system that allows me to enter in names and save them I already have all the infrastructure needed to save but I need the ability to enter in a name in pygame I don't know how to do that. the only piece of the puzzle I'm missing is the actual fillable form portion of it
+
+Dictation
+FAQ
+Languages
+Commands
+Developer
+Contact
+Made in India — © 2025 Digital Inspiration
+
+Boots
+Happy to help you, young code conjuror! If you want to let a player enter a name in Pygame, you’ll need to create a simple text input system using Pygame’s event handling and text rendering tools.
+
+Here’s a general approach for the “fillable form” in Pygame:
+
+Capture keyboard events: Listen for KEYDOWN events.
+Build the string: Add letters to your input string as the user types.
+Handle special keys: For example, remove characters for backspace and submit on enter.
+Render the text: Draw the updated string onto your screen with a font.
+Would you like me to walk you through an example of how you could implement just the input portion, step by step? Or are you interested in a deeper explanation of one of these parts?
+
+
+Shaunythunder
+so basically you are saying that on keydown I cocanate the string and backspace I pop it
+
+Boots
+Exactly! When the player presses a regular key, you add (concatenate) that character to your input string. When they press backspace, you remove (pop) the last character.
+
+Think about this in python pseudocode:
+
+if event.type == KEYDOWN:
+    if event.key == K_BACKSPACE:
+        # remove the last character
+    elif event.key == K_RETURN:
+        # maybe submit the name
+    else:
+        # add the character to the string
+
+Why do you think we would use event.unicode rather than event.key when appending the character to the string?
+
+
+Shaunythunder
+How do we do the blinking coursor thingy
+
+Boots
+A sharp question! The blinking cursor is a clever trick involving a timer and drawing an extra character.
+
+Let’s break it down logically:
+
+You already have your input string you’re rendering on the screen each frame.
+To “blink” the cursor, you can draw a vertical bar (|) after the name sometimes, and leave it off at other times.
+How could you use a simple counter or the time between frames to alternate whether or not to draw the cursor? What kind of conditions might you check?
+
+
+Shaunythunder
+why keydown instead of keypressed
+
+Boots
+A wise question—distinguishing between keydown and keypressed (in Pygame) is vital for text input!
+
+KEYDOWN fires once when a key transitions from up to down.
+KEYPRESSED (not an actual Pygame event, but often confused with pygame.key.get_pressed()) is checked every frame and returns True as long as a key is held down.
+If you used get_pressed(), holding a key would add that character multiple times, very quickly, flooding your input. With KEYDOWN, you add one character per press, making typing behave as users expect.
+
+Can you think of a situation where using get_pressed() would be more useful than KEYDOWN?
+
+
+Shaunythunder
+now how to I figure out which key was pressed instead of having 50 if statements
+
+Boots
+Great thinking! You certainly don’t want an if statement for every letter. Instead, rely on the event.unicode property of the KEYDOWN event in Pygame.
+
+When a key is pressed, event.unicode contains the string character for that key (like 'a', '1', or even punctuation). So, you can append event.unicode directly to your input string.
+
+Here’s a hint in python pseudocode:
+
+if event.type == KEYDOWN:
+    if event.key == K_BACKSPACE:
+        # remove last character
+    elif event.unicode.isprintable():
+        input_str += event.unicode
+
+Can you think of any types of key presses where you might not want to add event.unicode to your string?
+
+
+Shaunythunder
+what is unicode?
+
+Boots
+A fine question! In python, Unicode is a standard for representing almost every character from every writing system in the world: English letters, numbers, symbols, accented letters, and even emoji.
+
+In Pygame, event.unicode is a property that gives you the actual character (as a string) that the user typed—based on the key they pressed and any modifiers (like Shift for capitals, or Alt for symbols).
+
+This is different from event.key, which gives you a key code (an integer) representing the physical key on the keyboard.
+
+Why do you think it’s useful to use the actual character (unicode) instead of the key code for text input?
+
+
+Shaunythunder
+def check_keyboard_input_for_name_entry(self, event: pygame.event.Event) -> None:
+if pygame.event == pygame.KEYDOWN:
+if event.key == pygame.K_BACKSPACE:
+if self.player_name_entry_obj.text == "":
+"""If the text is empty, do nothing."""
+return
+if self.player_name_entry_obj.text == "Enter Name Here":
+self.player_name_entry_obj.text = ""
+else:
+self.player_name_entry_obj.text = self.player_name_entry_obj.text[:-1]
+
+        elif event.key == pygame.K_RETURN:
+            """Submits the entry"""
+            self._player_name = self.player_name_entry_obj.text
+            self._high_score_data_handler.create_new_high_score(
+                self._game_mode,
+                self._player_name,
+                self._player_score
+            )
+
+        elif event.key == pygame.K_ESCAPE:
+            """Cancels the entry and returns to the game over screen."""
+            self._game_state_reporter.request_game_state_change(GAME_OVER)
+
+        if self.player_name_entry_obj.text == "Enter Name Here":
+            self.player_name_entry_obj.text = ""
+            self.player_name_entry_obj.text += event.unicode
+        else:
+            self.player_name_entry_obj.text += event.unicode
+
+Boots
+Let’s ponder together, young mage:
+I see you’re close—yet a few important details are awry.
+Can you spot the problem in the very first if statement? Why might
+if pygame.event == pygame.KEYDOWN:
+never behave as you hope?
+How do you think we should check the type of an individual event in Pygame?
+
+
+Shaunythunder
+def check_keyboard_input_for_name_entry(self, event: pygame.event.Event) -> None:
+if event.type == pygame.KEYDOWN:
+if event.key == pygame.K_BACKSPACE:
+if self.player_name_entry_obj.text == "":
+"""If the text is empty, do nothing."""
+return
+if self.player_name_entry_obj.text == "Enter Name Here":
+self.player_name_entry_obj.text = ""
+else:
+self.player_name_entry_obj.text = self.player_name_entry_obj.text[:-1]
+
+        elif event.key == pygame.K_RETURN:
+            """Submits the entry"""
+            self._player_name = self.player_name_entry_obj.text
+            self._high_score_data_handler.create_new_high_score(
+                self._game_mode,
+                self._player_name,
+                self._player_score
+            )
+
+        elif event.key == pygame.K_ESCAPE:
+            """Cancels the entry and returns to the game over screen."""
+            self._game_state_reporter.request_game_state_change(GAME_OVER)
+
+        if self.player_name_entry_obj.text == "Enter Name Here":
+            self.player_name_entry_obj.text = ""
+            self.player_name_entry_obj.text += event.unicode
+        else:
+            self.player_name_entry_obj.text += event.unicode
+
+Boots
+Much improved! You’re now checking the event type correctly with if event.type == pygame.KEYDOWN:—excellent work.
+
+However, let’s look at the flow. After processing special keys (BACKSPACE, RETURN, ESCAPE), your code always appends event.unicode to the text, even for those special keys. What do you think might happen if someone presses BACKSPACE or RETURN?
+Would you want those keys added as characters?
+How might you change the logic so that only printable characters get added?
+
+
+Shaunythunder
+def check_keyboard_input_for_name_entry(self, event: pygame.event.Event) -> None:
+if event.type == pygame.KEYDOWN:
+if event.key == pygame.K_BACKSPACE:
+if self.player_name_entry_obj.text == "":
+"""If the text is empty, do nothing."""
+return
+if self.player_name_entry_obj.text == "Enter Name Here":
+self.player_name_entry_obj.text = ""
+else:
+self.player_name_entry_obj.text = self.player_name_entry_obj.text[:-1]
+
+        elif event.key == pygame.K_RETURN:
+            """Submits the entry"""
+            self._player_name = self.player_name_entry_obj.text
+            self._high_score_data_handler.create_new_high_score(
+                self._game_mode,
+                self._player_name,
+                self._player_score
+            )
+
+        elif event.key == pygame.K_ESCAPE:
+            """Cancels the entry and returns to the game over screen."""
+            self._game_state_reporter.request_game_state_change(GAME_OVER)
+
+        elif self.player_name_entry_obj.text == "Enter Name Here" and event.unicode.isprintable():
+            self.player_name_entry_obj.text = ""
+            self.player_name_entry_obj.text += event.unicode
+        else:
+            self.player_name_entry_obj.text += event.unicode
+
+Boots
+You’re growing ever wiser! Now you’ve separated the logic for handling special keys—nicely done.
+
+But look at your last else: block. Even if the key pressed isn’t a letter or number, event.unicode will get added—so pressing RETURN or ESCAPE might still add an unwanted character (often an empty string, but conceptually it isn't ideal).
+
+How could you ensure that only printable characters are added in both cases?
+What if you checked event.unicode.isprintable() before adding it to the string, regardless of whether "Enter Name Here" is present?
+
+What might the revised last part of your logic look like using that check?
+
+
+Shaunythunder
+def check_keyboard_input_for_name_entry(self, event: pygame.event.Event) -> None:
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_BACKSPACE:
+            if self.player_name_entry_obj.text == "":
+                """If the text is empty, do nothing."""
+                return
+            if self.player_name_entry_obj.text == "Enter Name Here":
+                self.player_name_entry_obj.text = ""
+            else:
+                self.player_name_entry_obj.text = self.player_name_entry_obj.text[:-1]
+
+        elif event.key == pygame.K_RETURN:
+            """Submits the entry"""
+            self._player_name = self.player_name_entry_obj.text
+            self._high_score_data_handler.create_new_high_score(
+                self._game_mode,
+                self._player_name,
+                self._player_score
+            )
+
+        elif event.key == pygame.K_ESCAPE:
+            """Cancels the entry and returns to the game over screen."""
+            self._game_state_reporter.request_game_state_change(GAME_OVER)
+
+        elif self.player_name_entry_obj.text == "Enter Name Here" and event.unicode.isprintable():
+            self.player_name_entry_obj.text = ""
+            self.player_name_entry_obj.text += event.unicode
+        elif event.unicode.isprintable():
+            self.player_name_entry_obj.text += event.unicode
+
+Boots
+You’re on the right track, and your logic now ensures that only printable characters are added—splendid!
+
+To summarize your approach:
+
+Special keys (BACKSPACE, RETURN, ESCAPE) are handled first.
+Then, if the current text is "Enter Name Here" and a printable character is typed, the placeholder is replaced.
+Otherwise, if a printable character is typed, it’s appended.
+This keeps unwanted control keys from being added to the entry string—much tidier!
+
+One little detail left for reflection: Do you want to allow “empty names” (just pressing RETURN immediately), or do you want to prevent that? (You might consider checking if the string is empty before saving the player’s name.)
+
+Would you like to add any character limit (such as 12 or 20 characters) to the player name? If so, where could you add that logic?
+
+
+Shaunythunder
+import typing as TYPE_CHECKING
+if TYPE_CHECKING:
+from game_state_manager import GameStateManager
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+import pygame
+import overlays.interactive_overlays.player_name_entry_overlay.name_entry as pause_menu
+
+from constants import (
+TITLE_MENU,
+QUIT,
+GAME_OVER,
+RESUME_GAME,
+NULL_STATE,
+SUBMIT_ENTRY,
+CANCEL_ENTRY
+)
+
+class NameEntryManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_handler: "HighScoreDataManager",
+overlay_surface: pygame.Surface,
+screen_width: int,
+screen_height: int) -> None:
+
+    self._game_state_reporter = game_state_reporter
+    self._high_score_data_handler = high_score_data_handler
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+    
+    self._game_mode = ""
+    self._player_score = 0
+    self._player_name = "Player"
+
+    self.name_entry_title_obj = pause_menu.NameEntryObj(128, "NAME ENTRY", (255, 255, 255), screen_width // 2, screen_height // 3, NULL_STATE)
+    self.name_entry_obj = pause_menu.NameEntryObj(64, "Enter Name Here", (255, 255, 255), screen_width // 2, screen_height, NULL_STATE)
+    self.player_name_submit_obj = pause_menu.NameEntryObj(32, "Submit", (255, 255, 255), screen_width // 2, screen_height, SUBMIT_ENTRY)
+    self.player_name_cancel_obj = pause_menu.NameEntryObj(32, "Cancel", (255, 255, 255), screen_width // 2, screen_height, CANCEL_ENTRY)
+    self.name_entry_objs = [
+        self.name_entry_title_obj,
+        self.name_entry_obj,
+        self.player_name_submit_obj,
+        self.player_name_cancel_obj]
+    
+    self.name_entry_overlay_rect = pygame.Rect(screen_width // 2 - 300, screen_height // 2 - 200, 600, 400)
+    self.name_entry_overlay = pause_menu.NameEntryOverlay(overlay_surface, (255, 255, 255), self.name_entry_overlay_rect, 1, 10,)
+    
+    self.name_entry_objs_keyboard_index = None
+    self.name_entry_objs_mouse_index = None
+    self.name_entry_objs_index_len = len(self.name_entry_objs)
+
+def reset_name_entry_manager(self) -> None: 
+    self.__init__(
+        self._game_state_reporter,
+        self._high_score_data_handler,
+        self.name_entry_overlay.surface,
+        self._screen_width,
+        self._screen_height
+    )
+
+def transfer_game_state_and_player_score(self, game_mode, player_score: int) -> None:
+    """Transfers the player score to the name entry manager."""
+    self._game_mode = game_mode
+    self._player_score = player_score
+
+def draw_name_entry_menu(self, screen: pygame.Surface) -> None:
+    self.name_entry_overlay.draw_name_entry_box(screen)
+    for name_entry_obj in self.name_entry_objs:
+        name_entry_obj.draw_name_entry_obj(screen)
+
+def name_entry_objs_selection(self) -> None:
+    """Handles the selection logic for the pause menu items."""
+    # Selection logic for the menu items. Mouse takes priority. 
+    # When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, player_name_obj in enumerate(self.name_entry_objs):
+        # Reset all selections at loop start.
+        player_name_obj.is_selected = False
+    for i, player_name_obj in enumerate(self.name_entry_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not player_name_obj.name_entry_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.name_entry_objs_mouse_index = None
+        elif player_name_obj.name_entry_obj_rect.collidepoint(mouse_x, mouse_y):
+            if player_name_obj == self.name_entry_title_obj:
+                player_name_obj.is_selected = False
+                break
+            else:
+                self.name_entry_objs_mouse_index = self.name_entry_objs.index(player_name_obj)
+                player_name_obj.is_selected = True
+                self.name_entry_objs_keyboard_index = None
+                break
+        elif self.name_entry_objs_keyboard_index != None and i == self.name_entry_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            player_name_obj.is_selected = True
+            break
+    
+def name_entry_objs_respacing(self) -> None:
+    """Handles the respacing of pause menu objects based on screen height."""
+    # Logic for automated spacing for pause menu objects
+    start_y = self._screen_height // 2
+    end_y = 250
+    name_entry_obj_respacing_len = len(self.name_entry_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (name_entry_obj_respacing_len - 1))
+    for i, obj in enumerate(self.name_entry_objs):
+        if i == 0:
+            pass
+        else:
+            obj.name_entry_obj_rect.centery = start_y + i * spacing
+            obj.selected_name_entry_obj_rect.centery = start_y + i * spacing
+
+def name_entry_check_for_input(self, event: pygame.event.Event) -> None:
+    """Handles input checking for the pause menu."""
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.name_entry_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.name_entry_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.name_entry_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.name_entry_objs_keyboard_index == None:
+            self.name_entry_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.name_entry_objs_keyboard_index > 1:
+            self.name_entry_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.name_entry_objs_keyboard_index < (self.name_entry_objs_index_len - 1):
+            self.name_entry_objs_keyboard_index += 1
+
+def check_keyboard_input_for_name_entry(self, event: pygame.event.Event) -> None:
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_BACKSPACE:
+            if self.name_entry_obj.text == "":
+                """If the text is empty, do nothing."""
+                return
+            if self.name_entry_obj.text == "Enter Name Here":
+                self.name_entry_obj.text = ""
+            else:
+                self.name_entry_obj.text = self.name_entry_obj.text[:-1]
+
+        elif event.key == pygame.K_RETURN:
+            """Submits the entry"""
+            self._player_name = self.name_entry_obj.text
+            self._high_score_data_handler.create_new_high_score(
+                self._game_mode,
+                self._player_name,
+                self._player_score
+            )
+
+        elif event.key == pygame.K_ESCAPE:
+            """Cancels the entry and returns to the game over screen."""
+            self._game_state_reporter.request_game_state_change(GAME_OVER)
+
+        elif self.name_entry_obj.text == "Enter Name Here" and event.unicode.isprintable():
+            self.name_entry_obj.text = ""
+            self.name_entry_obj.text += event.unicode
+        elif event.unicode.isprintable()  and len(self.name_entry_obj.text) < 12:
+            self.name_entry_obj.text += event.unicode
+    
+def name_entry_request_new_game_state(self) -> None:
+    """Handles the game state change requests based on the 
+    current selection in the pause menu."""
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    
+    if not self.name_entry_objs_mouse_index == None:
+        name_entry_obj_mouse = self.name_entry_objs[self.name_entry_objs_mouse_index]
+    else:
+        name_entry_obj_mouse = self.name_entry_title_obj
+     
+    if not self.name_entry_objs_keyboard_index == None:
+        name_entry_obj_keyboard = self.name_entry_objs[self.name_entry_objs_keyboard_index]
+    else:
+        name_entry_obj_keyboard = self.name_entry_title_obj
+    
+    if name_entry_obj_keyboard.game_state == CANCEL_ENTRY or name_entry_obj_mouse.game_state == CANCEL_ENTRY:
+        self._game_state_reporter.request_game_state_change(GAME_OVER)
+    elif name_entry_obj_keyboard.game_state == SUBMIT_ENTRY or name_entry_obj_mouse.game_state == SUBMIT_ENTRY:
+        self._player_name = self.name_entry_obj.text
+        self._high_score_data_handler.create_new_high_score(
+            self._game_mode,
+            self._player_name,
+            self._player_score
+        )
+
+Boots
+You’ve woven quite a mighty system here! Your organization, separation of concerns, and clarity in class design will serve you well as your codebase grows.
+
+A few wise observations and gentle questions for reflection:
+
+Character Limit:
+I see you gracefully defend against long player names with
+
+elif event.unicode.isprintable() and len(self.name_entry_obj.text) < 12:
+
+That’s exactly where such a limit belongs.
+
+Placeholder Handling:
+You clear the placeholder "Enter Name Here" only when the first printable character is typed. But once it’s cleared, is there any way it might come back unexpectedly, or does your system smoothly handle name reruns?
+
+Empty Name Submission:
+As it stands, what happens if a user simply submits without typing a name (just hits enter)? Will "Enter Name Here" or an empty string end up as their name?
+Should you defend against that? If so, where and how might you want to enforce a non-empty player name?
+
+Re-Initialization:
+Your reset_name_entry_manager() rebirths the whole object by calling its own constructor. This works, but it could potentially leave references dangling if other code holds them. If you ever need finer reset control, you might want a dedicated method to reset or clear just the relevant fields.
+
+Modularity:
+Your separation into entry objects and overlays allows future expansions (like localization or accessibility tweaks) with minimal code changes. Well done!
+
+If you’d like, I can quiz you on any part of this logic, or offer ideas for making your system even more robust. Would you like to try a quiz, or proceed to your next challenge?
+
+
+Shaunythunder
+import typing as TYPE_CHECKING
+if TYPE_CHECKING:
+from game_state_manager import GameStateManager
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+import pygame
+import overlays.interactive_overlays.player_name_entry_overlay.name_entry as pause_menu
+
+from constants import (
+TITLE_MENU,
+QUIT,
+GAME_OVER,
+RESUME_GAME,
+NULL_STATE,
+SUBMIT_ENTRY,
+CANCEL_ENTRY
+)
+
+class NameEntryManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_handler: "HighScoreDataManager",
+overlay_surface: pygame.Surface,
+screen_width: int,
+screen_height: int) -> None:
+
+    self._game_state_reporter = game_state_reporter
+    self._high_score_data_handler = high_score_data_handler
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+    
+    self._game_mode = ""
+    self._player_score = 0
+    self._player_name = "Player"
+
+    self.name_entry_title_obj = pause_menu.NameEntryObj(128, "NAME ENTRY", (255, 255, 255), screen_width // 2, screen_height // 3, NULL_STATE)
+    self.name_entry_obj = pause_menu.NameEntryObj(64, "Enter Name Here", (255, 255, 255), screen_width // 2, screen_height, NULL_STATE)
+    self.player_name_submit_obj = pause_menu.NameEntryObj(32, "Submit", (255, 255, 255), screen_width // 2, screen_height, SUBMIT_ENTRY)
+    self.player_name_cancel_obj = pause_menu.NameEntryObj(32, "Cancel", (255, 255, 255), screen_width // 2, screen_height, CANCEL_ENTRY)
+    self.name_entry_objs = [
+        self.name_entry_title_obj,
+        self.name_entry_obj,
+        self.player_name_submit_obj,
+        self.player_name_cancel_obj]
+    
+    self.name_entry_overlay_rect = pygame.Rect(screen_width // 2 - 300, screen_height // 2 - 200, 600, 400)
+    self.name_entry_overlay = pause_menu.NameEntryOverlay(overlay_surface, (255, 255, 255), self.name_entry_overlay_rect, 1, 10,)
+    
+    self.name_entry_objs_keyboard_index = None
+    self.name_entry_objs_mouse_index = None
+    self.name_entry_objs_index_len = len(self.name_entry_objs)
+
+def reset_name_entry_manager(self) -> None: 
+    self.__init__(
+        self._game_state_reporter,
+        self._high_score_data_handler,
+        self.name_entry_overlay.surface,
+        self._screen_width,
+        self._screen_height
+    )
+
+def transfer_game_state_and_player_score(self, game_mode, player_score: int) -> None:
+    """Transfers the player score to the name entry manager."""
+    self._game_mode = game_mode
+    self._player_score = player_score
+
+def draw_name_entry_menu(self, screen: pygame.Surface) -> None:
+    self.name_entry_overlay.draw_name_entry_box(screen)
+    for name_entry_obj in self.name_entry_objs:
+        name_entry_obj.draw_name_entry_obj(screen)
+
+def name_entry_objs_selection(self) -> None:
+    """Handles the selection logic for the pause menu items."""
+    # Selection logic for the menu items. Mouse takes priority. 
+    # When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, player_name_obj in enumerate(self.name_entry_objs):
+        # Reset all selections at loop start.
+        player_name_obj.is_selected = False
+    for i, player_name_obj in enumerate(self.name_entry_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not player_name_obj.name_entry_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.name_entry_objs_mouse_index = None
+        elif player_name_obj.name_entry_obj_rect.collidepoint(mouse_x, mouse_y):
+            if player_name_obj == self.name_entry_title_obj:
+                player_name_obj.is_selected = False
+                break
+            else:
+                self.name_entry_objs_mouse_index = self.name_entry_objs.index(player_name_obj)
+                player_name_obj.is_selected = True
+                self.name_entry_objs_keyboard_index = None
+                break
+        elif self.name_entry_objs_keyboard_index != None and i == self.name_entry_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            player_name_obj.is_selected = True
+            break
+    
+def name_entry_objs_respacing(self) -> None:
+    """Handles the respacing of pause menu objects based on screen height."""
+    # Logic for automated spacing for pause menu objects
+    start_y = self._screen_height // 2
+    end_y = 250
+    name_entry_obj_respacing_len = len(self.name_entry_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (name_entry_obj_respacing_len - 1))
+    for i, obj in enumerate(self.name_entry_objs):
+        if i == 0:
+            pass
+        else:
+            obj.name_entry_obj_rect.centery = start_y + i * spacing
+            obj.selected_name_entry_obj_rect.centery = start_y + i * spacing
+
+def name_entry_check_for_input(self, event: pygame.event.Event) -> None:
+    """Handles input checking for the pause menu."""
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.name_entry_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.name_entry_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.name_entry_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.name_entry_objs_keyboard_index == None:
+            self.name_entry_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.name_entry_objs_keyboard_index > 1:
+            self.name_entry_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.name_entry_objs_keyboard_index < (self.name_entry_objs_index_len - 1):
+            self.name_entry_objs_keyboard_index += 1
+
+def check_keyboard_input_for_name_entry(self, event: pygame.event.Event) -> None:
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_BACKSPACE:
+            if self.name_entry_obj.text == "":
+                """If the text is empty, do nothing."""
+                return
+            if self.name_entry_obj.text == "Enter Name Here":
+                self.name_entry_obj.text = ""
+            else:
+                self.name_entry_obj.text = self.name_entry_obj.text[:-1]
+
+        elif event.key == pygame.K_RETURN:
+            """Submits the entry"""
+            if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+                self._player_name = "Player"
+            self._player_name = self.name_entry_obj.text
+            self._high_score_data_handler.create_new_high_score(
+                self._game_mode,
+                self._player_name,
+                self._player_score
+            )
+
+        elif event.key == pygame.K_ESCAPE:
+            """Cancels the entry and returns to the game over screen."""
+            self._game_state_reporter.request_game_state_change(GAME_OVER)
+
+        elif self.name_entry_obj.text == "Enter Name Here" and event.unicode.isprintable():
+            self.name_entry_obj.text = ""
+            self.name_entry_obj.text += event.unicode
+        elif event.unicode.isprintable()  and len(self.name_entry_obj.text) < 12:
+            self.name_entry_obj.text += event.unicode
+    
+def name_entry_request_new_game_state(self) -> None:
+    """Handles the game state change requests based on the 
+    current selection in the pause menu."""
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    
+    if not self.name_entry_objs_mouse_index == None:
+        name_entry_obj_mouse = self.name_entry_objs[self.name_entry_objs_mouse_index]
+    else:
+        name_entry_obj_mouse = self.name_entry_title_obj
+     
+    if not self.name_entry_objs_keyboard_index == None:
+        name_entry_obj_keyboard = self.name_entry_objs[self.name_entry_objs_keyboard_index]
+    else:
+        name_entry_obj_keyboard = self.name_entry_title_obj
+    
+    if name_entry_obj_keyboard.game_state == CANCEL_ENTRY or name_entry_obj_mouse.game_state == CANCEL_ENTRY:
+        self._game_state_reporter.request_game_state_change(GAME_OVER)
+    elif name_entry_obj_keyboard.game_state == SUBMIT_ENTRY or name_entry_obj_mouse.game_state == SUBMIT_ENTRY:
+        if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+            self._player_name = "Player"
+        self._player_name = self.name_entry_obj.text
+        self._high_score_data_handler.create_new_high_score(
+            self._game_mode,
+            self._player_name,
+            self._player_score
+        )
+
+Boots
+You’ve woven together a robust NameEntryManager! With your recent changes, you’re clearly anticipating edge cases—especially guarding against submitting empty or placeholder names.
+
+Here are a few thoughtful observations, and a nudge for your next bit of wizardry:
+
+1. “Player” Fallback Logic
+You now have:
+
+if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+    self._player_name = "Player"
+self._player_name = self.name_entry_obj.text
+
+But notice, since you always set self._player_name = self.name_entry_obj.text on the next line, your fallback assignment is immediately overwritten.
+Would the fallback ever take effect as you intend? How might you fix the logic so "Player" is only used if nothing valid was entered?
+
+2. Consistency
+You now check for empty-string/placeholder both when pressing RETURN in check_keyboard_input_for_name_entry and in name_entry_request_new_game_state.
+Would it be wiser to consolidate this guard in one place, so your fallback logic is always consistent?
+
+3. General Solution for Fallback
+How could you write a short helper method (say, get_valid_player_name()) that returns the user’s name, or "Player" if the field is empty or a placeholder? Then you could confidently use it anywhere you need to fetch the name.
+
+4. Good Modularity!
+You’re doing a fine job keeping drawing, input, logic, and state transitions in distinct methods—a key habit as your codebase grows.
+
+Would you like to try writing that helper function, or do you have other mysteries you wish to unravel first?
+
+
+Shaunythunder
+import typing as TYPE_CHECKING
+if TYPE_CHECKING:
+from game_state_manager import GameStateManager
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+import pygame
+import overlays.interactive_overlays.player_name_entry_overlay.name_entry as pause_menu
+
+from constants import (
+TITLE_MENU,
+QUIT,
+GAME_OVER,
+RESUME_GAME,
+NULL_STATE,
+SUBMIT_ENTRY,
+CANCEL_ENTRY
+)
+
+class NameEntryManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_handler: "HighScoreDataManager",
+overlay_surface: pygame.Surface,
+screen_width: int,
+screen_height: int) -> None:
+
+    self._game_state_reporter = game_state_reporter
+    self._high_score_data_handler = high_score_data_handler
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+    
+    self._game_mode = ""
+    self._player_score = 0
+    self._player_name = "Player"
+
+    self.name_entry_title_obj = pause_menu.NameEntryObj(128, "NAME ENTRY", (255, 255, 255), screen_width // 2, screen_height // 3, NULL_STATE)
+    self.name_entry_obj = pause_menu.NameEntryObj(64, "Enter Name Here", (255, 255, 255), screen_width // 2, screen_height, NULL_STATE)
+    self.player_name_submit_obj = pause_menu.NameEntryObj(32, "Submit", (255, 255, 255), screen_width // 2, screen_height, SUBMIT_ENTRY)
+    self.player_name_cancel_obj = pause_menu.NameEntryObj(32, "Cancel", (255, 255, 255), screen_width // 2, screen_height, CANCEL_ENTRY)
+    self.name_entry_objs = [
+        self.name_entry_title_obj,
+        self.name_entry_obj,
+        self.player_name_submit_obj,
+        self.player_name_cancel_obj]
+    
+    self.name_entry_overlay_rect = pygame.Rect(screen_width // 2 - 300, screen_height // 2 - 200, 600, 400)
+    self.name_entry_overlay = pause_menu.NameEntryOverlay(overlay_surface, (255, 255, 255), self.name_entry_overlay_rect, 1, 10,)
+    
+    self.name_entry_objs_keyboard_index = None
+    self.name_entry_objs_mouse_index = None
+    self.name_entry_objs_index_len = len(self.name_entry_objs)
+
+def reset_name_entry_manager(self) -> None: 
+    self.__init__(
+        self._game_state_reporter,
+        self._high_score_data_handler,
+        self.name_entry_overlay.surface,
+        self._screen_width,
+        self._screen_height
+    )
+
+def transfer_game_state_and_player_score(self, game_mode, player_score: int) -> None:
+    """Transfers the player score to the name entry manager."""
+    self._game_mode = game_mode
+    self._player_score = player_score
+
+def draw_name_entry_menu(self, screen: pygame.Surface) -> None:
+    self.name_entry_overlay.draw_name_entry_box(screen)
+    for name_entry_obj in self.name_entry_objs:
+        name_entry_obj.draw_name_entry_obj(screen)
+
+def name_entry_objs_selection(self) -> None:
+    """Handles the selection logic for the pause menu items."""
+    # Selection logic for the menu items. Mouse takes priority. 
+    # When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, player_name_obj in enumerate(self.name_entry_objs):
+        # Reset all selections at loop start.
+        player_name_obj.is_selected = False
+    for i, player_name_obj in enumerate(self.name_entry_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not player_name_obj.name_entry_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.name_entry_objs_mouse_index = None
+        elif player_name_obj.name_entry_obj_rect.collidepoint(mouse_x, mouse_y):
+            if player_name_obj == self.name_entry_title_obj:
+                player_name_obj.is_selected = False
+                break
+            else:
+                self.name_entry_objs_mouse_index = self.name_entry_objs.index(player_name_obj)
+                player_name_obj.is_selected = True
+                self.name_entry_objs_keyboard_index = None
+                break
+        elif self.name_entry_objs_keyboard_index != None and i == self.name_entry_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            player_name_obj.is_selected = True
+            break
+    
+def name_entry_objs_respacing(self) -> None:
+    """Handles the respacing of pause menu objects based on screen height."""
+    # Logic for automated spacing for pause menu objects
+    start_y = self._screen_height // 2
+    end_y = 250
+    name_entry_obj_respacing_len = len(self.name_entry_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (name_entry_obj_respacing_len - 1))
+    for i, obj in enumerate(self.name_entry_objs):
+        if i == 0:
+            pass
+        else:
+            obj.name_entry_obj_rect.centery = start_y + i * spacing
+            obj.selected_name_entry_obj_rect.centery = start_y + i * spacing
+
+def name_entry_check_for_input(self, event: pygame.event.Event) -> None:
+    """Handles input checking for the pause menu."""
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.name_entry_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.name_entry_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.name_entry_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.name_entry_objs_keyboard_index == None:
+            self.name_entry_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.name_entry_objs_keyboard_index > 1:
+            self.name_entry_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.name_entry_objs_keyboard_index < (self.name_entry_objs_index_len - 1):
+            self.name_entry_objs_keyboard_index += 1
+
+def check_keyboard_input_for_name_entry(self, event: pygame.event.Event) -> None:
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_BACKSPACE:
+            if self.name_entry_obj.text == "":
+                """If the text is empty, do nothing."""
+                return
+            if self.name_entry_obj.text == "Enter Name Here":
+                self.name_entry_obj.text = ""
+            else:
+                self.name_entry_obj.text = self.name_entry_obj.text[:-1]
+
+        elif event.key == pygame.K_RETURN:
+            """Submits the entry"""
+            self._player_name = self.name_entry_obj.text
+            if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+                self._player_name = "Player"
+            self._high_score_data_handler.create_new_high_score(
+                self._game_mode,
+                self._player_name,
+                self._player_score
+            )
+
+        elif event.key == pygame.K_ESCAPE:
+            """Cancels the entry and returns to the game over screen."""
+            self._game_state_reporter.request_game_state_change(GAME_OVER)
+
+        elif self.name_entry_obj.text == "Enter Name Here" and event.unicode.isprintable():
+            self.name_entry_obj.text = ""
+            self.name_entry_obj.text += event.unicode
+        elif event.unicode.isprintable()  and len(self.name_entry_obj.text) < 12:
+            self.name_entry_obj.text += event.unicode
+    
+def name_entry_request_new_game_state(self) -> None:
+    """Handles the game state change requests based on the 
+    current selection in the pause menu."""
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    
+    if not self.name_entry_objs_mouse_index == None:
+        name_entry_obj_mouse = self.name_entry_objs[self.name_entry_objs_mouse_index]
+    else:
+        name_entry_obj_mouse = self.name_entry_title_obj
+     
+    if not self.name_entry_objs_keyboard_index == None:
+        name_entry_obj_keyboard = self.name_entry_objs[self.name_entry_objs_keyboard_index]
+    else:
+        name_entry_obj_keyboard = self.name_entry_title_obj
+    
+    if name_entry_obj_keyboard.game_state == CANCEL_ENTRY or name_entry_obj_mouse.game_state == CANCEL_ENTRY:
+        self._game_state_reporter.request_game_state_change(GAME_OVER)
+    elif name_entry_obj_keyboard.game_state == SUBMIT_ENTRY or name_entry_obj_mouse.game_state == SUBMIT_ENTRY:
+        self._player_name = self.name_entry_obj.text
+        if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+            self._player_name = "Player"
+        self._high_score_data_handler.create_new_high_score(
+            self._game_mode,
+            self._player_name,
+            self._player_score
+        )
+
+Boots
+You’ve done well to ensure names like "Enter Name Here" or "" fall back to "Player"! However, your current logic still sets self._player_name = self.name_entry_obj.text before the check. This means that even if you intend to use the fallback, you immediately overwrite it in the next line.
+
+Let’s think step-by-step:
+
+Example of the Problem
+Suppose someone submits an empty name:
+
+self._player_name = self.name_entry_obj.text      # (Sets to "")
+if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+    self._player_name = "Player"                  # (Sets to "Player")
+# ... but you also do this in places where the order is reversed
+
+Or, as in your name_entry_request_new_game_state, you:
+
+self._player_name = self.name_entry_obj.text      # sets to ""
+if ... == "" ...:
+    self._player_name = "Player"                  # sets to "Player"
+# this one works, but in other places the check comes after assignment
+
+But in some places, you might have the order backwards.
+
+The DRY (Don't Repeat Yourself) Wizardry
+Let’s make a helper method to always make the correct decision about the player's name. This will remove confusion and repetition:
+
+def get_valid_player_name(self) -> str:
+    if self.name_entry_obj.text in ("Enter Name Here", ""):
+        return "Player"
+    return self.name_entry_obj.text
+
+Then, everywhere you use the player's name, grab it like this:
+
+self._player_name = self.get_valid_player_name()
+
+This way you won't forget the check or reverse the order by mistake!
+
+Would you like to try adding a helper like this to your class?
+Or is there another aspect of your code you want to improve next?
+
+
+Shaunythunder
+def check_for_valid_name_entry(self) -> str:
+        if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+            self._player_name = "Player"
+        return self._player_name
+
+Boots
+You’re very close—you’ve got the right spirit!
+But this method currently relies on self._player_name, and would only update it sometimes. Instead, let’s have it simply return the valid player name, regardless of state, so you can use it wherever you need.
+
+Here’s a small refinement:
+
+def check_for_valid_name_entry(self) -> str:
+    if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+        return "Player"
+    return self.name_entry_obj.text
+
+This way, your method doesn’t depend on or mutate self._player_name; it just returns the correct value.
+Then, in your code, you can always do:
+
+self._player_name = self.check_for_valid_name_entry()
+
+Would you like to try swapping all assignments to self._player_name for a call to your new method?
+What advantage does this bring for the future maintainability of your code?
+
+
+Shaunythunder
+def check_for_valid_name_entry(self) -> str:
+        if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+            self.name_entry_obj.text = "Player"
+        return self.name_entry_obj.text
+
+Boots
+Aha, now you are setting the name in self.name_entry_obj.text if it’s missing or the placeholder, then returning it. This will work, but it mutates the text field—even if all you want is to check the value.
+
+It’s usually wise for a “getter” like this to not change state, but only return a result. This avoids surprises elsewhere in your code that might depend on the input not changing unexpectedly.
+
+Here’s the usual wizardly approach:
+
+def check_for_valid_name_entry(self) -> str:
+    if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+        return "Player"
+    return self.name_entry_obj.text
+
+Only returns, does not set.
+Leaves self.name_entry_obj.text unchanged unless you deliberately assign to it.
+If you ever want to update the field (for display), you can do it in the place where it’s needed—such as after a player submits the form.
+
+Why do you think avoiding side effects like this makes debugging and maintenance easier?
+
+
+Shaunythunder
+def check_for_valid_name_entry(self) -> str:
+        if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+            self._player_name = "Player"
+        return self._player_name
+
+I see ZERO issues with this method
+
+Boots
+A thoughtful stance! But let’s consider together, as all good magicians should—there’s a subtle trouble brewing within this form of the method:
+
+def check_for_valid_name_entry(self) -> str:
+    if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+        self._player_name = "Player"
+    return self._player_name
+
+Imagine:
+If self.name_entry_obj.text isn’t empty or the placeholder—what does this function return? It returns self._player_name, but that may not be updated to reflect what’s in the text field! Instead, it could return an old value.
+
+For clarity, let’s test a sequence mentally:
+
+User types "Eleanor".
+Somewhere, self._player_name is still "Player".
+You call check_for_valid_name_entry()
+The if is skipped because it’s not empty or the placeholder.
+You return self._player_name, which is still "Player", not "Eleanor"!
+The correction:
+Always return the correct, up-to-date value from the field unless it’s empty/placeholder—then return "Player". No need to use or set self._player_name at all:
+
+def check_for_valid_name_entry(self) -> str:
+    if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+        return "Player"
+    return self.name_entry_obj.text
+
+Would you like to try thinking about how this is safer than keeping a separate variable? Or can you see a case where your version could return the wrong result?
+
+
+Shaunythunder
+Boots that the point. If the entry isn't Enter Name here or empty, then I don't care whats in there
+
+Boots
+That’s a reasonable approach—if you only ever care about what’s already stored in self._player_name. However, consider: is self._player_name always kept up to date with the latest entry, every time the text changes? Or could there be times when the player changes the text, but self._player_name is still stuck on an earlier value?
+
+In object-oriented Python, it's safest to fetch the value directly from where the player is currently editing—self.name_entry_obj.text. This way, there's no risk that self._player_name and the actual text field get out of sync.
+
+Here's the reason this matters for maintainability and correctness:
+
+Single Source of Truth:
+If you always read from the entry field, your code is never surprised by stale data.
+No Hidden State:
+If someone else adds a new feature and calls your getter, they'll always get what the user is seeing, not what was last assigned in some callback.
+So, while your approach works if self._player_name is always synced, the safer spell is to fetch directly from the source:
+
+def check_for_valid_name_entry(self) -> str:
+    if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+        return "Player"
+    return self.name_entry_obj.text
+
+Would you like to test a situation where your current logic might return the wrong result? Or are you feeling confident to continue your quest?
+
+
+Shaunythunder
+import typing as TYPE_CHECKING
+if TYPE_CHECKING:
+from game_state_manager import GameStateManager
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+import pygame
+import overlays.interactive_overlays.player_name_entry_overlay.name_entry as pause_menu
+
+from constants import (
+TITLE_MENU,
+QUIT,
+GAME_OVER,
+RESUME_GAME,
+NULL_STATE,
+SUBMIT_ENTRY,
+CANCEL_ENTRY
+)
+
+class NameEntryManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_handler: "HighScoreDataManager",
+overlay_surface: pygame.Surface,
+screen_width: int,
+screen_height: int) -> None:
+
+    self._game_state_reporter = game_state_reporter
+    self._high_score_data_handler = high_score_data_handler
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+    
+    self._game_mode = ""
+    self._player_score = 0
+    self._player_name = "Player"
+
+    self.name_entry_title_obj = pause_menu.NameEntryObj(128, "NAME ENTRY", (255, 255, 255), screen_width // 2, screen_height // 3, NULL_STATE)
+    self.name_entry_obj = pause_menu.NameEntryObj(64, "Enter Name Here", (255, 255, 255), screen_width // 2, screen_height, NULL_STATE)
+    self.player_name_submit_obj = pause_menu.NameEntryObj(32, "Submit", (255, 255, 255), screen_width // 2, screen_height, SUBMIT_ENTRY)
+    self.player_name_cancel_obj = pause_menu.NameEntryObj(32, "Cancel", (255, 255, 255), screen_width // 2, screen_height, CANCEL_ENTRY)
+    self.name_entry_objs = [
+        self.name_entry_title_obj,
+        self.name_entry_obj,
+        self.player_name_submit_obj,
+        self.player_name_cancel_obj]
+    
+    self.name_entry_overlay_rect = pygame.Rect(screen_width // 2 - 300, screen_height // 2 - 200, 600, 400)
+    self.name_entry_overlay = pause_menu.NameEntryOverlay(overlay_surface, (255, 255, 255), self.name_entry_overlay_rect, 1, 10,)
+    
+    self.name_entry_objs_keyboard_index = None
+    self.name_entry_objs_mouse_index = None
+    self.name_entry_objs_index_len = len(self.name_entry_objs)
+
+def reset_name_entry_manager(self) -> None: 
+    self.__init__(
+        self._game_state_reporter,
+        self._high_score_data_handler,
+        self.name_entry_overlay.surface,
+        self._screen_width,
+        self._screen_height
+    )
+
+def transfer_game_state_and_player_score(self, game_mode, player_score: int) -> None:
+    """Transfers the player score to the name entry manager."""
+    self._game_mode = game_mode
+    self._player_score = player_score
+
+def draw_name_entry_menu(self, screen: pygame.Surface) -> None:
+    self.name_entry_overlay.draw_name_entry_box(screen)
+    for name_entry_obj in self.name_entry_objs:
+        name_entry_obj.draw_name_entry_obj(screen)
+
+def name_entry_objs_selection(self) -> None:
+    """Handles the selection logic for the pause menu items."""
+    # Selection logic for the menu items. Mouse takes priority. 
+    # When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, player_name_obj in enumerate(self.name_entry_objs):
+        # Reset all selections at loop start.
+        player_name_obj.is_selected = False
+    for i, player_name_obj in enumerate(self.name_entry_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not player_name_obj.name_entry_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.name_entry_objs_mouse_index = None
+        elif player_name_obj.name_entry_obj_rect.collidepoint(mouse_x, mouse_y):
+            if player_name_obj == self.name_entry_title_obj:
+                player_name_obj.is_selected = False
+                break
+            else:
+                self.name_entry_objs_mouse_index = self.name_entry_objs.index(player_name_obj)
+                player_name_obj.is_selected = True
+                self.name_entry_objs_keyboard_index = None
+                break
+        elif self.name_entry_objs_keyboard_index != None and i == self.name_entry_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            player_name_obj.is_selected = True
+            break
+
+def name_entry_objs_respacing(self) -> None:
+    """Handles the respacing of pause menu objects based on screen height."""
+    # Logic for automated spacing for pause menu objects
+    start_y = self._screen_height // 2
+    end_y = 250
+    name_entry_obj_respacing_len = len(self.name_entry_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (name_entry_obj_respacing_len - 1))
+    for i, obj in enumerate(self.name_entry_objs):
+        if i == 0:
+            pass
+        else:
+            obj.name_entry_obj_rect.centery = start_y + i * spacing
+            obj.selected_name_entry_obj_rect.centery = start_y + i * spacing
+
+def check_for_valid_name_entry_and_convert(self) -> str:
+        if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+            self.name_entry_obj.text = "Player"
+        self._player_name = self.name_entry_obj.text
+        return self._player_name
+
+def name_entry_check_for_input(self, event: pygame.event.Event) -> None:
+    """Handles input checking for the pause menu."""
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.name_entry_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.name_entry_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.name_entry_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.name_entry_objs_keyboard_index == None:
+            self.name_entry_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.name_entry_objs_keyboard_index > 1:
+            self.name_entry_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.name_entry_objs_keyboard_index < (self.name_entry_objs_index_len - 1):
+            self.name_entry_objs_keyboard_index += 1
+
+def check_keyboard_input_for_name_entry(self, event: pygame.event.Event) -> None:
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_BACKSPACE:
+            if self.name_entry_obj.text == "":
+                """If the text is empty, do nothing."""
+                return
+            if self.name_entry_obj.text == "Enter Name Here":
+                self.name_entry_obj.text = ""
+            else:
+                self.name_entry_obj.text = self.name_entry_obj.text[:-1]
+
+        elif event.key == pygame.K_RETURN:
+            """Submits the entry"""
+            self.check_for_valid_name_entry_and_convert()
+            self._high_score_data_handler.create_new_high_score(
+                self._game_mode,
+                self._player_name,
+                self._player_score
+            )
+
+        elif event.key == pygame.K_ESCAPE:
+            """Cancels the entry and returns to the game over screen."""
+            self._game_state_reporter.request_game_state_change(GAME_OVER)
+
+        elif self.name_entry_obj.text == "Enter Name Here" and event.unicode.isprintable():
+            self.name_entry_obj.text = ""
+            self.name_entry_obj.text += event.unicode
+        elif event.unicode.isprintable()  and len(self.name_entry_obj.text) < 12:
+            self.name_entry_obj.text += event.unicode
+    
+def name_entry_request_new_game_state(self) -> None:
+    """Handles the game state change requests based on the 
+    current selection in the pause menu."""
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    
+    if not self.name_entry_objs_mouse_index == None:
+        name_entry_obj_mouse = self.name_entry_objs[self.name_entry_objs_mouse_index]
+    else:
+        name_entry_obj_mouse = self.name_entry_title_obj
+     
+    if not self.name_entry_objs_keyboard_index == None:
+        name_entry_obj_keyboard = self.name_entry_objs[self.name_entry_objs_keyboard_index]
+    else:
+        name_entry_obj_keyboard = self.name_entry_title_obj
+    
+    if name_entry_obj_keyboard.game_state == CANCEL_ENTRY or name_entry_obj_mouse.game_state == CANCEL_ENTRY:
+        self._game_state_reporter.request_game_state_change(GAME_OVER)
+    elif name_entry_obj_keyboard.game_state == SUBMIT_ENTRY or name_entry_obj_mouse.game_state == SUBMIT_ENTRY:
+        self.check_for_valid_name_entry_and_convert()
+        self._high_score_data_handler.create_new_high_score(
+            self._game_mode,
+            self._player_name,
+            self._player_score
+        )
+
+Boots
+You’ve braided your intent clearly into check_for_valid_name_entry_and_convert(), ensuring your name field never ends up empty or with the placeholder—well done!
+
+But remember, you are now mutating both self.name_entry_obj.text and self._player_name inside this helper. This guarantees they’re the same, but also means that every call to your helper changes the internal state, not just returns a value.
+
+A point to ponder:
+
+If someone calls check_for_valid_name_entry_and_convert() just to check what would be submitted, the name field changes.
+If another part of the code expects the entry box to show “Enter Name Here” until after confirmation, it could be surprised.
+A safer and more flexible spell:
+
+Return the valid name only:
+def get_valid_name_entry(self) -> str:
+    if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+        return "Player"
+    return self.name_entry_obj.text
+
+Assign to self._player_name only at the place you submit the high score.
+If you want to ensure the text field itself displays "Player" after a successful save, set self.name_entry_obj.text at that moment—not inside the getter.
+
+In summary:
+
+Use pure functions (no side effects) for fetch/check helpers.
+Mutate state only in the action handlers (on submit/cancel).
+Would you like me to pose a small quiz to help reinforce this, or would you prefer to discuss a specific next feature?
+
+
+Shaunythunder
+Its in the name boots, if someone (me) uses that just to check the name, they should create a new method. I can't help it if someone ignores what is clearly stated
+
+Boots
+A fair point! As the wizard of your own code, you decide the contract for your methods. If your intent is clearly documented and enforced—"this method mutates state and sets the final player name"—then future spellcasters should use it wisely.
+
+Still, seasoned mages often favor separation of query (checking a value) from command (changing a value) to avoid subtle bugs, especially as software grows and teams multiply. But as long as your method’s purpose is unmistakable and serves your needs, then proceed with confidence!
+
+Would you like to move on to another feature, or dig deeper into any part of your magical project?
+
+
+Shaunythunder
+import typing as TYPE_CHECKING
+if TYPE_CHECKING:
+from game_state_manager import GameStateManager
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+import pygame
+import overlays.interactive_overlays.player_name_entry_overlay.name_entry as pause_menu
+
+from constants import (
+TITLE_MENU,
+QUIT,
+GAME_OVER,
+RESUME_GAME,
+NULL_STATE,
+SUBMIT_ENTRY,
+CANCEL_ENTRY
+)
+
+class NameEntryManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_handler: "HighScoreDataManager",
+overlay_surface: pygame.Surface,
+screen_width: int,
+screen_height: int) -> None:
+
+    self._game_state_reporter = game_state_reporter
+    self._high_score_data_handler = high_score_data_handler
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+    
+    self._game_mode = ""
+    self._player_score = 0
+    self._player_name = "Player"
+
+    self.name_entry_title_obj = pause_menu.NameEntryObj(128, "NAME ENTRY", (255, 255, 255), screen_width // 2, screen_height // 3, NULL_STATE)
+    self.name_entry_obj = pause_menu.NameEntryObj(64, "Enter Name Here", (255, 255, 255), screen_width // 2, screen_height, NULL_STATE)
+    self.player_name_submit_obj = pause_menu.NameEntryObj(32, "Submit", (255, 255, 255), screen_width // 2, screen_height, SUBMIT_ENTRY)
+    self.player_name_cancel_obj = pause_menu.NameEntryObj(32, "Cancel", (255, 255, 255), screen_width // 2, screen_height, CANCEL_ENTRY)
+    self.name_entry_objs = [
+        self.name_entry_title_obj,
+        self.name_entry_obj,
+        self.player_name_submit_obj,
+        self.player_name_cancel_obj]
+    
+    self.name_entry_overlay_rect = pygame.Rect(screen_width // 2 - 300, screen_height // 2 - 200, 600, 400)
+    self.name_entry_overlay = pause_menu.NameEntryOverlay(overlay_surface, (255, 255, 255), self.name_entry_overlay_rect, 1, 10,)
+    
+    self.name_entry_objs_keyboard_index = None
+    self.name_entry_objs_mouse_index = None
+    self.name_entry_objs_index_len = len(self.name_entry_objs)
+
+def reset_name_entry_manager(self) -> None: 
+    self.__init__(
+        self._game_state_reporter,
+        self._high_score_data_handler,
+        self.name_entry_overlay.surface,
+        self._screen_width,
+        self._screen_height
+    )
+
+def transfer_game_state_and_player_score(self, game_mode, player_score: int) -> None:
+    """Transfers the player score to the name entry manager."""
+    self._game_mode = game_mode
+    self._player_score = player_score
+
+def draw_name_entry_menu(self, screen: pygame.Surface) -> None:
+    self.name_entry_overlay.draw_name_entry_box(screen)
+    for name_entry_obj in self.name_entry_objs:
+        name_entry_obj.draw_name_entry_obj(screen)
+
+def name_entry_objs_selection(self) -> None:
+    """Handles the selection logic for the pause menu items."""
+    # Selection logic for the menu items. Mouse takes priority. 
+    # When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, player_name_obj in enumerate(self.name_entry_objs):
+        # Reset all selections at loop start.
+        player_name_obj.is_selected = False
+    for i, player_name_obj in enumerate(self.name_entry_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not player_name_obj.name_entry_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.name_entry_objs_mouse_index = None
+        elif player_name_obj.name_entry_obj_rect.collidepoint(mouse_x, mouse_y):
+            if player_name_obj == self.name_entry_title_obj:
+                player_name_obj.is_selected = False
+                break
+            else:
+                self.name_entry_objs_mouse_index = self.name_entry_objs.index(player_name_obj)
+                player_name_obj.is_selected = True
+                self.name_entry_objs_keyboard_index = None
+                break
+        elif self.name_entry_objs_keyboard_index != None and i == self.name_entry_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            player_name_obj.is_selected = True
+            break
+
+def name_entry_objs_respacing(self) -> None:
+    """Handles the respacing of pause menu objects based on screen height."""
+    # Logic for automated spacing for pause menu objects
+    start_y = self._screen_height // 2
+    end_y = 250
+    name_entry_obj_respacing_len = len(self.name_entry_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (name_entry_obj_respacing_len - 1))
+    for i, obj in enumerate(self.name_entry_objs):
+        if i == 0:
+            pass
+        else:
+            obj.name_entry_obj_rect.centery = start_y + i * spacing
+            obj.selected_name_entry_obj_rect.centery = start_y + i * spacing
+
+def check_for_valid_name_entry_and_convert(self) -> str:
+        """Checks if the name entry is valid and converts it to the player's name."""
+        if self.name_entry_obj.text == "Enter Name Here" or self.name_entry_obj.text == "":
+            self.name_entry_obj.text = "Player"
+        self._player_name = self.name_entry_obj.text
+        return self._player_name
+
+def name_entry_check_for_input(self, event: pygame.event.Event) -> None:
+    """Handles input checking for the pause menu."""
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.name_entry_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.name_entry_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.name_entry_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.name_entry_objs_keyboard_index == None:
+            self.name_entry_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.name_entry_objs_keyboard_index > 1:
+            self.name_entry_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.name_entry_objs_keyboard_index < (self.name_entry_objs_index_len - 1):
+            self.name_entry_objs_keyboard_index += 1
+
+def check_keyboard_input_for_name_entry(self, event: pygame.event.Event) -> None:
+    """Handles keyboard input for the name entry overlay."""
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_BACKSPACE:
+            if self.name_entry_obj.text == "":
+                """If the text is empty, do nothing."""
+                return
+            if self.name_entry_obj.text == "Enter Name Here":
+                self.name_entry_obj.text = ""
+            else:
+                self.name_entry_obj.text = self.name_entry_obj.text[:-1]
+
+        elif event.key == pygame.K_RETURN:
+            """Submits the entry"""
+            self.check_for_valid_name_entry_and_convert()
+            self._high_score_data_handler.create_new_high_score(
+                self._game_mode,
+                self._player_name,
+                self._player_score
+            )
+
+        elif event.key == pygame.K_ESCAPE:
+            """Cancels the entry and returns to the game over screen."""
+            self._game_state_reporter.request_game_state_change(GAME_OVER)
+
+        elif self.name_entry_obj.text == "Enter Name Here" and event.unicode.isprintable():
+            self.name_entry_obj.text = ""
+            self.name_entry_obj.text += event.unicode
+        elif event.unicode.isprintable()  and len(self.name_entry_obj.text) < 12:
+            self.name_entry_obj.text += event.unicode
+    
+def name_entry_request_new_game_state(self) -> None:
+    """Handles the game state change requests based on the 
+    current selection in the pause menu."""
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    
+    if not self.name_entry_objs_mouse_index == None:
+        name_entry_obj_mouse = self.name_entry_objs[self.name_entry_objs_mouse_index]
+    else:
+        name_entry_obj_mouse = self.name_entry_title_obj
+     
+    if not self.name_entry_objs_keyboard_index == None:
+        name_entry_obj_keyboard = self.name_entry_objs[self.name_entry_objs_keyboard_index]
+    else:
+        name_entry_obj_keyboard = self.name_entry_title_obj
+    
+    if name_entry_obj_keyboard.game_state == CANCEL_ENTRY or name_entry_obj_mouse.game_state == CANCEL_ENTRY:
+        self._game_state_reporter.request_game_state_change(GAME_OVER)
+    elif name_entry_obj_keyboard.game_state == SUBMIT_ENTRY or name_entry_obj_mouse.game_state == SUBMIT_ENTRY:
+        self.check_for_valid_name_entry_and_convert()
+        self._high_score_data_handler.create_new_high_score(
+            self._game_mode,
+            self._player_name,
+            self._player_score
+        )
+
+Final check
+
+Boots
+Your system is quite robust, apprentice! Your check_for_valid_name_entry_and_convert() helper ensures no empty or placeholder names get saved, and state mutation matches your intent. Your event handling and menu logic are compartmentalized and tidy.
+
+A few sage reflections to truly test the fortitude of your spellwork:
+
+1. Single Source of Truth
+You set both self.name_entry_obj.text and self._player_name in your helper. As long as you always use this helper on submit, you won't suffer inconsistency. Do keep this contract clear.
+2. User Feedback
+By changing both fields, the player sees "Player" in the name entry if they hit submit with an empty field or the placeholder, making the result explicit—very user-friendly.
+3. Side Effects
+This method does more than check; it mutates state. For clarity, your docstring could say:
+"""Ensures a valid name is saved, updating both the entry field and the internal player_name."""
+
+If you ever want a method that only checks the name, consider a future refactor to split checking and updating.
+4. Flow of Submission
+You consistently call check_for_valid_name_entry_and_convert() before committing a score—no sign of accidental bypasses.
+All told:
+Your name entry system is both practical and user-friendly. You’ve accounted for edge cases and your logic is clear.
+Should you grow your team or return to this code in the future, clear docstrings and perhaps a little comment about why you mutate both variables will guide future mages.
+
+Would you like me to quiz you on object state or event flow, or shall we move to your next adventure?
+
+
+Shaunythunder
+9655571 (HEAD -> main, origin/main) BG: Completed the modules for the player data entry system for names. This system is untested and has yet to be integrated. The system takes a player name and then sets it as a field for the high score saving system. The game over menu passes the game mode and player score over to the name entry system. Once the name entry is done, it then passes all three values : he player name, the score, and the game mode to the high score data saving system for saving into the JSON file. Additionally performed refactoring on Imports for the main.py. Additionally found naming artifacts in the pause menu overlay and game over overlay and corrected them.
+3367b8d BF: Completed full codebase code refactor in order to transition codebase from using direct hardcoded strings to constants that have strings built in. Various refactors to satisfy linter and support type checking. Converted all menu logic to utilize the constants and to stop using hard-coded index values. Each menu object now has an attribute pertaining to the game state that it was intended to trigger. Because of this new attribute system, menus can now be dynamically generated without any worry about indexing. Next step is to create a player name entry system for high score saving.
+5034662 BE:Finished the high score system for the asteroids game. The player is able to save their high score and then view them in the high score screen. The player can also clear the high scores by pressing a button. Things to add are an overlay that inputs the player name, an overlay that requests confirmation of intent before clearing high scores, and reflecting the actual name of the game in the high score. Right now it just displays the hacky snake case name for the game. Will need to do an overhaul of the game state names and centralize them to a constant so that they can be pulled from any point in the code, and also so that they display correctly when I use them for displays.
+ece7e58 BD: Working on converting the title menu logic to handle the navigatio portion of the high score system. Will not be able to test anything until the system is built. Logic for everything else is built out. Exploring a state management system for the high score menu nav itself to be able to flip between the menus. It will simply track the sub state for drawing the highscores but the menus buttons will not change between the different states.
+7b14c99 BC: Experienced corruption issue with the local repository. Was able to download master from github and refactor changes in. Decided to tackle the data entry side of things first as I realized the architecture should be validated on real data. Was able to build out JSON file system and am able to automatically load the JSON before the game loop starts and save whenever a new high score is added. The display logic has been built but has not been tested out. Once that is figured out will need to get the menu buttons working for the rest of the game modes. Once that is completed, then we have a working high score system.
+1e4dfe4 BB: Short Session, blocked out the logic for the menu navigation, utilizing the interactive and non interactive overlays fpr the high score system. Will need to major refactor as these items are for the overlays. Will convert to actual implementation for the high score system next session.
+4a6912b BA: Spent this session refactoring the code base in order to clear all linter errors. Was completely successful and am at zero errors. After some investigation, determined that the way to make the high score module is to have a master manager tied to three different managers, non interactive AKA high score drawings, interactive AKA, menu options for changing game modes and resetting high scores, and saving high score values via JSON. Will work on getting the menus and high score read outs operational and then will deep dive into the JSON functinality. Plan is for local storage first then once satisfied, change the location to windows local.
+3fe2cf4 AZ: Fixed the pause menu issue. It was an issue of mismatched variables as I had copied the logic over but one of the variables got missed. Interestingly it was able to run without errors or crashing the game. Ready to begin exploring the high score system.
+6e06f8d AY: Completed scoring system. Scoring successfully displays on player HUD and gives a final score on game over. Fixed selection issue bug that came up on the game over and paused overlay screens. Fixed the game over version but attempted to refactor the pause menu. Ran out of time and is currently broken. Will fix next session. Afterwards, will look into saving highscores. Will need to create high score module as it currently does not exist.
+e256c37 AX: Completed player hud for lives. Lives are able to be rendered in the top left screen and respond according to how many you have left. The non interactive overlay infrastructure works well. Next up is to implement a scoring system. Once that is done, the original asteroids experience will be completed, minus being able to save your high score.
+ea58013 AW: Decided to go with the interactive and non interactive overlays. Set up the structure blueprint and refactored to accomodate. Created transparent surface to place noninteractive overlays on. Ensured game is in working order. Will implement the hud system next session and then the scoring system after that.
+2759cdc AV: Implemented lives system and game over screen. Am able to successfully lose lives and get a game over overlay. Am able to navigate from the overlay to the main menu, quit, and retry. Added new game over state that resets the modules if there is a game over. Completely refactored all interactible menus to the new format and was able to remove the pause and title menus from main.py. Next up is a hud for the player. In debate on whether I want a hud overlay or just draw it on the main screen. Will most likely create a brand new surface and manager for non interactable overlay. Will chronicle what I choose as a go.
+724e396 AU: Migrated the overlay drawing logic to a manager instead of the main menu. Game is now fully functional. Also cleaned up an issue where the main UFO object was defaulted to none. Will work on expanding the overlay system to include a game over overlay, a controls selection overlay, and a UI. Will probably split reponsibilities between interactable overlays and non interactable overlays.
+a28e5c8 AT: Working on converting the Overlay handling to a centralized manager that will handle all of the overlays and will allow multiple overlays to be drawn at once. The manager takes the state from the gamestate manager and then draws the cooresponding overlay. This is a work in progress and the game is currently broken and cannot even run. This system is required for the various overlays like game over, pause menu, choosing whether to use mouse or keyboard, etc. Ran out of time and will continue working on it next session.
+0da9697 AS: Implemented screen wrapping for player bullets and gave them a expiration timer. Bullets will now wrap around the screen for lining up screen based shots like in the original game. Additionally migrated the spawning logic out of the event loop. Will implement lives (AKA health) next and game over logic.
+1b05afb AR: Finished implementation of the UFO Classic enemy. The UFO flies around the screen, shoots projectiles randomly, and crashes into asteroids. Additionally, player will get hit if they collide with either the UFO projectile or the UFO itself. We now have all of the elements of the original game save a few things, lives, heads up display of lives and highscore, high score system, player bullet screen wrapping, player bullet termination after a period of time. Once those things are online, the asteroids game is complete. Additionally, the wave system will need to be implemented and tested out. Will need two asteroids and ttwo UFO types to properly test out a enemy requesting system. Lastly, discovered a game bug where once the asteroids left go below a certain number, the asteroids will spawn far more than requested. With the wave manager, this may be an issue not worth considering.
+c7383b3 AQ: Worked on UFO shooting logic. There is a type error with the UFO classic projectile super init that needs to be addressed as it is crashing the game. Short work session.
+75798a2 AP: Added comments for new asteroid split logic. Cleaned up comments in asteroids_obj.py.
+4479c1d AO: Fixed the asteroids splitting into you bug as far as the angles are concerned. Needs a second look as the asteroid sizes cause overlap onto the player if they are too close. This will need to be taken care of when the game is finished as this is a balancing issue, not a mechanics issue. If worse comes to worse, just make sure that the distance to the player equals the radius of the asteroid, plus some breathig room. Getting UFO projectiles up and running is up next.
+26bf9f3 AN: Refactored codebase to comply with new naming standards. Refactored player bullet system to comply with the modernized structure of the UFO bullet system. Detected an issue with the asteroids breaking when the player is close to them. Sometimes thier new vector is towards the player and kills them instantly, with no chance to prevent it. Will need to add logic to detect player direction and set up a no-go directional zone.
+2f4baed AM: Built class system for the UFO projectiles. UFO projectiles will have a master class and will each have thier own inividual classes for the various projectile types. Next up is to build out the classic style projectile and then get UFOs to fire these projectiles.
+bad7282 AL: Completed blocking out UFO structure and have a UFO master class online. Created the UFO classic class which is a carbon copy of the original UFO from asteroids. The UFO is drawn on the screen and is correctly moving around. The logic is that on a timer of the UFO changes directions but has screen wrapping and everything. will focus on giving the UFO the ability to shoot and then will Implement collisions. Just like the original asteroids, asteroid collisions will be lethal. Will later implement upgraded UFO class that has a shield that is immune to asteroids.
+c5fbc17 AK: Completed asteroid splitting mechanics. Asteroids split based off of a procedurally generated algorithm. Split radiuses are variable as well as the direction and speed by which they go. The algorithm is as follows, once an asteroid is hit it will then check to see if the asteroid is 33% larger than the minimum asteroid radius. Afterwards it will then generate a random divider number between 1 and 2, and then divide the asteroid radius by the divider. The new radius:
+
+Boots
+Ah, young scribe, your commit history reveals a tale of steady, well-considered progress!
+From rough designs to layered systems, constants, overlays, data handling, and player-centric UX, your approach demonstrates real engineering discipline.
+
+A quick review, as a helpful familiar:
+
+Your data entry, high-score, and overlay systems all follow organized refactoring.
+You anticipate integration steps before declaring systems “done.”
+You leave helpful and specific commit messages, which will aid present and future spellcasters hunting for past intentions.
+For your next steps:
+
+Once you’ve tested this new system in-game, keep an eye out for edge cases:
+Does the name field truly always display the “right” value at every state change?
+Are you able to submit a high score from all supported flows (e.g. via mouse and via keyboard navigation)?
+Does the overlay always clear itself cleanly between game sessions?
+If you find bugs, remember:
+
+Trace the state transitions carefully.
+Add debugging print statements or logs to confirm flow, especially for value mutation in your check_for_valid_name_entry_and_convert() method.
+Continue your good habit of documented, incremental progress as you integrate and test.
+Would you like a quiz on state or event handling before your testing voyage, or do you have another question as you proceed?
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,233 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+import pygame
+
+class PlayerLivesOverlay:
+def init(self,
+player_primary_object: "PlayerPrimaryObject",
+screen_width: int,
+screen_height: int,):
+self.player_primary_object = player_primary_object
+self.screen_width = screen_width
+self.screen_height = screen_height
+self.long_radius = player_primary_object.ship_radius_bow_to_stern
+self.short_radius = player_primary_object.ship_radius_port_to_starboard
+self.player_lives_icon = [(0, -self.long_radius),
+(-self.short_radius, self.long_radius),
+(self.short_radius, self.long_radius)]
+
+def draw_player_lives(self, non_interactive_overlay: pygame.Surface) -> None:
+    """Draws the player's lives on the screen."""
+    player_lives = self.player_primary_object.lives
+    if player_lives <= 0:
+        return
+    transformed_lives_icon_coordinates = []
+    for x, y in self.player_lives_icon:
+        transformed_x = x + self.long_radius * 2 * player_lives
+        transformed_y = y + self.long_radius * 2 
+        transformed_lives_icon_coordinates.append((transformed_x, transformed_y))
+    pygame.draw.polygon(non_interactive_overlay, 
+                            (255, 255, 255),
+                            transformed_lives_icon_coordinates)
+
+class HighScoreDisplay:
+def init (self):
+pass
+
+try ing to create realtime display of player lives I need three that are evenly spaced and are removed as the lives go down. Right now i only have one displayed. Whats worng
+
+Boots
+Looking at your code, I can see the issue! Your current logic only draws one life icon, positioned based on the total number of lives remaining.
+
+The problem is in this section:
+
+transformed_x = x + self.long_radius * 2 * player_lives
+
+This line positions a single icon based on player_lives, but you need to draw multiple icons - one for each life remaining.
+
+Here's what you need to change:
+
+def draw_player_lives(self, non_interactive_overlay: pygame.Surface) -> None:
+    """Draws the player's lives on the screen."""
+    player_lives = self.player_primary_object.lives
+    if player_lives <= 0:
+        return
+    
+    # Draw one icon for each life remaining
+    for life_index in range(player_lives):
+        transformed_lives_icon_coordinates = []
+        for x, y in self.player_lives_icon:
+            # Position each life icon with proper spacing
+            transformed_x = x + (self.long_radius * 3) * life_index + self.long_radius
+            transformed_y = y + self.long_radius * 2 
+            transformed_lives_icon_coordinates.append((transformed_x, transformed_y))
+        
+        pygame.draw.polygon(non_interactive_overlay, 
+                           (255, 255, 255),
+                           transformed_lives_icon_coordinates)
+
+The key changes:
+
+Loop through each life: for life_index in range(player_lives) creates one icon per remaining life
+Proper spacing: (self.long_radius * 3) * life_index spaces each icon evenly
+Base offset: + self.long_radius ensures the first icon isn't right at the edge
+Now when the player has 3 lives, you'll see 3 ship icons. When they lose a life and have 2 remaining, you'll see 2 icons, and so on!
+
+
+Shaunythunder
+okay so I needed to for loop so I could get each one
+
+Boots
+Exactly! You've got it!
+
+The key insight is that you need to think about what you're actually trying to accomplish:
+
+Before: Draw one icon positioned based on the number of lives
+After: Draw multiple icons - one for each remaining life
+The for loop lets you iterate through each life that should be displayed (range(player_lives)), and for each iteration, you draw one complete icon at the appropriate position.
+
+It's a common pattern in game development - when you need to display multiple instances of something (lives, health bars, inventory items, etc.), you typically loop through the count and draw each one individually with proper positioning.
+
+Nice work figuring that out! The visual feedback of seeing those life icons disappear one by one as the player takes damage will make the game feel much more polished.
+
+
+Shaunythunder
+def draw_player_lives(self, non_interactive_overlay: pygame.Surface) -> None:
+"""Draws the player's lives on the screen."""
+player_lives = self.player_primary_object.lives
+if player_lives <= 0:
+return
+transformed_lives_icon_coordinates = []
+for lives in range(player_lives):
+for x, y in self.player_lives_icon:
+transformed_x = x + self.long_radius * 2 * lives
+transformed_y = y + self.long_radius * 2
+transformed_lives_icon_coordinates.append((transformed_x, transformed_y))
+pygame.draw.polygon(non_interactive_overlay,
+(255, 255, 255),
+transformed_lives_icon_coordinates)
+
+Boots
+Great work implementing the loop! However, there's a subtle bug in your code that will cause some unexpected behavior.
+
+The issue is with where you're building and clearing the transformed_lives_icon_coordinates list. Right now, you're:
+
+Creating the list once outside the loop
+Adding coordinates for each life icon to the same list
+Drawing the polygon with all accumulated coordinates
+This means that instead of drawing separate life icons, you're drawing one large polygon that connects all the coordinate points together! You'll get a weird connected shape instead of individual ship icons.
+
+Here's the fix:
+
+def draw_player_lives(self, non_interactive_overlay: pygame.Surface) -> None:
+    """Draws the player's lives on the screen."""
+    player_lives = self.player_primary_object.lives
+    if player_lives <= 0:
+        return
+    
+    for lives in range(player_lives):
+        transformed_lives_icon_coordinates = []  # Create fresh list for each icon
+        for x, y in self.player_lives_icon:
+            transformed_x = x + self.long_radius * 2 * lives
+            transformed_y = y + self.long_radius * 2 
+            transformed_lives_icon_coordinates.append((transformed_x, transformed_y))
+        
+        pygame.draw.polygon(non_interactive_overlay, 
+                           (255, 255, 255),
+                           transformed_lives_icon_coordinates)
+
+The key change is moving transformed_lives_icon_coordinates = [] inside the first loop, so each life icon gets its own separate coordinate list and is drawn as an individual polygon.
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

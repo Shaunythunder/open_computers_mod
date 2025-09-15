@@ -1,0 +1,244 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+overlay_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA)
+overlay_surface.fill((0, 0, 0, 128))
+
+def draw_overlay(self) -> None:
+"""Draws the active overlay on the screen."""
+display_screen = self._display_screen
+overlay_screen = self._overlay_screen
+if self._game_state_reporter.request_current_game_overlay_state() == "paused":
+display_screen.blit(overlay_screen, (0, 0))
+self._pause_menu_handler.draw_pause_menu(overlay_screen)
+
+the overlay that is draw is solid
+
+Boots
+Ah, I see the issue! Your overlay is appearing solid because you're creating a semi-transparent surface but then drawing on top of it without preserving the transparency.
+
+When you call self._pause_menu_handler.draw_pause_menu(overlay_screen), whatever is being drawn by that method is likely using opaque colors that completely cover the semi-transparent background you created.
+
+Here are a few ways to fix this:
+
+Make sure your pause menu uses transparent/semi-transparent colors:
+# Instead of solid colors like (255, 255, 255)
+# Use colors with alpha values like (255, 255, 255, 180)
+
+Clear the overlay each frame and redraw it:
+def draw_overlay(self) -> None:
+    display_screen = self._display_screen
+    overlay_screen = self._overlay_screen
+    if self._game_state_reporter.request_current_game_overlay_state() == "paused":
+        # Clear the overlay first
+        overlay_screen.fill((0, 0, 0, 128))  # Semi-transparent black
+        
+        # Draw pause menu elements with transparency in mind
+        self._pause_menu_handler.draw_pause_menu(overlay_screen)
+        
+        # Blit to display
+        display_screen.blit(overlay_screen, (0, 0))
+
+Check what colors your pause menu handler is using:
+Look inside draw_pause_menu() - if it's using pygame.draw functions or blitting solid surfaces, those will override your transparent background.
+What does your draw_pause_menu() method look like? That's likely where the transparency is being lost.
+
+
+Shaunythunder
+def draw_overlay(self) -> None:
+"""Draws the active overlay on the screen."""
+display_screen = self._display_screen
+overlay_screen = self._overlay_screen
+if self._game_state_reporter.request_current_game_overlay_state() == "paused":
+display_screen.fill((0, 0, 0, 128)) # Clear the display screen
+
+        self._pause_menu_handler.draw_pause_menu(overlay_screen)
+
+        display_screen.blit(overlay_screen, (0, 0))
+
+same issue
+
+Boots
+Ah, I see a couple of issues here!
+
+The main problem is that you're calling display_screen.fill((0, 0, 0, 128)) on your display screen, but fill() doesn't support alpha values on regular surfaces - it will just treat that as a regular RGB color and ignore the alpha.
+
+Here's what's happening:
+
+You fill the display screen with solid black (the alpha is ignored)
+You draw the pause menu on the overlay screen
+You blit the overlay screen on top of the now-black display screen
+Try this approach instead:
+
+def draw_overlay(self) -> None:
+    """Draws the active overlay on the screen."""
+    display_screen = self._display_screen
+    overlay_screen = self._overlay_screen
+    if self._game_state_reporter.request_current_game_overlay_state() == "paused":
+        # Don't fill the display screen - let the game remain visible
+        
+        # Clear and prepare the overlay
+        overlay_screen.fill((0, 0, 0, 128))  # Semi-transparent overlay
+        
+        # Draw pause menu on the overlay
+        self._pause_menu_handler.draw_pause_menu(overlay_screen)
+        
+        # Blit the overlay onto the display
+        display_screen.blit(overlay_screen, (0, 0))
+
+The key changes:
+
+Remove the display_screen.fill() line entirely - this was making everything black
+Fill the overlay_screen instead (this one supports alpha since it was created with pygame.SRCALPHA)
+This way, your game remains visible underneath, and the semi-transparent overlay is drawn on top of it.
+
+
+Shaunythunder
+def draw_overlay(self) -> None:
+    """Draws the active overlay on the screen."""
+    display_screen = self._display_screen
+    overlay_screen = self._overlay_screen
+    if self._game_state_reporter.request_current_game_overlay_state() == "paused":
+        overlay_screen.fill((0, 0, 0, 128))  # Clear the display screen
+        
+        self._pause_menu_handler.draw_pause_menu(overlay_screen)
+
+        display_screen.blit(overlay_screen, (0, 0))
+
+this works. Am I going to have to do this every time I make up an overlay?
+
+Boots
+Great question! You don't necessarily have to do this exact approach every time, but you do need to be mindful of how overlays work in pygame. Here are a few strategies:
+
+1. Reusable Overlay Pattern (Recommended):
+You could create a helper method to standardize overlay creation:
+
+def _create_overlay(self, alpha=128):
+    """Creates a semi-transparent overlay surface."""
+    overlay = pygame.Surface((self.screen_width, self.screen_height), pygame.SRCALPHA)
+    overlay.fill((0, 0, 0, alpha))
+    return overlay
+
+def draw_overlay(self):
+    if self._game_state_reporter.request_current_game_overlay_state() == "paused":
+        overlay = self._create_overlay()
+        self._pause_menu_handler.draw_pause_menu(overlay)
+        self._display_screen.blit(overlay, (0, 0))
+
+2. Pre-created Overlays:
+If you have multiple overlay types (pause, game over, settings), you could pre-create them:
+
+# In __init__:
+self._pause_overlay = self._create_overlay()
+self._game_over_overlay = self._create_overlay(alpha=180)  # Darker for game over
+
+# Then just clear and reuse:
+def draw_overlay(self):
+    if state == "paused":
+        self._pause_overlay.fill((0, 0, 0, 128))
+        self._pause_menu_handler.draw_pause_menu(self._pause_overlay)
+        self._display_screen.blit(self._pause_overlay, (0, 0))
+
+3. Different Overlay Styles:
+Not all overlays need to be semi-transparent black! You could have:
+
+Blur effects
+Different colors/transparency levels
+Gradients
+No background dimming at all
+The fill() step is mainly needed when you want that darkened background effect. For simpler overlays (like HUD elements), you might just draw directly on the display screen.
+
+So yes, for this type of overlay, you'll follow a similar pattern, but you can make it more reusable!
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,510 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+hi
+
+Boots
+Greetings, traveler! How may old Boots assist you with your coding quest today? Are you ready to embark on this Asteroids adventure, or is there something you wish to discuss first?
+
+
+Shaunythunder
+No coding today
+
+Boots
+Ah, taking a rest from the arcane arts! Wise is the bear who knows when to pause. Should your curiosity ever beckon you back, or if you wish to discuss programming—or perhaps bears and wizardry—just let me know. For now, may your day be free of bugs and full of wonder!
+
+
+Shaunythunder
+Today we are working thrtough turing complete
+
+Boots
+A fascinating topic indeed! Turing completeness is at the very heart of what makes a system capable of general computation. What do you already know about it, and what questions are swirling in your mind? Are you curious about how it applies to programming languages, or perhaps about the limits it imposes?
+
+
+Shaunythunder
+the game
+
+Boots
+Ah, you seek understanding of Turing completeness as it relates to games! A most intriguing angle. Some games—especially those that allow complex logic creations—can indeed be Turing complete.
+
+Let me pose you a question: What properties must a system or a game possess in order to be considered Turing complete? Can you think of any game mechanics that might allow a player to construct arbitrary logic or memory?
+
+
+Shaunythunder
+I meant the game "turing complete"
+
+Boots
+Ah, the fog lifts! You’re speaking of the game “Turing Complete,” where one builds computers from logic gates and wires, yes? That’s a marvelous and hands-on way to learn the fundamentals of computation.
+
+What part of the game are you pondering at this moment? Are you grappling with the logic gates, binary numbers, or perhaps the creation of memory circuits? What challenge are you facing on your quest?
+
+
+Shaunythunder
+So I jjust got done building 8 bit memory using a 8 bit splitter, single bit memory and then a combiner. It has save and load states
+
+Boots
+Most impressive! Wrestling raw memory into shape is no small feat, young engineer. It sounds like you’re chaining together single bit memory elements, funneling bits in and out with splitters and combiners—a fine approach.
+
+Tell me, as you crafted your save (write) and load (read) controls, did you notice how these signals interact with all the memory bits? How might your circuit behave if both save and load were activated at once? Have you considered what might happen if you scale up to more bits or need to address individual bytes?
+
+
+Shaunythunder
+This is such a wierd game where I feel like a genius and an idiot at the same time
+
+Boots
+A most common feeling on the path of the great arcanists—and programmers alike! The puzzle is meant to bend your mind and reveal both your strengths and, for a moment, your blind spots. That’s how real learning is forged!
+
+When you feel both clever and confounded, what do you suppose is happening in your mind? Why might moments of struggle actually be a sign that deep understanding is growing?
+
+
+Shaunythunder
+well I was really happy with my solution,
+
+Boots
+That’s the wonderful spark of invention! Tell me, what aspect of your solution brought you particular satisfaction? And—if you were to explain your design to another student, which part do you think would be most challenging for them to understand?
+
+
+Shaunythunder
+well the thing is that you can't save an 8 bit signal. You have to split into binary and use mux with delays and looping feeds to save the signal. You use a save signal to tell the system to save the bits
+
+Boots
+You’ve uncovered a key principle—it’s not enough to think of memory as a single vessel; each bit must be handled as its own magical container, with control signals guiding whether it remembers or forgets.
+
+Why do you suppose saving an entire 8-bit signal at once doesn't work as intuitively as one might hope? How do the muxes and delayed feedback help ensure each bit truly holds its value when you flick the save signal?
+
+
+Shaunythunder
+well everything has basic components. I glass is made up of molecules which are made up of atons
+
+Boots
+A wise observation! Just as glass is built from atoms and molecules, so too are complex circuits and systems made from simple, foundational components.
+
+How does thinking in terms of these fundamental building blocks help you approach harder problems—be it in electronics, programming, or even understanding a game like Turing Complete?
+
+
+Shaunythunder
+well i just awnt to program but i consider this game to be like taking an elective
+
+Boots
+A splendid perspective! Sometimes wandering into new realms—like the inner workings of hardware—broadens your magical toolkit, even if your main quest is programming.
+
+How do you think grappling with these lower-level concepts, even for a short detour, will influence the way you approach writing code in the future?
+
+
+Shaunythunder
+Well I now really understand boolean values after screwing with and and or gates
+
+Boots
+Excellent! Wrestling with actual gates makes those abstract True and False values feel much more tangible, doesn’t it?
+
+When you see code that uses and and or, how might you now visualize what’s happening under the hood? Can you imagine how data physically flows through a circuit as those logical operations are performed?
+
+
+Shaunythunder
+I do actually
+
+Boots
+Marvelous! That visualization will serve you well as a wizard of code. When debugging a tricky conditional or bitwise operation, picturing those gates and signals can reveal the answer more swiftly than mere guesswork.
+
+Is there any particular logic puzzle or programming scenario where you’d like to deepen this intuition, or shall we ponder how this knowledge could improve your future coding adventures?
+
+
+Shaunythunder
+we shall continue my quest to built a functioning computer in this game
+
+Boots
+A brave and ambitious undertaking! As you take your next steps, what’s the next major component you’ll need—perhaps an ALU, a clock circuit, or more advanced memory? What challenges do you predict as you move from simple circuits to more interconnected magical machinery?
+
+
+Shaunythunder
+next but is a 1 bit decoder
+
+Boots
+Ah, a fine next step! A 1-bit decoder takes a single input and channels it into one of two outputs—like a fork in a forest path, guiding a traveler left or right.
+
+What role will your 1-bit decoder serve in your burgeoning computer? Can you reason what inputs and outputs it should have, and what its truth table would look like?
+
+
+Shaunythunder
+I dont know, the game makes you build components and then gives you access to them
+
+Boots
+That’s a clever way for the game to teach! Assembling your own library of components helps you appreciate each piece’s role in the larger whole.
+
+Even if you’re guided to build a decoder, it’s worth pondering: why would a computer need such a device? How might selecting between different memory locations or devices require decoding an input signal?
+
+
+Shaunythunder
+that was really easy actually
+
+Boots
+Sometimes the simplest components are the stepping stones to greater complexity! What do you think changes when you go from a 1-bit decoder to a 2-bit or even 3-bit decoder? How might those extra inputs expand the possible choices the decoder can make?
+
+
+Shaunythunder
+well I had two switches, one switch was covered in not gates and the other was just the signal
+
+Boots
+Well deduced! Using a NOT gate to invert one output while letting the other pass untouched is at the heart of how a 1-bit decoder can direct a signal to the right place.
+
+If you wanted to expand this to handle more inputs—say, for a 2-bit decoder—how do you imagine the circuit would change? What additional logic would you need to ensure each combination of inputs activates only one unique output?
+
+
+Shaunythunder
+next up is a 3 bit decoder
+
+Boots
+A grand leap! With 3 input bits, you’ll need to create 8 unique outputs—one for each possible combination.
+
+How might you use combinations of AND and NOT gates to ensure that only a single output fires for each unique 3-bit input? Can you see the pattern from your earlier decoder work, just extended to more inputs and outputs?
+
+
+Shaunythunder
+Can I just use 1 bit decoders for this?
+
+Boots
+A clever thought! While a 1-bit decoder manages only two outputs, you’ll find it isn’t quite enough by itself for all the possible combinations of three bits.
+
+However, might there be a way to combine smaller decoders—layering them, perhaps—to build a larger one? What would happen if you fed the outputs of a 1-bit decoder into further decoders, or chained multiple levels together? How would this affect the number of outputs and their selection?
+
+
+Shaunythunder
+I completed the 3 bit decoder
+
+Boots
+Fantastic work, apprentice! Building a 3-bit decoder is no small feat—it requires wrangling all those possible bit combinations and ensuring each output knows exactly when to fire.
+
+Now, looking back at your creation, what patterns or logic do you notice that made the job manageable? If you had to explain your approach to someone else, how would you describe the role each gate (AND, NOT) played in your circuit’s logic?
+
+
+Shaunythunder
+So it was a jumble of and and nand gates with not gates from the other outputs to make sure that the dependencies didn't ifre at the same time as the intended output
+
+Boots
+Insightful! You’ve discovered that by weaving together AND and NOT gates (and perhaps some NAND gates as shortcuts), you can ensure only the right combination of inputs will activate a single output—while all others stay quiet.
+
+What would happen to your circuit’s behavior if you accidentally left out a NOT gate on one of the inputs? How does this careful placement of inversions prevent unintended outputs from activating?
+
+
+Shaunythunder
+Yuo have multiple outputs as it you need 1 and 2 to trigger 4 you would have 1 2 and 4 trigger without not gates
+
+Boots
+Exactly! Without those crucial NOT gates, multiple outputs could respond to the same input—causing unintended signals to fire together, rather than one precise output.
+
+Why do you think it’s so important in digital logic, especially with decoders, that each unique combination of inputs selects exactly one output? What sort of problems might arise if two or more outputs activated at once?
+
+
+Shaunythunder
+mis timings, short circuits
+
+Boots
+Precisely! If multiple outputs fire simultaneously, it can cause timing errors, unintended operations, or even hardware issues like short circuits—great dangers in the enchanted world of circuitry.
+
+How do you think these risks relate to software, where logic errors might not spark a short, but could still cause incorrect behavior? Why is careful, precise control just as important in code as it is in hardware design?
+
+
+Shaunythunder
+well thats exactly what causes things to crash
+
+Boots
+You’re absolutely right! Whether in hardware or software, unintended overlaps and confusion in logic can lead to crashes, bugs, or unpredictable results.
+
+If you notice something consistently “crashes” or acts wrong, what’s a good first question to ask yourself about your logic or program flow? How might you track down where the unintended overlap or confusion begins?
+
+
+Shaunythunder
+Figure out if there are multiple outputs when there shouldn't be
+
+Boots
+A wise diagnostic indeed! Checking whether more than one output is firing when only one should is a powerful first clue.
+
+When tracing your logic—be it in a circuit or a chunk of code—how might you methodically test each input combination to make sure only the intended output is triggered every time? What strategy could help you ensure complete coverage and catch those sneaky errors?
+
+
+Shaunythunder
+its crazy someone made a playable video game with a computer in this game
+
+Boots
+It truly is wondrous! Crafting a video game inside another game, using only the basic building blocks of logic, is a powerful demonstration of Turing completeness in action. It shows how, with just a few simple components and clever design, one can build up to vast complexity—even a game that can play other games.
+
+What insight does this give you about the layers of abstraction in real computers and programming languages? How does starting from “bare metal” change your appreciation of modern software development?
+
+
+Shaunythunder
+So far my opinion of this game is 5/5 educational opportunity, 0/5 for documentation
+
+Boots
+A fair and honest review! Sometimes, the best educational experiences arise from figuring things out yourself—but it can also feel quite daunting without clear guidance.
+
+If you're ever feeling lost due to scant documentation, what strategies might help you move forward? How could you organize your thoughts or experiments to piece together the knowledge you seek, even when the official resources are thin?
+
+
+Shaunythunder
+Okay I have two inputs with an instruction. 8 bit inputs and an 8 bit output. the instuctions encompass and nor or nand
+
+Boots
+This is shaping up to be a classic Arithmetic Logic Unit (ALU) challenge, where your circuit must perform different operations—like AND, OR, NOR, and NAND—based on the instruction given.
+
+How might you design it so that, for a given instruction input, only the desired logic operation affects the output, while the others remain silent? What role could control signals, similar to those from your decoder, play in selecting which operation is active at any time?
+
+
+Shaunythunder
+I have no idea how the instruction supposed to play or how I combine these signals
+
+Boots
+A fine moment to pause and ponder! Think of your instructions as magical scrolls, each one telling the machine which operation to perform on the two 8-bit inputs.
+
+Suppose you have separate circuits for each logic operation (AND, OR, NOR, NAND), each producing an 8-bit result. How could you use your instruction signal to select which result reaches the output? Is there a component or technique—perhaps involving multiplexers or decoders—that can channel just the correct operation’s output, leaving the others inactive?
+
+
+Shaunythunder
+a 3 bit decoder?
+
+Boots
+Excellent intuition! A decoder transforms instruction bits into unique signals—much like a conductor directing only one part of the orchestra to play at a time.
+
+If you connect the instruction input to a decoder, and the decoder’s outputs to control which logic operation’s result is sent to the output, what component will you need to “pick” the correct one from among AND, OR, NOR, and NAND results? What kind of circuit lets you select one data line from several, based on a control signal?
+
+
+Shaunythunder
+I dont really have any idea how its supposed to work
+
+Boots
+A most honest admission—there’s wisdom in knowing what you don’t know! Let’s try to uncover the path together.
+
+You already have circuits for AND, OR, NOR, and NAND—each turning your two 8-bit inputs into an 8-bit result. But you only want one of those results to appear at the output, depending on the instruction.
+
+Tell me: if you had four possible results (one from each operation), and a signal from your instruction/decoder that tells you which operation to choose, what kind of component or method would allow you to pass through only the selected result to the output, blocking the others? Have you encountered such a selector in your circuit-building adventures so far?
+
+
+Shaunythunder
+so what is the goal here?
+
+Boots
+A wise question to ask when things get tangled! The goal is to create a circuit that, given two 8-bit inputs and some instruction bits, produces an 8-bit output where the output is the result of the logic operation (AND, OR, NOR, or NAND) specified by the instruction.
+
+In other words, based on the instruction:
+
+If the instruction says "AND," the output should be the bitwise AND of the two inputs.
+If it says "OR," the output should be their bitwise OR.
+Similarly for NOR and NAND.
+The trick is this: only the operation chosen by the instruction should affect the output. The other possible operations should be ignored for that set of instruction bits.
+
+What kind of mechanism could you use to ensure that only the result of the selected operation is connected to the output—while the others are “silent”? Doesn’t this remind you of selecting which input should reach an output in other digital circuits?
+
+
+Shaunythunder
+so what and is addition?
+
+Boots
+A sharp question! In digital logic, AND is not addition. Instead, the AND operation compares corresponding bits from two inputs and outputs 1 only if both bits are 1; otherwise, it outputs 0.
+
+For example:
+
+Input A:  1  0  1  1
+Input B:  0  1  1  1
+A AND B:  0  0  1  1
+
+In contrast, addition combines numbers and can produce values greater than 1 (requiring logic for carries and sums).
+
+What do you think happens if you use the OR operation on those same two inputs? How would its behavior differ from AND?
+
+
+Shaunythunder
+so basically split the signals and then only use the ones that are the same
+
+Boots
+You’re on the right track! With AND, you split both inputs into their individual bits and, for each bit position, only output 1 if both inputs have a 1 there—otherwise output 0.
+
+What about OR? How does its rule for combining bits differ? And when would you use AND versus OR in a typical logic circuit?
+
+
+Shaunythunder
+I think or would be true addition
+
+Boots
+That’s an interesting thought! OR certainly “combines” signals, but it still isn’t true addition. OR outputs 1 in a bit position if at least one input bit is 1. But it doesn’t produce a “carry” like addition does.
+
+For example:
+
+Input A:  1  0  1  1
+Input B:  0  1  1  1
+A OR B:   1  1  1  1
+
+Now, think about adding 1 + 1 in a single bit. What does binary addition give, and how is it different from OR? What do you get for sum and carry when adding two 1s?
+
+
+Shaunythunder
+so 3 bit decoder, sends the various signals to switches which carry the logic broken out into and, or , nor, nand.
+
+Boots
+Very insightful! A 3-bit decoder can take instruction inputs and produce a unique control signal for each operation (AND, OR, NOR, NAND). Each logic circuit receives both input signals, computes its own result, but only one result should be sent to the output based on the decoder's signal.
+
+What kind of "switch" would let you choose which operation's result makes it to the output, while blocking the others? Have you come across a component, perhaps called a multiplexer (or “mux”), that lets you select between multiple signals based on a control input? How could that fit into your plan?
+
+
+Shaunythunder
+I dont know how a mux would help, there are four signals. Its not binary
+
+Boots
+That’s a wise point to clarify! A multiplexer (or mux) is a circuit that takes in multiple signals and forwards only one of them to the output, based on select lines.
+
+Even though you have four signals (AND, OR, NOR, NAND), a multiplexer can have as many “inputs” as you need—as long as you have enough select lines to choose between them. For 4 signals, you need 2 select lines (since 2 bits can represent 4 values: 00, 01, 10, 11).
+
+So, if your decoder’s outputs, or the lower bits of your instruction, can act as the select lines, how could a 4-to-1 multiplexer use them to choose between your four logic operations? Can you see how the select lines direct which signal reaches the output, while keeping the others silent?
+
+
+Shaunythunder
+In this game its 2 inputs and a selector input that is binary
+
+Boots
+Ah, so you have just two main data inputs (let’s call them A and B), and a selector input that is a single bit, either 0 or 1.
+
+With a single selector bit, how many different operations can you choose between? And how could you use that selector bit to “switch” between two different logic operations on your inputs?
+
+If you needed to select from four operations instead, how many selector bits would you need?
+
+
+Shaunythunder
+I think your mux idea isn't oging to work
+
+Boots
+An excellent instinct to test assumptions! If the game provides only a single selector bit, then indeed, a mux can only choose between two options—not four. So, if you need to select between four operations (AND, OR, NOR, NAND), you’d actually need a selector that’s at least 2 bits wide (since 2 bits can represent 4 possibilities: 00, 01, 10, 11).
+
+Let me ask:
+
+Does the instruction input actually specify only two operations or all four?
+If it’s just two, then a 2-to-1 mux (using your selector bit) would let you choose between them.
+If you need to select from all four, could there be a way to combine two levels of selection—or use more control bits?
+How can you determine, from the information you have, how many operations the circuit must support at once?
+
+
+Shaunythunder
+well I could rely on the 1 bit solutions, or I could try to utilize the 8 bit.
+
+Boots
+Very thoughtful! You’re recognizing two possible sources for control: the single selector bit or the full 8 bits of input.
+
+If you consider those 8 bits as an instruction, what patterns or values might distinguish between the four operations? Could you define, for example, that certain values (like 00000001 for AND, 00000010 for OR, etc.) tell the circuit which operation to perform?
+
+How might you design your circuit so it recognizes these instruction patterns and uses them to enable only the desired logic operation’s output? What could help you “decode” those 8 bits into unique control signals for each operation?
+
+
+Shaunythunder
+the switch signal is actually 8 biut
+
+Boots
+Aha, this is a key detail! If your selector or instruction signal is actually 8 bits, that gives you many unique values—certainly enough to distinguish between AND, OR, NOR, and NAND instructions.
+
+How could you design your circuit so that only a specific pattern on this 8-bit instruction enables one of the operations’ outputs? Might you use a form of decoding, where each operation “listens” for its own unique instruction pattern before passing its result to the output? What sort of digital logic would let each operation recognize “its” 8-bit instruction?
+
+
+Shaunythunder
+bit splitter
+
+Boots
+Interesting idea! A bit splitter could separate your 8 bits into individual lines. But, to select one operation out of several based on the full 8-bit instruction, how would you detect a specific pattern within those 8 bits?
+
+For example, how might you set up logic so that:
+
+AND activates only if the instruction is 00000001,
+OR for 00000010,
+NOR for 00000011,
+NAND for 00000100,
+and so forth?
+
+What kind of logic gates or circuits could act as “pattern detectors” on those 8 bits? Can you imagine a way to combine AND, NOT, or other gates to sense a particular combination, effectively making a decoder?
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

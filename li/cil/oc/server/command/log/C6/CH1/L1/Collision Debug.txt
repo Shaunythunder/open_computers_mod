@@ -1,0 +1,2378 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+HI boots I did a refactor and now my bullets are not colliding with the asteroids. trying to figure out where the break is
+
+Boots
+Ah, a refactoring mishap! These things happen to the best of us, young apprentice. Since you've completed this lesson, I can help you debug this step by step.
+
+Let's start with the most likely culprits for collision detection breaking after a refactor:
+
+Check your collision detection method - Is it still being called in your game loop? Sometimes during refactoring, method calls get accidentally removed or commented out.
+
+Verify object positions are updating - Are both your bullets and asteroids still updating their positions correctly? If either stops moving or updating, collisions won't register.
+
+Check collision detection logic - Did you accidentally change the collision detection algorithm or the distance calculation between bullets and asteroids?
+
+Look at object lists/groups - Are your bullets and asteroids still being added to the correct lists or groups that the collision detection iterates through?
+
+Could you share the relevant collision detection code? Or tell me what specific changes you made during the refactor? That would help me pinpoint where the issue might be lurking.
+
+Also, are you seeing any error messages, or do the bullets and asteroids just pass through each other silently?
+
+
+Shaunythunder
+import pygame
+import math
+import player_class.player_projectiles as player_projectiles
+
+class PlayerPrimaryObj:
+"""This class represents the controllable player ship in the game."""
+def init(self,
+game_state_reporter: "GameStateManager",
+screen_width: int,
+screen_height: int,
+player_object_manager: "PlayerObjManager"):
+
+    self._game_state_reporter = game_state_reporter
+    self._player_object_manager = player_object_manager
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+    
+    self.player_color = (255, 255, 255)  # Default color for the player ship
+    
+    # Ship drawing variables and coordinates
+    self.ship_radius_port_to_starboard = 5
+    self.ship_radius_bow_to_stern = self.ship_radius_port_to_starboard * 1.5
+    self.player_pos_x = 0
+    self.player_pos_y = 0
+    self.player_ship_nose_x = 0
+    self.player_ship_nose_y = 0
+    self.player_radians = 0
+
+    # Player Health and Score
+    self.score = 0
+    self.lives = 3
+    self.shield_layers = 0
+    self.is_invincible = False
+    self._player_invincibility_cooldown = 2
+    self.player_shield_recharge_cooldown = 60
+
+    # Player movement
+    self.player_velocity = pygame.Vector2(0, 0)
+    self.player_movement_speed = 25 
+    self.player_acceleration = 8
+    self.player_rotation_speed = 3
+    self._player_drag_coefficient = .985
+    
+    # Player shooting variables
+    self.player_can_shoot = True
+    self.player_shot_cooldown = .5
+    self.player_last_shot_time = .5
+    self.player_bullet_speed = 10
+    self.player_bullet_damage = 1
+
+def reset_player_primary_obj(self) -> None:
+    """Resets the player to its initial state."""
+    self.__init__(self._game_state_reporter, 
+                  self._screen_width, 
+                  self._screen_height, 
+                  self._player_object_manager)
+
+def draw_player_primary_obj(self, screen: pygame.Surface) -> None:
+    """Draws the player ship on the screen."""
+    rotated_player_ship_coordinates = self.calculate_player_primary_obj_rotated_coordinates()
+    pygame.draw.polygon(screen, self.player_color, rotated_player_ship_coordinates, width=1)
+
+def calculate_player_primary_obj_velocity(self, dt: float) -> None:
+    """Updates the player's position based on its velocity and the time delta."""      
+    self.player_pos_x += self.player_velocity.x * dt
+    self.player_pos_y += self.player_velocity.y * dt
+
+def calculate_player_primary_obj_inertia(self) -> None:
+    """Calculates the player's inertia based on the current velocity and applies drag."""
+    # Multiply by drag coefficient to ensure player slows down over time
+    self.player_velocity *= self._player_drag_coefficient
+    if self.player_velocity.length() < 0.2:
+        self.player_velocity = pygame.Vector2(0, 0)
+
+def calculate_player_primary_obj_rotated_coordinates(self) -> list[tuple[float, float]]:
+    """Calculates the rotated coordinates of the player ship 
+    based on its position and rotation. and returns a list of tuples."""
+    long_radius = self.ship_radius_bow_to_stern
+    short_radius = self.ship_radius_port_to_starboard
+
+    player_ship_base_coordinates = [
+        (0, -long_radius),  # Top point of the ship
+        (-short_radius, long_radius),  # Bottom left point of the ship
+        (short_radius, long_radius),   # Bottom right point of the ship
+    ]
+    rotated_player_ship_coordinates = []
+    for x, y in player_ship_base_coordinates:
+        # Renders the player's ship based on XY and radians as determined by movement methods.
+        player_rotated_x = (x * math.cos(self.player_radians) - y * math.sin(self.player_radians))
+        player_rotated_y = (x * math.sin(self.player_radians) + y * math.cos(self.player_radians))
+        
+        player_actual_x = self.player_pos_x + player_rotated_x
+        player_actual_y = self.player_pos_y + player_rotated_y
+
+        rotated_player_ship_coordinates.append((player_actual_x, player_actual_y))
+    
+    actual_ship_nose_x, actual_ship_nose_y = rotated_player_ship_coordinates[0]
+    self.player_ship_nose_x = actual_ship_nose_x
+    self.player_ship_nose_y = actual_ship_nose_y
+    return rotated_player_ship_coordinates
+
+def is_point_inside_player_primary_obj(self, point_pos_xy: tuple[float, float]) -> bool:
+    """Checks if a point is inside the player ship's triangle shape."""
+    rotated_player_ship_coordinates = self.calculate_player_primary_obj_rotated_coordinates()
+    vertice_A = rotated_player_ship_coordinates[0]
+    vertice_B = rotated_player_ship_coordinates[1]
+    vertice_C = rotated_player_ship_coordinates[2]
+
+    def determine_positive_or_negative(point_1: tuple[float, float], 
+                                       point_2: tuple[float, float], 
+                                       point_3: tuple[float, float]):
+        """Takes the scalar value of vectors vs the point 
+        And returns a positive or negative value."""
+        point_1_x = point_1[0]
+        point_1_y = point_1[1]
+        point_2_x = point_2[0]
+        point_2_y = point_2[1]
+        point_3_x = point_3[0]
+        point_3_y = point_3[1]
+        return (point_1_x - point_3_x) * (point_2_y - point_3_y) - \
+               (point_1_y - point_3_y) * (point_2_x - point_3_x)
+       
+    # Each of these will return a true or false. Basically is this less than 0.0?
+    # The point is to determine if all sides of the triangle see the same thing.
+    # If all three are true or false, then the point is inside the triangle.
+    # The key is that they all match.
+    detect_side_A = determine_positive_or_negative(point_pos_xy, vertice_A, vertice_B) < 0.0
+    detect_side_B = determine_positive_or_negative(point_pos_xy, vertice_B, vertice_C) < 0.0
+    detect_side_C = determine_positive_or_negative(point_pos_xy, vertice_C, vertice_A) < 0.0
+    return (detect_side_A == detect_side_B) and (detect_side_B == detect_side_C)
+    
+def player_primary_obj_check_collision_vs_circle(self, circle_x: float, 
+                                                 circle_y: float, 
+                                                 circle_radius: int) -> bool: 
+    
+    """This method checks if the player ship collides with a circle object."""
+    # Pull all relevant variables and redefine them to work with the equations.
+    rotated_player_ship_coordinates = self.calculate_player_primary_obj_rotated_coordinates()
+    circle_obj_pos_x = circle_x
+    circle_obj_pos_y = circle_y
+    ax = circle_obj_pos_x
+    ay = circle_obj_pos_y
+    circle_obj_radius = circle_radius
+    index_range = len(rotated_player_ship_coordinates)
+    
+    for index in range(index_range):
+        # For each triangle edge, find the closest point on the edge to the circle's center.
+        rotated_player_ship_coordinate_A = rotated_player_ship_coordinates[index]
+        rotated_player_ship_coordinate_B = rotated_player_ship_coordinates[(index + 1) % index_range]
+        
+        # Variable renaming and conversion to equation variables.
+        A = rotated_player_ship_coordinate_A
+        B = rotated_player_ship_coordinate_B
+        vector_AB_x_component = B[0] - A[0]
+        vector_AB_y_component = B[1] - A[1]
+        ABx = vector_AB_x_component
+        ABy = vector_AB_y_component
+        vector_AP_x_component = ax - A[0]
+        vector_AP_y_component = ay - A[1]
+        APx = vector_AP_x_component
+        APy = vector_AP_y_component
+
+        # Calculate hypotenuse squared to avoid square root for performance.
+        AB_length_squared = ABx ** 2 + ABy ** 2
+
+        if AB_length_squared == 0:
+            # If A and B are the same point, we can't calculate a projection.
+            continue
+        
+        # t allows use to find where the point on the edge that is closest to the circle's center is.
+        # t is the percentage of the distance along the edge from A to B.
+        t_unclamped = (APx * ABx + APy * ABy) / AB_length_squared
+
+        # Clamp t to the range [0, 1] as that is all we care about.
+        t_clamped = max(0, min(1, t_unclamped)) 
+        
+        # X and Y coodrinates multiplied by the clamped t value
+        # Multiplied by the the vector magnitude
+        player_closest_x = A[0] + t_clamped * ABx
+        player_closest_y = A[1] + t_clamped * ABy
+        distance_x = player_closest_x - circle_obj_pos_x
+        distance_y = player_closest_y - circle_obj_pos_y
+        true_distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+        collision_distance = circle_obj_radius
+       
+        if true_distance < collision_distance:
+            return True
+        
+    circle_pos_xy = (circle_obj_pos_x, circle_obj_pos_y)
+    if self.is_point_inside_player_primary_obj(circle_pos_xy):
+        # If the circle's center is inside the player ship, we consider it a collision.
+        return True
+        # If no collision detected, return False.    
+    return False
+    
+def player_primary_obj_genre_transition(self, 
+                                        player_x: float, 
+                                        player_y: float, 
+                                        player_radians: float) -> None:
+    """This will reset the player position and rotation based on the new game type."""
+    self.player_pos_x = player_x
+    self.player_pos_y = player_y
+    self.player_radians = player_radians
+    self.is_invincible = False
+
+# For all player movement methods, dt has to be multiplied to the changing attribute
+# to ensure that the movement is frame rate independent.
+
+def player_primary_obj_rotate_left(self, dt: float) -> None:
+    """Rotates the player ship to the left by decreasing the radians."""
+    self.player_radians -= self.player_rotation_speed * dt
+
+def player_primary_obj_rotate_right(self, dt: float) -> None:
+    """Rotates the player ship to the right by increasing the radians."""
+    self.player_radians += self.player_rotation_speed * dt
+
+def player_primary_obj_move_forward(self, dt: float) -> None:
+    """Moves the player ship forward by increasing the Y position."""
+    self.player_pos_y += self.player_movement_speed * dt
+
+def player_primary_obj_move_backward(self, dt: float) -> None:
+    """Moves the player ship backward by decreasing the Y position."""
+    self.player_pos_y -= self.player_movement_speed * dt
+
+def player_primary_obj_move_left(self, dt: float) -> None:
+    """Moves the player ship left by decreasing the X position."""
+    self.player_pos_x -= self.player_movement_speed * dt
+
+def player_primary_obj_move_right(self, dt: float) -> None:
+    """Moves the player ship right by increasing the X position."""
+    self.player_pos_x += self.player_movement_speed * dt
+
+def player_primary_obj_accelerate(self) -> None:
+    """Calculates the player's vector based on the current radians and acceleration."""
+    # Player speed is a vector to give inertia mechanics
+    base_player_vector = pygame.math.Vector2(0, -1) 
+    adjusted_player_vector = base_player_vector.rotate(math.degrees(self.player_radians)) * self.player_acceleration
+    self.player_velocity += adjusted_player_vector
+
+def player_primary_obj_deaccelerate(self) -> None:
+    """Calculates the player's vector based on the current radians and acceleration."""
+    base_player_vector = pygame.math.Vector2(0, 1) 
+    adjusted_player_vector = base_player_vector.rotate(math.degrees(self.player_radians)) * self.player_acceleration
+    self.player_velocity += adjusted_player_vector
+
+def calc_if_player_primary_obj_can_shoot(self) -> None:
+    """Calculates if the player can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_shot = self.player_last_shot_time
+    if (current_time - time_since_last_shot) > self.player_shot_cooldown:          
+        self.player_can_shoot = True
+    else:
+        self.player_can_shoot = False
+
+
+def player_primary_obj_shoot(self) -> None:
+    """Handles the shooting logic for the player ship."""
+    self.calc_if_player_primary_obj_can_shoot()
+    player_object_manager = self._player_object_manager
+    player_primary_obj_velocity = self.player_velocity
+    player_primary_obj_radians = self.player_radians
+    player_primary_obj_ship_nose_x = self.player_ship_nose_x
+    player_primary_obj_ship_nose_y = self.player_ship_nose_y
+    screen_width = self._screen_width
+    screen_height = self._screen_height
+    if self.player_can_shoot == True:
+        new_bullet = player_projectiles.PlayerBulletProjectile(player_object_manager, 
+                                                    player_primary_obj_velocity, 
+                                                    player_primary_obj_radians, 
+                                                    player_primary_obj_ship_nose_x,
+                                                    player_primary_obj_ship_nose_y,
+                                                    screen_width,
+                                                    screen_height)
+        new_bullet.calculate_player_projectile_vector()
+        self._player_object_manager.create_player_projectile_obj(new_bullet)
+        self.player_last_shot_time = pygame.time.get_ticks() / 1000
+        self.player_can_shoot = False
+
+def player_primary_obj_hit(self) -> None:
+    """Handles the logic when the player ship is hit by an enemy or obstacle."""
+    if not self.is_invincible:
+        # If the player has not recently been hit, reduce lives or shield layers.
+        if self.shield_layers > 0:
+            # If the player has shields, reduce the shield layers.
+            self.shield_layers -= 1
+        else:
+            # If no shields, reduce lives.
+            self.lives -= 1
+            
+            if self.lives <= 0:
+                self.player_primary_obj_is_dead()
+
+def player_primary_obj_hit_cooldown(self) -> None:
+    # Placeholder for player invincibility logic after being hit.
+    pass
+
+def player_primary_obj_shield_recharge(self) -> None:   
+    # Placeholder for player shield recharge logic.
+    pass
+
+def player_primary_obj_is_dead(self) -> None:
+    # Placeholder for player death logic.
+    # This will trigger a game over overlay showing score and option to record highscore.
+    self._game_state_reporter.request_game_state_change("game_over")
+
+def asteroids_is_player_primary_obj_out_of_bounds(self) -> None:
+    """Checks if the player ship is out of bounds and wraps it around the screen."""
+    long_radius = self.ship_radius_bow_to_stern
+    
+    if self.player_pos_x < -long_radius:
+        self.player_pos_x += self._screen_width + long_radius
+
+    if self.player_pos_x > self._screen_width:
+        self.player_pos_x -= self._screen_width + long_radius
+
+    if self.player_pos_y < -long_radius:
+        self.player_pos_y += self._screen_height + long_radius
+
+    if self.player_pos_y > self._screen_height:
+        self.player_pos_y -= self._screen_height + long_radius
+
+
+def report_player_primary_obj_status(self) -> tuple:
+    """Returns a tuple containing the player's status information."""
+    player_score = self.score
+    player_lives = self.lives
+    player_shield_layers = self.shield_layers
+    player_x = self.player_pos_x
+    player_y = self.player_pos_y
+    player_radians = self.player_radians
+    player_is_invincible = self.is_invincible
+    player_movement_speed = self.player_movement_speed
+    player_rotation_speed = self.player_rotation_speed
+    player_fire_rate = self.player_shot_cooldown
+    player_bullet_speed = self.player_bullet_speed
+    player_bullet_damage = self.player_bullet_damage
+    player_invincibility_cooldown = self._player_invincibility_cooldown
+    player_shield_recharge = self.player_shield_recharge_cooldown
+    return (player_score,
+            player_lives,
+            player_shield_layers,
+            player_x,
+            player_y,
+            player_radians,
+            player_is_invincible,
+            player_movement_speed,
+            player_rotation_speed,
+            player_fire_rate,
+            player_bullet_speed,
+            player_bullet_damage,
+            player_invincibility_cooldown,
+            player_shield_recharge
+    )
+
+def space_invaders_control_player_primary_obj(self, dt: float) -> None:
+    """Handles player controls for the Space Invaders game."""
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+        self.player_primary_obj_move_left(dt)
+    elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+        self.player_primary_obj_move_right(dt)
+    elif keys[pygame.K_SPACE]:
+        self.player_primary_obj_shoot()
+
+def asteroids_control_player_primary_obj(self, dt: float) -> None:
+    """Handles player controls for the Asteroids game."""
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+        self.player_primary_obj_rotate_left(dt)
+    if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+        self.player_primary_obj_rotate_right(dt)
+    if keys[pygame.K_w] or keys[pygame.K_UP]:
+        self.player_primary_obj_accelerate()
+    if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+        self.player_primary_obj_deaccelerate()
+    if keys[pygame.K_SPACE]:
+        self.player_primary_obj_shoot()
+
+def galaga_control_player_primary_obj(self, dt: float) -> None:
+    """Handles player controls for the Galaga game."""
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+        self.player_primary_obj_move_left(dt)
+    elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+        self.player_primary_obj_move_right(dt)
+    elif keys[pygame.K_w] or keys[pygame.K_UP]:
+        self.player_primary_obj_move_forward(dt)
+    elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
+        self.player_primary_obj_move_backward(dt)
+    elif keys[pygame.K_SPACE]:
+        self.player_primary_obj_shoot()
+
+Boots
+Looking at your player class, I can see the shooting mechanism creates bullets and adds them to the _player_object_manager. The issue is likely not in this file, but rather in how the collision detection is being handled in your game loop or object manager.
+
+Here are the most likely places where the collision detection broke during your refactor:
+
+Game Loop Issues - Check your main game loop. Make sure you're still:
+
+Updating bullet positions each frame
+Updating asteroid positions each frame
+Calling the collision detection method between bullets and asteroids
+Object Manager Problems - Look at your PlayerObjManager or wherever you're storing bullets and asteroids:
+
+Are bullets still being added to the correct list/collection?
+Are asteroids still being added to the correct list/collection?
+Is the collision detection iterating through the right collections?
+Collision Detection Method - The actual collision detection code might have been accidentally modified. This would typically be something like:
+
+for bullet in bullets:
+    for asteroid in asteroids:
+        if bullet.collides_with(asteroid):
+            # handle collision
+
+Object Removal - Are bullets and asteroids being properly removed from their collections after collision? If they're not being removed, they might not be getting processed correctly.
+
+Could you show me:
+
+Your main game loop where collision detection happens?
+The collision detection method itself?
+How bullets and asteroids are stored and managed?
+That will help me pinpoint exactly where the break occurred!
+
+
+Shaunythunder
+import pygame
+import math
+import asteroid_game_folder.asteroids_obj as asteroids_obj
+
+class PlayerMasterProjectile:
+"""Class to handle player bullet objects in the game."""
+def init (self, player_object_manager: "PlayerObjManager",
+player_primary_obj_velocity: pygame.math.Vector2,
+player_primary_obj_radians: float,
+player_primary_obj_ship_nose_x: float,
+player_primary_obj_ship_nose_y: float,
+screen_width: int,
+screen_height: int):
+
+    self._player_object_manager = player_object_manager
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+
+    self.bullet_velocity = pygame.math.Vector2(0, 0)
+    self.player_primary_obj_velocity = player_primary_obj_velocity
+    self.player_primary_obj_radians = player_primary_obj_radians
+
+    self.bullet_pos_x = player_primary_obj_ship_nose_x
+    self.bullet_pos_y = player_primary_obj_ship_nose_y
+
+    """Placeholder Values"""
+    
+    self.bullet_radius = 2
+    self.bullet_base_velocity_magnitude = 500
+    self.bullet_damage = 1
+    self.bullet_color = (255, 255, 255)  # Default color for the bullet
+
+
+def draw_player_projectile(self, screen: pygame.Surface) -> None:
+    """Draw the player bullet on the screen."""
+    bullet_pos_x = self.bullet_pos_x
+    bullet_pos_y = self.bullet_pos_y
+    bullet_radius = self.bullet_radius
+    bullet_color = self.bullet_color
+    pygame.draw.circle(screen, bullet_color, (bullet_pos_x, bullet_pos_y), bullet_radius, width = 1)
+
+def calculate_player_projectile_vector(self) -> None:
+    """Calculate the bullet's velocity vector based on the player's 
+    current velocity and orientation."""
+    bullet_magnitude = self.bullet_base_velocity_magnitude
+    base_bullet_velocity = pygame.math.Vector2(0, -bullet_magnitude)
+    adjusted_bullet_velocity = base_bullet_velocity.rotate(math.degrees(self.player_primary_obj_radians)) + self.player_primary_obj_velocity
+    self.bullet_velocity = adjusted_bullet_velocity
+
+def calculate_player_projectile_velocity(self, dt: float) -> None:
+    """Update the bullet's position based on its velocity and the time delta."""
+    self.bullet_pos_x += self.bullet_velocity.x * dt
+    self.bullet_pos_y += self.bullet_velocity.y * dt
+
+def player_projectile_collision_vs_circle(self, 
+                                       circle_pos_x: float, 
+                                       circle_pos_y: float, 
+                                       circle_radius: float) -> bool:         
+    """Check for collision between the bullet and a circle object."""
+    circle_obj_pos_x = circle_pos_x
+    circle_obj_pos_y = circle_pos_y
+    circle_obj_radius = circle_radius
+    bullet_radius = self.bullet_radius
+    bullet_pos_x = self.bullet_pos_x
+    bullet_pos_y = self.bullet_pos_y
+    
+    distance_x = circle_obj_pos_x - bullet_pos_x
+    distance_y = circle_obj_pos_y - bullet_pos_y
+    true_distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+    collision_distance = bullet_radius + circle_obj_radius
+
+    if true_distance < collision_distance:
+        return True
+    return False
+
+def player_projectile_out_of_bounds(self) -> None:
+    """Check if the bullet is out of bounds and terminate it if so."""
+    radius = self.bullet_radius
+    if self.bullet_pos_x < -radius or self.bullet_pos_x > self._screen_width:
+        self._player_object_manager.terminate_player_projectile_obj(self)
+    if self.bullet_pos_y < -radius or self.bullet_pos_y > self._screen_height:
+        self._player_object_manager.terminate_player_projectile_obj(self)
+
+class PlayerBulletProjectile(PlayerMasterProjectile):
+def init(self, player_object_manager: "PlayerObjManager",
+player_primary_obj_velocity: pygame.math.Vector2,
+player_primary_obj_radians: float,
+player_primary_obj_ship_nose_x: float,
+player_primary_obj_ship_nose_y: float,
+screen_width: int,
+screen_height: int):
+super().init(player_object_manager,
+player_primary_obj_velocity,
+player_primary_obj_radians,
+player_primary_obj_ship_nose_x,
+player_primary_obj_ship_nose_y,
+screen_width,
+screen_height)
+self.bullet_color = (255, 255, 255)
+
+    # Setup Information
+    self.bullet_radius = 2
+    self.bullet_base_velocity_magnitude = 500
+    self.bullet_damage = 1
+
+"""
+Accidentally created something like a mine layer. Keeping incase I want to implement this.
+
+Gameplay could be player lays on mine and then when an object gets within a certain distance of
+that mine it then increases its velocity towards that Target
+
+class PlayerMineObj:
+def init (self, player_primary_obj_velocity,
+player_primary_obj_radians,
+player_primary_obj_ship_nose_x,
+player_primary_obj_ship_nose_y,
+screen_width,
+screen_height):
+
+    self.bullet_velocity = pygame.math.Vector2(0, 0)
+    self.player_primary_obj_velocity = player_primary_obj_velocity
+    self.player_primary_obj_radians = player_primary_obj_radians
+    self.screen_width = screen_width
+    self.screen_height = screen_height
+    self.bullet_x = player_primary_obj_ship_nose_x
+    self.bullet_y = player_primary_obj_ship_nose_y        
+    self.__bullet_drag_coefficient__ = .5
+    self.bullet_radius = 1
+    self.bullet_base_velocity_magnitude = 200
+    self.bullet_damage = 1
+
+def draw_player_bullet(self, screen):
+    bullet_x = self.bullet_x
+    bullet_y = self.bullet_y
+    bullet_radius = self.bullet_radius
+    pygame.draw.circle(screen, (255, 255, 255), (bullet_x, bullet_y), bullet_radius)
+
+def calculate_bullet_vector(self):
+    bullet_magnitude = self.bullet_base_velocity_magnitude
+    base_bullet_velocity = pygame.math.Vector2(0, -bullet_magnitude)
+    adjusted_bullet_velocity = base_bullet_velocity.rotate(math.degrees(self.player_primary_obj_radians)) + self.player_primary_obj_velocity
+    self.bullet_velocity = adjusted_bullet_velocity
+
+def calculate_bullet_velocity(self, dt):
+    self.bullet_x += self.bullet_velocity.x * dt
+    self.bullet_y += self.bullet_velocity.y * dt
+
+def calculate_bullet_intertia(self):
+    # Multiply by drag coefficient to ensure player slows down over time
+        self.bullet_velocity *= self.__bullet_drag_coefficient__
+
+"""
+
+Boots
+Ah, now I'm seeing the structure! Your bullet collision detection method player_projectile_collision_vs_circle() looks correct. The issue is likely in how the collision detection is being called in your game loop or object manager.
+
+A few questions to help narrow this down:
+
+Are bullets being created? - Can you see the bullets on screen when you shoot?
+
+Are asteroids still on screen? - Are the asteroids visible and moving?
+
+Where is the collision detection loop? - This is the critical piece. Somewhere in your code (probably in your game loop or object manager), you should have something like:
+
+# Check collisions between bullets and asteroids
+for bullet in player_bullets:
+    for asteroid in asteroids:
+        if bullet.player_projectile_collision_vs_circle(asteroid.x, asteroid.y, asteroid.radius):
+            # Handle collision - remove bullet, damage/destroy asteroid, etc.
+
+The most common issues after a refactor are:
+
+The collision detection loop was accidentally removed or commented out
+Variable names changed - maybe player_bullets became player_projectiles but the collision loop still references the old name
+Method calls changed - maybe the collision detection method name changed but wasn't updated everywhere
+Object attributes changed - maybe asteroid position or radius attributes were renamed
+Could you show me:
+
+Your main game loop or update method
+The collision detection code that calls player_projectile_collision_vs_circle()
+That's where the break almost certainly occurred!
+
+
+Shaunythunder
+import pygame
+import math
+import random
+import player_class.player_projectiles as player_projectiles
+
+class AsteroidMasterObj:
+"""Master class for all asteroid objects in the game."""
+def init (self,
+player_primary_object: object,
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+screen_width: int,
+screen_height: int,
+asteroid_min_radius: int = 20,
+asteroid_max_radius: int = 50,
+asteroid_min_vector_magnitude: int = 100,
+asteroid_max_vector_magnitude: int = 400,
+asteroid_min_radians: float = 0,
+asteroid_max_radians: float = 2 * math.pi,):
+
+    self._player_primary_object = player_primary_object
+    self._asteroids_enemy_obj_manager = asteroids_enemy_obj_manager
+    self._player_objs_handler = player_objs_handler  # Player object manager
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+
+    self.asteroid_color = (255, 255, 255)  # Placeholder color
+    self.asteroid_radius = 20  # Placeholder radius
+    self.asteroid_radians = 0  # Placeholder radians
+
+    
+    # Dummy values that don't affect the game logic but are needed for initialization
+    # Do not adjust these values, they won't do anything
+    self._asteroid_velocity_split_loss_coefficient = 0.5  # Placeholder value for velocity loss on split
+    self._asteroid_density_constant = 1
+    self._asteroid_mass = self._asteroid_density_constant * self.asteroid_radius ** 3
+    self._asteroid_elastic_constant = 1  # Placeholder value for elasticity
+
+    self.asteroid_min_radius = asteroid_min_radius
+    self.asteroid_max_radius = asteroid_max_radius
+    self.min_asteroid_pos_x = 0 - self.asteroid_max_radius
+    self.max_asteroid_pos_x = screen_width + self.asteroid_max_radius
+    self.min_asteroid_pos_y = 0 - self.asteroid_max_radius
+    self.max_asteroid_pos_y = screen_height + self.asteroid_max_radius
+    self.asteroid_min_vector_magnitude = asteroid_min_vector_magnitude
+    self.asteroid_max_vector_magnitude = asteroid_max_vector_magnitude
+    self.asteroid_min_radians = asteroid_min_radians
+    self.asteroid_max_radians = asteroid_max_radians
+   
+    #Asteroid Statistics
+    self.asteroid_velocity = pygame.math.Vector2(0, 0)
+    self.asteroid_vector_magnitude = 500
+    self.asteroid_health = 1
+
+def reset_asteroid_master_obj(self) -> None:
+    """Reset the asteroid master object to its initial state."""
+    self.__init__(self._player_primary_object,
+                  self._player_objs_handler,
+                  self._asteroids_enemy_obj_manager,
+                  self._screen_width,
+                  self._screen_height,
+                  self.asteroid_min_radius,
+                  self.asteroid_max_radius,
+                  self.asteroid_min_vector_magnitude,
+                  self.asteroid_max_vector_magnitude,
+                  self.asteroid_min_radians,
+                  self.asteroid_max_radians)
+
+def terminate_asteroid_object(self) -> None:
+    """Terminate the asteroid object."""
+    # This method will terminate the asteroid object.
+    # It is called when the asteroid is destroyed or removed from the game.
+    self._asteroids_enemy_obj_manager.terminate_asteroid_object(self)
+
+def draw_asteroid_object(self, screen: object) -> None:
+    """Draw the asteroid object on the screen."""
+    pygame.draw.circle(screen, 
+                        self.asteroid_color, 
+                       (self.asteroid_pos_x, self.asteroid_pos_y), 
+                        self.asteroid_radius,
+                        width = 1)
+    
+def calculate_asteroid_vector(self) -> None:
+    """Calculate the asteroid's velocity vector based on its radians and magnitude."""
+    asteroid_magnitude = self.asteroid_vector_magnitude
+    base_asteroid_velocity = pygame.math.Vector2(0, -asteroid_magnitude)
+    adjusted_asteroid_velocity = base_asteroid_velocity.rotate(math.degrees(self.asteroid_radians))
+    self.asteroid_velocity = adjusted_asteroid_velocity
+
+def calculate_asteroid_velocity(self, dt: float) -> None:
+    """Update the asteroid's position based on its velocity and the time delta."""
+    self.asteroid_pos_x += self.asteroid_velocity.x * dt
+    self.asteroid_pos_y += self.asteroid_velocity.y * dt
+
+def spawn_asteroid(self, asteroid_type: str) -> None:
+    """Spawn an asteroid object at a random position outside the screen bounds.
+    Ensures that asteroids cannot spawn next to the player."""
+    # Randomly choose a plane (x or y) and a side (min or max) to spawn the asteroid
+    # This will determine if the asteroid spawns on the left/right or top/bottom of the screen
+    # All asteroids spawn in a deadzone area just outside the screen.
+    for attempt_number in range (10):  # Try up to 10 times to find a valid position
+
+        current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+        asteroid_max_pos_x = self.max_asteroid_pos_x
+        asteroid_max_pos_y = self.max_asteroid_pos_y
+        asteroid_min_pos_x = self.min_asteroid_pos_x
+        asteroid_min_pos_y = self.min_asteroid_pos_y
+        chosen_plane = random.choice(["x", "y"])
+        chosen_side = random.choice(["min", "max"])
+
+        # Randomly select the position for the asteroid based on the chosen plane and side
+        if chosen_plane == "x":
+            if chosen_side == "min":
+                self.asteroid_pos_x = asteroid_min_pos_x
+                self.asteroid_pos_y = random.randint(self.min_asteroid_pos_y, self.max_asteroid_pos_y)
+            elif chosen_side == "max":
+                self.asteroid_pos_x = asteroid_max_pos_x
+                self.asteroid_pos_y = random.randint(self.min_asteroid_pos_y, self.max_asteroid_pos_y)
+        elif chosen_plane == "y":
+            if chosen_side == "min":
+                self.asteroid_pos_x = random.randint(self.min_asteroid_pos_x, self.max_asteroid_pos_x)
+                self.asteroid_pos_y = asteroid_min_pos_y
+            elif chosen_side == "max":
+                self.asteroid_pos_x = random.randint(self.min_asteroid_pos_x, self.max_asteroid_pos_x)
+                self.asteroid_pos_y = asteroid_max_pos_y
+
+        # Set new asteroid properies based on min max range system
+        asteroid_x = self.asteroid_pos_x
+        asteroid_y = self.asteroid_pos_y
+        asteroid_vector_magnitude = random.randint(self.asteroid_min_vector_magnitude, self.asteroid_max_vector_magnitude)
+        asteroid_radians = random.uniform(self.asteroid_min_radians, self.asteroid_max_radians)
+        asteroid_radius = random.randint(self.asteroid_min_radius, self.asteroid_max_radius)
+        asteroid_color = (255, 255, 255)  # Placeholder color
+        
+        # Check if the asteroid is safe to spawn
+        # The asteroid is safe to spawn if it is not too close to other asteroids or the player
+        
+        asteroid_safe_to_spawn = True
+        player_safe_to_spawn = False
+
+        for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, Asteroid):
+                mimimum_distance = asteroid_obj.asteroid_radius + asteroid_radius + 4
+                asteroid_distance_x = abs(asteroid_obj.asteroid_pos_x - asteroid_x)
+                asteroid_distance_y = abs(asteroid_obj.asteroid_pos_y - asteroid_y)
+            if asteroid_distance_x < mimimum_distance and asteroid_distance_y < mimimum_distance:
+                asteroid_safe_to_spawn = False
+                break
+
+        # Logic for determining id spawn is too close to the player
+        if self._player_primary_object:
+           
+            player_pos_x = self._player_primary_object.player_pos_x
+            player_pos_y = self._player_primary_object.player_pos_y
+            player_radius = self._player_primary_object.ship_radius_bow_to_stern
+            player_distance_x = abs(player_pos_x - asteroid_x)
+            player_distance_y = abs(player_pos_y - asteroid_y)
+            player_minimum_distance = player_radius + asteroid_radius + 100
+
+            if player_distance_x > player_minimum_distance and player_distance_y > player_minimum_distance:
+                player_safe_to_spawn = True
+        
+       
+        if asteroid_safe_to_spawn and player_safe_to_spawn:
+            if asteroid_type == "asteroid":
+                new_asteroid = Asteroid(self._player_primary_object,
+                                        self._player_objs_handler,
+                                        self._asteroids_enemy_obj_manager,
+                                        self._screen_width,
+                                        self._screen_height,
+                                        self.asteroid_min_radius,
+                                        self.asteroid_max_radius,
+                                        self.asteroid_min_vector_magnitude,
+                                        self.asteroid_max_vector_magnitude,
+                                        self.asteroid_min_radians,
+                                        self.asteroid_max_radians,
+                                        asteroid_x,
+                                        asteroid_y, 
+                                        asteroid_radius, 
+                                        asteroid_color, 
+                                        asteroid_vector_magnitude,
+                                        asteroid_radians,
+                                        )
+                self._asteroids_enemy_obj_manager.create_asteroid_object(new_asteroid)
+                new_asteroid.calculate_asteroid_vector()
+
+def check_player_primary_obj_collision(self) -> None:
+    """Check for collision between the asteroid and the player primary object."""
+    player_primary_obj_collision = self._player_primary_object.\
+                                   player_primary_obj_check_collision_vs_circle(self.asteroid_pos_x,
+                                                                                self.asteroid_pos_y,
+                                                                                self.asteroid_radius)    
+    if player_primary_obj_collision:
+        self.terminate_asteroid_object()
+        self._player_primary_object.player_primary_obj_hit()
+
+def check_player_projectile_obj_collision(self) -> None:
+    """Check for collision between the asteroid and player projectiles."""
+    player_projectile_objs = self._player_objs_handler.player_projectile_objs
+    number_of_projectiles = self._player_objs_handler.num_player_projectile_objs
+    if number_of_projectiles == 0:
+        return
+    for player_projectile in player_projectile_objs:
+        player_projectile_collision = player_projectile.player_projectile_collision_vs_circle(
+                                                                                    self.asteroid_pos_x, 
+                                                                                    self.asteroid_pos_y, 
+                                                                                    self.asteroid_radius
+                                                                                    )
+        if player_projectile_collision:
+            # If the asteroid is hit by a player projectile, terminate the asteroid
+            # and remove the player projectile
+            self._player_objs_handler.terminate_player_projectile_obj(player_projectile)
+            self.split_asteroid()
+            return  # Exit after the first collision to avoid multiple hits on the same asteroid
+
+def split_asteroid(self) -> None:
+    """Split the asteroid into smaller pieces if it is large enough. 
+    Method is set up to ensure that the asteroid vector cannot send an
+    asteroid fragment directly at the player."""
+    # Terminate original asteroid
+    self.terminate_asteroid_object()
+    
+    # Radius check to determine if asteroid is big enough to split
+    radius_check = self.asteroid_radius * 0.6667
+    if radius_check < self.asteroid_min_radius:
+        return
+
+    player_pos_x = self._player_primary_object.player_pos_x
+    player_pos_y = self._player_primary_object.player_pos_y
+
+    # Determine direction and position of the player relative
+    # To the asteroid. Set up safe zone to ensure asteroid
+    # Cannot move straight towards the player.
+    delta_x = player_pos_x - self.asteroid_pos_x
+    delta_y = player_pos_y - self.asteroid_pos_y
+    radians_to_player = math.atan2(delta_y, delta_x)
+    
+    # Safe zone is a 90 degree (1/2 * pi) window with 
+    # 45 degress on each side of the player. 
+    safe_zone_radian_min = radians_to_player - math.pi / 3
+    safe_zone_radian_max = radians_to_player + math.pi / 3
+    safe_zone_radian_range = safe_zone_radian_max - safe_zone_radian_min
+    
+    # Handling for edge case where range goes across zero (2 * pi)
+    safe_zone_range_crosses_zero = False
+    if safe_zone_radian_max < math.pi / 2:
+        safe_zone_range_crosses_zero = True
+    
+    # Make 10 attempts, if not successful, abort the split.
+    for attempt_number in range(10):
+        
+        # Asteroid division is randomized by setting the division
+        # To a range
+        random_divider = random.uniform(1, 2)
+        first_new_asteroid_radius = self.asteroid_radius /  random_divider
+        second_new_asteroid_radius = self.asteroid_radius - first_new_asteroid_radius
+        if second_new_asteroid_radius < self.asteroid_min_radius:
+            second_new_asteroid_radius = self.asteroid_min_radius + self.asteroid_min_radius // 2
+
+        # Determines new asteroid direction.
+        first_new_asteroid_radians = random.uniform(self.asteroid_min_radians, self.asteroid_max_radians)
+        second_new_asteroid_radians = random.uniform(self.asteroid_min_radians, self.asteroid_max_radians)
+
+        # Handling for player safezone.
+        if not safe_zone_range_crosses_zero:
+            if first_new_asteroid_radians > safe_zone_radian_min and first_new_asteroid_radians < safe_zone_radian_max:
+                coin_flip = random.choice([1, 2])
+                if coin_flip == 1:
+                    first_new_asteroid_radians = random.uniform(0, safe_zone_radian_min - 0.1)
+                elif coin_flip == 2:
+                    first_new_asteroid_radians = random.uniform(safe_zone_radian_max + 0.1, 2 * math.pi)
+
+            if second_new_asteroid_radians > safe_zone_radian_min and second_new_asteroid_radians < safe_zone_radian_max:
+                coin_flip = random.choice([1, 2])
+                if coin_flip == 1:
+                    second_new_asteroid_radians = random.uniform(0, safe_zone_radian_min - 0.1)
+                elif coin_flip == 2:
+                    second_new_asteroid_radians = random.uniform(safe_zone_radian_max + 0.1, 2 * math.pi)
+        elif safe_zone_range_crosses_zero:
+            if (first_new_asteroid_radians > safe_zone_radian_min and first_new_asteroid_radians < 2 * math.pi) or \
+                (first_new_asteroid_radians < safe_zone_radian_max and first_new_asteroid_radians > 0):
+                    second_new_asteroid_radians = random.uniform(safe_zone_radian_max + 0.1, safe_zone_radian_min - 0.1)
+            if (second_new_asteroid_radians > safe_zone_radian_min and second_new_asteroid_radians < 2 * math.pi) or \
+                (second_new_asteroid_radians < safe_zone_radian_max and second_new_asteroid_radians > 0):
+                    second_new_asteroid_radians = random.uniform(safe_zone_radian_max + 0.1, safe_zone_radian_min - 0.1)
+        
+        first_new_asteroid_vector_magnitude = random.uniform \
+            (self.asteroid_min_vector_magnitude, self.asteroid_max_vector_magnitude * self._asteroid_velocity_split_loss_coefficient)
+        
+        second_new_asteroid_vector_magnitude = random.uniform \
+            (self.asteroid_min_vector_magnitude, self.asteroid_max_vector_magnitude * self._asteroid_velocity_split_loss_coefficient)
+        
+        first_new_asteroid_pos_x = self.asteroid_pos_x
+        first_new_asteroid_pos_y = self.asteroid_pos_y
+        second_new_asteroid_pos_x = self.asteroid_pos_x
+        second_new_asteroid_pos_y = self.asteroid_pos_y
+        first_new_asteroid = Asteroid(self._player_primary_object,
+                                self._player_objs_handler,
+                                self._asteroids_enemy_obj_manager,
+                                self._screen_width,
+                                self._screen_height,
+                                self.asteroid_min_radius,
+                                self.asteroid_max_radius,
+                                self.asteroid_min_vector_magnitude,
+                                self.asteroid_max_vector_magnitude,
+                                self.asteroid_min_radians,
+                                self.asteroid_max_radians,
+                                first_new_asteroid_pos_x,
+                                first_new_asteroid_pos_y, 
+                                first_new_asteroid_radius, 
+                                self.asteroid_color, 
+                                first_new_asteroid_vector_magnitude,
+                                first_new_asteroid_radians,
+                                )
+        second_new_asteroid = Asteroid(self._player_primary_object,
+                                self._player_objs_handler,
+                                self._asteroids_enemy_obj_manager,
+                                self._screen_width,
+                                self._screen_height,
+                                self.asteroid_min_radius,
+                                self.asteroid_max_radius,
+                                self.asteroid_min_vector_magnitude,
+                                self.asteroid_max_vector_magnitude,
+                                self.asteroid_min_radians,
+                                self.asteroid_max_radians,
+                                second_new_asteroid_pos_x,
+                                second_new_asteroid_pos_y, 
+                                second_new_asteroid_radius, 
+                                self.asteroid_color, 
+                                second_new_asteroid_vector_magnitude,
+                                second_new_asteroid_radians,
+                                )
+        self._asteroids_enemy_obj_manager.asteroid_objs.append(first_new_asteroid)
+        self._asteroids_enemy_obj_manager.asteroid_objs.append(second_new_asteroid)
+        break
+    
+def check_asteroid_collision(self, asteroid_objs: list) -> None:
+    """Check for collision between the asteroid and other asteroids."""         
+    #print(f"Asteroid at {self.asteroid_pos_x:.1f}, {self.asteroid_pos_y:.1f} checking collisions")
+    is_colliding = False
+    collision_checked = False
+    current_asteroids = asteroid_objs
+    asteroid_radius = self.asteroid_radius
+    asteroid_x = self.asteroid_pos_x
+    asteroid_y = self.asteroid_pos_y
+    for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, Asteroid) and asteroid_obj != self:
+                distance_x = asteroid_obj.asteroid_pos_x - asteroid_x
+                distance_y = asteroid_obj.asteroid_pos_y - asteroid_y
+                true_distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+                collision_distance = asteroid_radius + asteroid_obj.asteroid_radius
+                
+                #print(f"  Distance: {true_distance:.1f}, Need: {collision_distance:.1f} (r1={asteroid_radius}, r2={asteroid_obj.asteroid_radius})")
+                #print(f"  Collision check: {true_distance} < {collision_distance} = {true_distance < collision_distance}")
+
+                if true_distance < collision_distance:
+                    is_colliding = True
+                    if not collision_checked:
+                        self.resolve_asteroid_collision_with_PHYSICS(asteroid_obj)
+                        collision_checked = True
+                        break
+
+    if is_colliding:
+        self.asteroid_color = (255, 0, 0)
+    else:
+        self.asteroid_color = (255, 255, 255)
+
+def resolve_asteroid_collision_with_PHYSICS(self, asteroid_obj: object) -> None:
+    """Resolve the collision between two asteroids using physics calculations."""
+    
+    # Set up positions for both asteroids
+    asteroid_1_pos_x = self.asteroid_pos_x
+    asteroid_1_pos_y = self.asteroid_pos_y
+    asteroid_2_pos_x = asteroid_obj.asteroid_pos_x
+    asteroid_2_pos_y = asteroid_obj.asteroid_pos_y
+
+    # Set up vector components for both asteroids
+    asteroid_1_vector_x = self.asteroid_vector_magnitude * math.cos(self.asteroid_radians)
+    asteroid_1_vector_y = self.asteroid_vector_magnitude * math.sin(self.asteroid_radians)
+    asteroid_2_vector_x = asteroid_obj.asteroid_vector_magnitude * math.cos(asteroid_obj.asteroid_radians)
+    asteroid_2_vector_y = asteroid_obj.asteroid_vector_magnitude * math.sin(asteroid_obj.asteroid_radians)
+    asteroid_1_vector = pygame.math.Vector2(asteroid_1_vector_x, asteroid_1_vector_y)
+    asteroid_2_vector = pygame.math.Vector2(asteroid_2_vector_x, asteroid_2_vector_y)
+
+    # Set up masses for both asteroids
+    asteroid_1_mass = self._asteroid_mass
+    asteroid_2_mass = asteroid_obj._asteroid_mass
+
+    # Calculate distance between the two asteroids
+    delta_x = asteroid_2_pos_x - asteroid_1_pos_x
+    delta_y = asteroid_2_pos_y - asteroid_1_pos_y
+    distance = math.hypot(delta_x, delta_y)
+    
+    # If the distance is zero, assign default vector components 
+    # to avoid division by zero
+    if distance == 0:
+        collision_direction_x = 1
+        collision_direction_y = 0
+    else:
+        # Calculate the collision direction vector
+        # Dection vector goes from center of asteroid 1 to asteroid 2
+        collision_direction_x = delta_x / distance # Normal x
+        collision_direction_y = delta_y / distance # Normal y
+
+    # Calculate 90 deg or perpendicular vector components
+    perpendicular_vector_x = -collision_direction_y
+    perpendicular_vector_y = collision_direction_x
+
+    # Determine velocities with normal and perpendicular components
+    asteroid_1_normal_velocity = asteroid_1_vector.x * collision_direction_x + asteroid_1_vector.y * collision_direction_y
+    asteroid_1_perpendicular_velocity = asteroid_1_vector.x * perpendicular_vector_x + asteroid_1_vector.y * perpendicular_vector_y
+    asteroid_2_normal_velocity = asteroid_2_vector.x * collision_direction_x + asteroid_2_vector.y * collision_direction_y
+    asteroid_2_perpendicular_velocity = asteroid_2_vector.x * perpendicular_vector_x + asteroid_2_vector.y * perpendicular_vector_y
+
+    # Determine scalar vector magnitudes assuming perfectly elastic collision
+    # Multiply by the elasticity constant to adjust the collision response 
+    # For realistic collisions
+
+    asteroid_1_post_collision_normal_velocity = ((asteroid_1_mass - asteroid_2_mass) * asteroid_1_normal_velocity + 2 * asteroid_2_mass * asteroid_2_normal_velocity) / (asteroid_1_mass + asteroid_2_mass) * self._asteroid_elastic_constant
+    asteroid_2_post_collision_normal_velocity = ((asteroid_2_mass - asteroid_1_mass) * asteroid_2_normal_velocity + 2 * asteroid_1_mass * asteroid_1_normal_velocity) / (asteroid_1_mass + asteroid_2_mass) * self._asteroid_elastic_constant
+
+    # Determine the final vectors using the post-collision normal velocities
+    # Combined with the directional normal and perpendicular components
+    asteroid_1_final_vector_x = asteroid_1_post_collision_normal_velocity * collision_direction_x + asteroid_1_perpendicular_velocity * perpendicular_vector_x
+    asteroid_1_final_vector_y = asteroid_1_post_collision_normal_velocity * collision_direction_y + asteroid_1_perpendicular_velocity * perpendicular_vector_y
+    asteroid_2_final_vector_x = asteroid_2_post_collision_normal_velocity * collision_direction_x + asteroid_2_perpendicular_velocity * perpendicular_vector_x
+    asteroid_2_final_vector_y = asteroid_2_post_collision_normal_velocity * collision_direction_y + asteroid_2_perpendicular_velocity * perpendicular_vector_y
+
+    # Assemble the final vectors 
+    asteroid_1_final_vector = pygame.math.Vector2(asteroid_1_final_vector_x, asteroid_1_final_vector_y)
+    asteroid_2_final_vector = pygame.math.Vector2(asteroid_2_final_vector_x, asteroid_2_final_vector_y)
+
+    # Apply the final vectors to the asteroid objects
+    self.asteroid_velocity = asteroid_1_final_vector
+    asteroid_obj.asteroid_velocity = asteroid_2_final_vector
+
+    # Update the vector magnitudes for both asteroids and thier radian angles
+    self.asteroid_vector_magnitude = asteroid_1_final_vector.length()
+    asteroid_obj.asteroid_vector_magnitude = asteroid_2_final_vector.length()
+    self.asteroid_radians = math.atan2(asteroid_1_final_vector_y, asteroid_1_final_vector_x)
+    asteroid_obj.asteroid_radians = math.atan2(asteroid_2_final_vector_y, asteroid_2_final_vector_x)
+
+    # Separate the asteroids after collision to stop
+    # them from hugging each other
+    overlap_distance = self.asteroid_radius + asteroid_obj.asteroid_radius - distance
+    if overlap_distance > 0:
+        # Calculate the separation vector
+        separation_vector_x = collision_direction_x * overlap_distance / 2
+        separation_vector_y = collision_direction_y * overlap_distance / 2
+        
+        # Apply the separation vector to both asteroids
+        self.asteroid_pos_x -= separation_vector_x
+        self.asteroid_pos_y -= separation_vector_y
+        asteroid_obj.asteroid_pos_x += separation_vector_x
+        asteroid_obj.asteroid_pos_y += separation_vector_y
+
+def asteroid_out_of_bounds(self) -> None:
+    """Check if the asteroid is out of bounds and wrap it around the screen."""
+    # Horizontal wrapping
+    if self.asteroid_pos_x < -self.asteroid_radius:
+        self.asteroid_pos_x = self._screen_width + self.asteroid_radius
+    elif self.asteroid_pos_x > self._screen_width + self.asteroid_radius:
+        self.asteroid_pos_x = -self.asteroid_radius
+    # Vertical wrapping
+    if self.asteroid_pos_y < -self.asteroid_radius:
+        self.asteroid_pos_y = self._screen_height + self.asteroid_radius
+    elif self.asteroid_pos_y > self._screen_height + self.asteroid_radius:
+        self.asteroid_pos_y = -self.asteroid_radius
+
+def restore_vector_magnitude(self) -> None:
+    """Restore the asteroid's vector magnitude to a minimum value if it is too low."""
+    if self.asteroid_vector_magnitude < self.asteroid_min_vector_magnitude:
+        self.asteroid_vector_magnitude = self.asteroid_min_vector_magnitude
+    elif self.asteroid_vector_magnitude > self.asteroid_max_vector_magnitude:
+        self.asteroid_vector_magnitude = self.asteroid_max_vector_magnitude
+
+class Asteroid(AsteroidMasterObj):
+"""Basic Asteroid class that inherits from AsteroidMasterObj."""
+def init (self,
+player_primary_object: object,
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: object,
+screen_width: int,
+screen_height: int,
+asteroid_min_radius: float,
+asteroid_max_radius: float,
+asteroid_min_vector_magnitude: int,
+asteroid_max_vector_magnitude: int,
+asteroid_min_radians: float,
+asteroid_max_radians: float,
+asteroid_pos_x: float,
+asteroid_pos_y: float,
+radius: int,
+color: tuple[int, int, int],
+vector_magnitude: int,
+asteroid_radians: float):
+
+    super().__init__(player_primary_object,
+                     player_objs_handler,
+                     asteroids_enemy_obj_manager,
+                     screen_width,
+                     screen_height,
+                     asteroid_min_radius,
+                     asteroid_max_radius,
+                     asteroid_min_vector_magnitude,
+                     asteroid_max_vector_magnitude,
+                     asteroid_min_radians,
+                     asteroid_max_radians)
+    
+    self.asteroid_pos_x = asteroid_pos_x
+    self.asteroid_pos_y = asteroid_pos_y
+    self.asteroid_radius = radius
+    self.asteroid_color = color
+
+    self._asteroid_velocity_split_loss_coefficient = 0.5  # Placeholder value for velocity loss on split
+    self._asteroid_density_constant = 1
+    self._asteroid_mass = self._asteroid_density_constant * self.asteroid_radius ** 3
+    self._asteroid_elastic_constant = .7  # Placeholder value for elasticity
+
+    self.asteroid_vector_magnitude = vector_magnitude
+    self.asteroid_radians = asteroid_radians
+    self.asteroid_velocity = pygame.math.Vector2(0, 0)
+
+Boots
+Found it! Looking at your asteroid collision detection method check_player_projectile_obj_collision(), I can see the issue.
+
+In this method:
+
+def check_player_projectile_obj_collision(self) -> None:
+    """Check for collision between the asteroid and player projectiles."""
+    player_projectile_objs = self._player_objs_handler.player_projectile_objs
+    number_of_projectiles = self._player_objs_handler.num_player_projectile_objs
+    if number_of_projectiles == 0:
+        return
+    for player_projectile in player_projectile_objs:
+        player_projectile_collision = player_projectile.player_projectile_collision_vs_circle(
+                                                                                    self.asteroid_pos_x, 
+                                                                                    self.asteroid_pos_y, 
+                                                                                    self.asteroid_radius
+                                                                                    )
+        if player_projectile_collision:
+            # If the asteroid is hit by a player projectile, terminate the asteroid
+            # and remove the player projectile
+            self._player_objs_handler.terminate_player_projectile_obj(player_projectile)
+            self.split_asteroid()
+            return  # Exit after the first collision to avoid multiple hits on the same asteroid
+
+The collision detection logic looks correct, so the issue is likely that this method isn't being called in your game loop, or there's an issue with how self._player_objs_handler.player_projectile_objs is being populated.
+
+A few questions to debug this:
+
+Is check_player_projectile_obj_collision() being called in your game loop? Look for where this method is invoked for each asteroid.
+
+Are bullets being added to the correct collection? Check if bullets are actually being stored in self._player_objs_handler.player_projectile_objs.
+
+What does your PlayerObjManager look like? Specifically, how does create_player_projectile_obj() and the player_projectile_objs list work?
+
+The most likely scenario is that during your refactor, either:
+
+The call to check_player_projectile_obj_collision() was removed from the game loop
+The bullet storage mechanism changed but this collision detection wasn't updated to match
+Can you show me your main game loop where collision detection happens?
+
+
+Shaunythunder
+import pygame
+import asteroid_game_folder.asteroids_obj as asteroids_obj
+import asteroid_game_folder.alien_ufo_obj as alien_ufo_obj
+import asteroid_game_folder.ufo_projectiles as ufo_projectiles
+
+class AsteroidsEnemyObjManager:
+"""Class to manage asteroid and UFO objects in the game."""
+def init(self,
+game_state_reporter: "GameStateManager",
+wave_reporter: "WaveManager",
+player_primary_obj: "PlayerPrimaryObj",
+asteroid_master_obj: "AsteroidsMasterObj"):
+
+    self._game_state_reporter = game_state_reporter
+    self._player_primary_obj = player_primary_obj
+    self._wave_reporter = wave_reporter
+    self._asteroid_master_obj = asteroid_master_obj
+    self.can_spawn_asteroids = True  # Flag to control asteroid spawning
+    self.can_spawn_ufos = True
+    self.asteroid_objs = []
+    self.ufo_objs = [] 
+    self.ufo_projectile_objs = []
+
+    self.maximum_asteroid_objs = 20  # Maximum number of asteroids in a wave
+    self.maximum_ufo_objs = 5
+    self.maximum_ufo_projectile_objs = 9999
+    
+    # Entity Counts
+    self.asteroid_objs_left = len(self.asteroid_objs)
+    self.ufo_objs_left = len(self.ufo_objs)
+    self.ufo_projectile_objs_left = len(self.ufo_projectile_objs)
+    self.total_enemies_left = self.asteroid_objs_left + self.ufo_objs_left
+
+def reset_asteroids_enemy_obj_manager(self) -> None:
+    """Reset the AsteroidsEnemyObjManager to its initial state."""
+    self.__init__(self._game_state_reporter,
+                   self._wave_reporter,
+                   self._player_primary_obj,
+                   self._asteroid_master_obj)
+
+def update_enemy_objs_left(self) -> None:
+    self.update_asteroids_left()
+    self.update_ufos_left()
+    self.total_enemies_left = self.asteroids_left + self.ufos_left + self.ufo_projectile_objs_left
+
+def create_wave(self, wave_number: int) -> None:
+    # This method will create a new wave of enemies based on the wave number.
+    # The implementation details would depend on the game design.
+    pass
+
+"""==============ASTEROIDS=================="""
+
+def update_asteroids_left(self) -> None:
+    """This method will update the number of asteroids left in the game."""
+    self.asteroids_left = len(self.asteroid_objs)
+    if self.asteroids_left < self.maximum_asteroid_objs:
+        self.can_spawn_asteroids = True
+    else:
+        self.can_spawn_asteroids = False
+
+def draw_asteroid_objects(self, screen: pygame.Surface) -> None:
+    """Draw all asteroid objects on the screen."""
+    for asteroid_obj in self.asteroid_objs:
+        if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+            asteroid_obj.draw_asteroid_object(screen)
+  
+def create_asteroid_object(self, asteroid_obj: object) -> None:
+    """Create a new asteroid object and add it to the list of asteroid objects."""
+    if self.asteroid_objs_left < self.maximum_asteroid_objs:
+        if asteroid_obj not in self.asteroid_objs:
+            self.asteroid_objs.append(asteroid_obj)
+    self.update_asteroids_left()
+
+def update_asteroid_objs(self, dt: float) -> None:
+    """Update all asteroid objects based on the current game state."""
+    current_asteroids = self.asteroid_objs
+    self.update_asteroids_left()
+    for asteroid_obj in self.asteroid_objs:
+        if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+            asteroid_obj.calculate_asteroid_velocity(dt)
+            asteroid_obj.asteroid_out_of_bounds()
+            asteroid_obj.check_player_primary_obj_collision()
+            asteroid_obj.check_asteroid_collision(current_asteroids)
+            asteroid_obj.check_player_projectile_obj_collision()
+            asteroid_obj.restore_vector_magnitude()
+
+def terminate_asteroid_object(self, asteroid_obj: object) -> None:
+    """Terminate an asteroid object and remove it from the list of asteroid objects."""
+    if asteroid_obj in self.asteroid_objs:
+        self.asteroid_objs.remove(asteroid_obj)
+
+"""--------------ASTEROIDS END-----------------"""
+
+"""=================UFOs==================="""
+
+def update_ufos_left(self) -> None:
+    """This method will update the number of asteroids left in the game."""
+    self.ufo_objs_left = len(self.ufo_objs)
+    if self.ufo_objs_left < self.maximum_ufo_objs:
+        self.can_spawn_ufos = True
+    else:
+        self.can_spawn_ufos = False
+
+def draw_ufo_objects(self, screen: pygame.Surface) -> None:
+    """Draws UFO Objects onto thes screen."""
+    for ufo_obj in self.ufo_objs:
+        if isinstance(ufo_obj, alien_ufo_obj.UFOClassic):
+            ufo_obj.draw_ufo_object(screen)
+
+def create_ufo_object(self, ufo_obj: object) -> None:
+    """Creates a UFO Object and adds to manager for tracking."""
+    if self.ufo_objs_left < self.maximum_ufo_objs:
+        if ufo_obj not in self.ufo_objs:
+            self.ufo_objs.append(ufo_obj)
+    self.update_ufos_left()
+   
+def update_ufo_objs(self, dt: float) -> None:
+    """Updates the game logic for the UFO Objects."""
+    self.update_ufos_left()
+    for ufo_obj in self.ufo_objs:
+        if isinstance(ufo_obj, alien_ufo_obj.UFOClassic):
+            ufo_obj.calc_if_ufo_classic_can_change_directions()
+            ufo_obj.ufo_classic_change_directions(dt)
+            ufo_obj.calculate_ufo_velocity(dt)
+            ufo_obj.calc_if_ufo_classic_can_shoot()
+            ufo_obj.ufo_classic_shoot()
+            ufo_obj.ufo_out_of_bounds()
+            
+
+def terminate_ufo_object(self, ufo_obj: object) -> None:
+    # This method will terminate the corrosponding UFO.
+    if ufo_obj in self.ufo_objs:
+        self.ufo_objs.remove(ufo_obj)
+
+"""----------------UFOs END-----------------"""
+
+"""=========UFO PROJECTILES START==========="""
+
+def update_ufo_projectile_objs_left(self) -> None:
+    """This method will update the number of asteroids left in the game."""
+    self.ufos_left = len(self.ufo_objs)
+    if self.ufo_projectile_objs_left < self.maximum_ufo_projectile_objs:
+        self.can_spawn_ufo_projectiles = True
+    else:
+        self.can_spawn_ufo_projectiles = False
+
+def draw_ufo_projectile_objs(self, screen: pygame.Surface) -> None:
+    """Draws UFO projectiles on the screen."""
+    for ufo_projectile_obj in self.ufo_projectile_objs:
+        if isinstance(ufo_projectile_obj, ufo_projectiles.UFOClassicProjectile):
+            ufo_projectile_obj.draw_ufo_projectile(screen)
+
+def create_ufo_projectile_obj(self, ufo_projectile: object) -> None:
+    """Creates UFO projectile and adds it to the manager for tracking."""
+    if self.ufo_projectile_objs_left < self.maximum_ufo_projectile_objs:
+        if ufo_projectile not in self.ufo_projectile_objs:
+            self.ufo_projectile_objs.append(ufo_projectile)
+    self.update_ufo_projectile_objs_left()
+   
+def update_ufo_projectile_objs(self, dt: float) -> None:
+    """Updates the game logic for the UFO projectiles."""
+    self.update_ufo_projectile_objs_left()
+    for ufo_projectile in self.ufo_projectile_objs:
+        if isinstance(ufo_projectile, ufo_projectiles.UFOClassicProjectile):
+           pass
+            
+
+def terminate_ufo_projectile(self, ufo_projectile_obj: object) -> None:
+    """Removes the UFO projectile from the manager and stops tracking it."""
+    # This method will terminate the corrosponding UFO.
+    if ufo_projectile_obj in self.ufo_projectile_objs:
+        self.ufo_projectile_objs.remove(ufo_projectile_obj)'
+
+Boots
+Perfect! Now I can see the issue clearly. In your update_asteroid_objs method, you ARE calling the collision detection:
+
+def update_asteroid_objs(self, dt: float) -> None:
+    """Update all asteroid objects based on the current game state."""
+    current_asteroids = self.asteroid_objs
+    self.update_asteroids_left()
+    for asteroid_obj in self.asteroid_objs:
+        if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+            asteroid_obj.calculate_asteroid_velocity(dt)
+            asteroid_obj.asteroid_out_of_bounds()
+            asteroid_obj.check_player_primary_obj_collision()
+            asteroid_obj.check_asteroid_collision(current_asteroids)
+            asteroid_obj.check_player_projectile_obj_collision()  # <-- This IS being called
+            asteroid_obj.restore_vector_magnitude()
+
+So the collision detection IS running. This means the issue is likely in your PlayerObjManager class. The problem is probably that bullets aren't being stored properly in self._player_objs_handler.player_projectile_objs.
+
+Looking back at your asteroid's collision method:
+
+player_projectile_objs = self._player_objs_handler.player_projectile_objs
+number_of_projectiles = self._player_objs_handler.num_player_projectile_objs
+if number_of_projectiles == 0:
+    return  # <-- This might be returning early!
+
+The most likely issue: Your PlayerObjManager.num_player_projectile_objs is returning 0 even when there are bullets, causing the collision detection to exit early.
+
+Can you show me your PlayerObjManager class? Specifically:
+
+The player_projectile_objs list/collection
+The num_player_projectile_objs property/method
+The create_player_projectile_obj() method
+I suspect there's a mismatch between how bullets are being stored and how the count is being calculated, or bullets aren't being added to the collection at all!
+
+
+Shaunythunder
+import pygame
+import player_class.player_projectiles as player_projectiles
+
+class PlayerObjManager:
+"""Manages player objects in the game, including the primary player object and
+auxiliary objects like bullets."""
+def init(self,
+game_state_reporter: "GameStateManager",
+wave_reporter: "WaveManager",
+player_primary_obj: "PlayerPrimaryObj",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+dt: float):
+self._game_state_reporter = game_state_reporter
+self._player_primary_obj = player_primary_obj
+self._wave_reporter = wave_reporter
+self._asteroids_enemy_obj_manager = asteroids_enemy_obj_manager
+self.dt = dt
+self.player_projectile_objs = []
+self.num_player_projectile_objs = len(self.player_projectile_objs)
+
+def reset_player_obj_manager(self) -> None:
+    """Reset the player object manager to its initial state."""
+    self.__init__(self._game_state_reporter,
+                  self._wave_reporter,
+                  self._player_primary_obj,
+                  self._asteroids_enemy_obj_manager,
+                  self.dt)
+    self._player_primary_obj.reset_player_primary_obj()
+
+def draw_player_primary_obj(self, screen: pygame.Surface) -> None:
+    """Draw the primary player object on the screen."""
+    # Assuming player has a draw method to render itself on the screen.
+    self._player_primary_obj.draw_player_primary_obj(screen)
+
+def update_player_primary_obj(self, dt: float) -> None:
+    """Update the primary player object based on the current game state."""
+    # Update the player primary object based on the current game state.
+    if self._game_state_reporter.request_current_game_logic_state() == "asteroids_mode":
+        self._player_primary_obj.asteroids_control_player_primary_obj(dt)
+        self._player_primary_obj.calculate_player_primary_obj_velocity(dt)
+        self._player_primary_obj.calculate_player_primary_obj_inertia()
+        self._player_primary_obj.asteroids_is_player_primary_obj_out_of_bounds()
+    elif self._game_state_reporter.request_current_game_logic_state() == "galaga_mode":
+        self._player_primary_obj.galaga_control_player_primary_obj(dt)
+    elif self._game_state_reporter.request_current_game_logic_state() == "space_invaders_mode":
+        self._player_primary_obj.space_invaders_control_player_primary_obj(dt)
+
+def draw_player_projectile_objs(self, screen: pygame.Surface) -> None:
+    """Draw all player objects on the screen."""
+    for player_obj in self.player_projectile_objs:
+        if isinstance(player_obj, player_projectiles.PlayerBulletProjectile):
+            player_obj.draw_player_projectile(screen)
+        # Assuming player_obj has a draw method to render itself on the screen.
+        
+def create_player_projectile_obj(self, player_obj: object) -> None:
+    """Player bullet objects are created by the shoot method in player_primary_obj.py"""
+    self.player_projectile_objs.append(player_obj)
+
+def update_player_projectile_objs(self, dt: float) -> None:
+    """Update all player auxiliary objects based on the current game state."""
+    for player_projectile_obj in self.player_projectile_objs:
+        if isinstance(player_projectile_obj, player_projectiles.PlayerBulletProjectile):
+            player_projectile_obj.player_projectile_out_of_bounds()
+            player_projectile_obj.calculate_player_projectile_velocity(dt)
+
+def terminate_player_projectile_obj(self, player_projectile_obj: object) -> None:
+    """Terminate a player object and remove it from the player objects list."""
+    if player_projectile_obj in self.player_projectile_objs:
+        self.player_projectile_objs.remove(player_projectile_obj)
+
+def handle_player_inputs(self) -> None:
+    """All encompassing method to handle player inputs based on the current game state."""
+    dt = self.dt
+
+    if not self._game_state_reporter.request_current_game_logic_state() == "paused":
+        if self._game_state_reporter.request_current_game_logic_state() == "asteroids_mode":
+            self._player_primary_obj.asteroids_control_player_primary_obj(dt)
+        elif self._game_state_reporter.request_current_game_logic_state() == "galaga_mode":
+            self._player_primary_obj.galaga_control_player_primary_obj(dt)
+        elif self._game_state_reporter.request_current_game_logic_state() == "space_invaders_mode":
+            self._player_primary_obj.space_invaders_control_player_primary_obj(dt)
+
+Boots
+Found the bug! 🎯
+
+The issue is in your PlayerObjManager.__init__() method:
+
+def __init__(self, ...):
+    # ... other code ...
+    self.player_projectile_objs = []
+    self.num_player_projectile_objs = len(self.player_projectile_objs)  # This is ALWAYS 0!
+
+The problem is that self.num_player_projectile_objs is set to 0 during initialization and never gets updated! So even when bullets are added to self.player_projectile_objs, the count remains at 0.
+
+This means in your asteroid collision detection:
+
+number_of_projectiles = self._player_objs_handler.num_player_projectile_objs
+if number_of_projectiles == 0:
+    return  # This ALWAYS returns early because num_player_projectile_objs is always 0!
+
+The fix: You need to either:
+
+Option 1 - Update the count whenever bullets are added/removed:
+
+def create_player_projectile_obj(self, player_obj: object) -> None:
+    """Player bullet objects are created by the shoot method in player_primary_obj.py"""
+    self.player_projectile_objs.append(player_obj)
+    self.num_player_projectile_objs = len(self.player_projectile_objs)  # Add this line
+    
+def terminate_player_projectile_obj(self, player_projectile_obj: object) -> None:
+    """Terminate a player object and remove it from the player objects list."""
+    if player_projectile_obj in self.player_projectile_objs:
+        self.player_projectile_objs.remove(player_projectile_obj)
+        self.num_player_projectile_objs = len(self.player_projectile_objs)  # Add this line
+
+Option 2 - Make it a property that calculates dynamically:
+
+@property
+def num_player_projectile_objs(self) -> int:
+    return len(self.player_projectile_objs)
+
+Option 3 - Just use len(self.player_projectile_objs) directly in your collision detection instead of the separate counter.
+
+That's your collision detection killer right there!
+
+
+Shaunythunder
+my UFO is shooting every frame
+
+Boots
+Ah, the classic "machine gun UFO" bug! Looking at your update_ufo_objs method, I can see you're calling:
+
+def update_ufo_objs(self, dt: float) -> None:
+    """Updates the game logic for the UFO Objects."""
+    self.update_ufos_left()
+    for ufo_obj in self.ufo_objs:
+        if isinstance(ufo_obj, alien_ufo_obj.UFOClassic):
+            ufo_obj.calc_if_ufo_classic_can_change_directions()
+            ufo_obj.ufo_classic_change_directions(dt)
+            ufo_obj.calculate_ufo_velocity(dt)
+            ufo_obj.calc_if_ufo_classic_can_shoot()
+            ufo_obj.ufo_classic_shoot()  # <-- This is being called every frame!
+            ufo_obj.ufo_out_of_bounds()
+
+The issue is that ufo_classic_shoot() is being called every single frame, regardless of whether the UFO should actually shoot.
+
+The most likely problems are:
+
+calc_if_ufo_classic_can_shoot() isn't working properly - It's not setting the "can shoot" flag correctly
+ufo_classic_shoot() doesn't check if it can shoot - It should only shoot if the cooldown allows it
+Missing cooldown logic - Similar to your player shooting, the UFO needs a cooldown timer
+The pattern should be:
+
+# In ufo_classic_shoot()
+if self.can_shoot_flag:  # Only shoot if allowed
+    # Create bullet
+    # Reset cooldown timer
+    # Set can_shoot_flag to False
+
+Could you show me your UFO's shooting methods (calc_if_ufo_classic_can_shoot() and ufo_classic_shoot())? That's where the bug is hiding!
+
+The fix will likely involve implementing a proper cooldown system similar to what you have in your player class with player_shot_cooldown and player_last_shot_time.
+
+
+Shaunythunder
+def calc_if_ufo_classic_can_shoot(self) -> None:
+"""Calculates if the player can shoot based on the cooldown timer."""
+current_time = pygame.time.get_ticks() / 1000
+time_since_last_shot = self.ufo_last_shot_time
+if (current_time - time_since_last_shot) > self.ufo_shot_cooldown:
+self.player_can_shoot = True
+else:
+self.player_can_shoot = False
+
+def ufo_classic_shoot(self) -> None:
+    """Handles the shooting logic for the player ship."""
+    player_primary_obj = self._player_primary_obj
+    player_objs_handler = self._player_objs_handler
+    asteroids_enemy_obj_manager = self._asteroids_enemy_obj_manager
+    ufo_velocity = self.ufo_velocity
+    ufo_radians = self.ufo_radians
+    screen_width = self._screen_width
+    screen_height = self._screen_height
+    ufo_pos_x = self.ufo_pos_x
+    ufo_pos_y = self.ufo_pos_y
+    if self.ufo_can_shoot:
+        new_classic_bullet = ufo_projectiles.UFOClassicProjectile(player_primary_obj,
+                                                                  player_objs_handler,
+                                                                  asteroids_enemy_obj_manager,
+                                                                  screen_width,
+                                                                  screen_height,
+                                                                  ufo_pos_x,
+                                                                  ufo_pos_y,
+                                                                  ufo_velocity,
+                                                                  ufo_radians)
+        new_classic_bullet.calculate_ufo_projectile_vector()
+        self._asteroids_enemy_obj_manager.create_ufo_projectile_obj(new_classic_bullet)
+    
+        self.ufo_last_shot_time = pygame.time.get_ticks() / 1000
+        self.ufo_can_shoot = False
+
+Ufo no longer shooting
+
+Boots
+Found the bug! 🎯
+
+You have a variable name mismatch in your calc_if_ufo_classic_can_shoot() method:
+
+def calc_if_ufo_classic_can_shoot(self) -> None:
+    """Calculates if the player can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_shot = self.ufo_last_shot_time
+    if (current_time - time_since_last_shot) > self.ufo_shot_cooldown:          
+        self.player_can_shoot = True  # <-- WRONG! Should be self.ufo_can_shoot
+    else:
+        self.player_can_shoot = False  # <-- WRONG! Should be self.ufo_can_shoot
+
+You're setting self.player_can_shoot instead of self.ufo_can_shoot!
+
+Then in your ufo_classic_shoot() method, you check:
+
+if self.ufo_can_shoot:  # This is probably always False or undefined
+
+The fix:
+
+def calc_if_ufo_classic_can_shoot(self) -> None:
+    """Calculates if the UFO can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_shot = self.ufo_last_shot_time
+    if (current_time - time_since_last_shot) > self.ufo_shot_cooldown:          
+        self.ufo_can_shoot = True  # <-- Fixed!
+    else:
+        self.ufo_can_shoot = False  # <-- Fixed!
+
+This is why your UFO was shooting every frame - the cooldown check wasn't actually working because it was setting the wrong variable! Classic copy-paste bug from your player shooting code.
+
+That should fix your machine gun UFO problem!
+
+
+Shaunythunder
+okay now its machine gun kelly again
+
+Boots
+Ha! Still machine gunning, eh? Let me dig deeper into this.
+
+The issue is likely that self.ufo_can_shoot is being set to True every frame because of how you're handling the time calculation.
+
+Looking at your code more carefully:
+
+time_since_last_shot = self.ufo_last_shot_time
+if (current_time - time_since_last_shot) > self.ufo_shot_cooldown:
+
+The problem is probably one of these:
+
+self.ufo_last_shot_time isn't being initialized properly - If it starts at 0, then current_time - 0 will always be greater than the cooldown.
+
+The UFO shoots, but then immediately becomes able to shoot again because the cooldown logic runs every frame and keeps setting ufo_can_shoot = True.
+
+Quick debug steps:
+
+Add some debug prints to see what's happening:
+def calc_if_ufo_classic_can_shoot(self) -> None:
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_shot = self.ufo_last_shot_time
+    time_diff = current_time - time_since_last_shot
+    print(f"Current: {current_time:.2f}, Last: {time_since_last_shot:.2f}, Diff: {time_diff:.2f}, Cooldown: {self.ufo_shot_cooldown}")
+    
+    if time_diff > self.ufo_shot_cooldown:          
+        self.ufo_can_shoot = True
+        print("UFO CAN SHOOT")
+    else:
+        self.ufo_can_shoot = False
+        print("UFO COOLING DOWN")
+
+Check your UFO initialization - Make sure self.ufo_last_shot_time starts at the current time, not 0:
+# In UFO __init__
+self.ufo_last_shot_time = pygame.time.get_ticks() / 1000  # Start with current time
+
+Can you show me how self.ufo_last_shot_time and self.ufo_shot_cooldown are initialized in your UFO class?
+
+
+Shaunythunder
+UFO CAN SHOOT
+Current: 3.45, Last: 3.43, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.46, Last: 3.45, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.48, Last: 3.46, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.50, Last: 3.48, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.51, Last: 3.50, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.53, Last: 3.51, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.55, Last: 3.53, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.56, Last: 3.55, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.58, Last: 3.56, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.59, Last: 3.58, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.61, Last: 3.59, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.63, Last: 3.61, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.64, Last: 3.63, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.66, Last: 3.64, Diff: 0.01, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.67, Last: 3.66, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.69, Last: 3.68, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.71, Last: 3.69, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.72, Last: 3.71, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.74, Last: 3.72, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.76, Last: 3.74, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.77, Last: 3.76, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.79, Last: 3.77, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.80, Last: 3.79, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.82, Last: 3.80, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.84, Last: 3.82, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.85, Last: 3.84, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.87, Last: 3.85, Diff: 0.01, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.89, Last: 3.87, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.90, Last: 3.89, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+Current: 3.92, Last: 3.90, Diff: 0.02, Cooldown: 0
+UFO CAN SHOOT
+
+Boots
+There's your problem! 🎯
+
+Look at this line in your debug output:
+
+Cooldown: 0
+
+Your self.ufo_shot_cooldown is set to 0 seconds!
+
+Since any time difference (even 0.01 seconds) is greater than 0, the condition time_diff > self.ufo_shot_cooldown is always true.
+
+The fix: Set your UFO's shot cooldown to something reasonable, like:
+
+# In your UFO __init__ or wherever you set shooting parameters
+self.ufo_shot_cooldown = 1.0  # 1 second between shots
+# or
+self.ufo_shot_cooldown = 0.5  # 0.5 seconds between shots
+# or whatever feels good for gameplay
+
+That's why it's machine gunning - there's no actual cooldown period! Every frame, the time difference is greater than 0, so it can always shoot.
+
+Your cooldown logic is working perfectly, you just need to give it an actual cooldown value greater than 0! 🎯
+
+
+Shaunythunder
+def ufo_classic_shoot(self) -> None:
+"""Handles the shooting logic for the player ship."""
+player_primary_obj = self._player_primary_obj
+player_objs_handler = self._player_objs_handler
+asteroids_enemy_obj_manager = self._asteroids_enemy_obj_manager
+ufo_velocity = self.ufo_velocity
+ufo_radians = random.uniform(0, 2 * math.pi) # Random angle for the bullet
+screen_width = self._screen_width
+screen_height = self._screen_height
+ufo_pos_x = self.ufo_pos_x
+ufo_pos_y = self.ufo_pos_y
+if self.ufo_can_shoot:
+new_classic_bullet = ufo_projectiles.UFOClassicProjectile(player_primary_obj,
+player_objs_handler,
+asteroids_enemy_obj_manager,
+screen_width,
+screen_height,
+ufo_pos_x,
+ufo_pos_y,
+ufo_velocity,
+ufo_radians)
+new_classic_bullet.calculate_ufo_projectile_vector()
+self._asteroids_enemy_obj_manager.create_ufo_projectile_obj(new_classic_bullet)
+
+        self.ufo_last_shot_time = pygame.time.get_ticks() / 1000
+        self.ufo_can_shoot = False
+
+trying to get this to randomly shoot in different directions
+
+Boots
+I see what you're doing! You're setting a random angle for the UFO bullets to shoot in all directions. That's a nice touch for chaotic gameplay!
+
+The code looks correct for random shooting directions. A few things to consider:
+
+1. The random angle generation looks good:
+
+ufo_radians = random.uniform(0, 2 * math.pi)  # Random angle for the bullet
+
+This will give you a completely random direction from 0 to 360 degrees (in radians).
+
+2. Make sure your UFO projectile vector calculation is working:
+The calculate_ufo_projectile_vector() method in your UFOClassicProjectile class needs to use the ufo_radians you're passing in to set the bullet's direction.
+
+3. Consider these variations for different gameplay feels:
+
+# Option 1: Completely random (what you have)
+ufo_radians = random.uniform(0, 2 * math.pi)
+
+# Option 2: Aim roughly toward the player with some randomness
+player_x = self._player_primary_obj.player_pos_x
+player_y = self._player_primary_obj.player_pos_y
+angle_to_player = math.atan2(player_y - ufo_pos_y, player_x - ufo_pos_x)
+# Add some randomness around the player direction
+ufo_radians = angle_to_player + random.uniform(-math.pi/4, math.pi/4)  # ±45 degrees
+
+# Option 3: Only shoot downward-ish (classic arcade style)
+ufo_radians = random.uniform(math.pi/4, 3*math.pi/4)  # Roughly downward cone
+
+Is the random shooting working? Are you seeing bullets going in different directions, or are they all going the same way? If they're all going the same direction, the issue might be in your UFOClassicProjectile.calculate_ufo_projectile_vector() method.
+
+
+Shaunythunder
+import pygame
+import math
+import random
+import asteroid_game_folder.asteroids_obj as asteroids_obj
+import asteroid_game_folder.ufo_projectiles as ufo_projectiles
+
+class UFOMasterObj:
+def init (self,
+player_primary_object: "PlayerPrimaryObj",
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+screen_width: int,
+screen_height: int,
+ufo_min_vector_magnitude: int = 100,
+ufo_max_vector_magnitude: int = 1000,
+ufo_min_radians: float = 0,
+ufo_max_radians: float = 2 * math.pi,
+ufo_min_shot_cooldown: float = 0.5,
+ufo_max_shot_cooldown: float = 1.5,
+ufo_minimum_health: int = 1,
+ufo_maximum_health: int = 3,):
+
+    self._player_primary_obj = player_primary_object
+    self._player_objs_handler = player_objs_handler
+    self._asteroids_enemy_obj_manager = asteroids_enemy_obj_manager
+    self._screen_width = screen_width
+    self._screen_height = screen_height
+
+    self.ufo_pos_x = 0
+    self.ufo_pos_y = 0
+    self.ufo_radians = 0
+    self.ufo_radius = 20  # Default radius for UFOs, can be adjusted
+    self.ufo_vector_magnitude = 0
+    self.ufo_velocity = pygame.math.Vector2(0, 0)
+
+    self.min_ufo_pos_x = 0 - self.ufo_radius
+    self.max_ufo_pos_x = screen_width + self.ufo_radius
+    self.min_ufo_pos_y = 0 - self.ufo_radius
+    self.max_ufo_pos_y = screen_height + self.ufo_radius
+    
+    self.ufo_min_vector_magnitude = ufo_min_vector_magnitude
+    self.ufo_max_vector_magnitude = ufo_max_vector_magnitude
+    self.ufo_min_radians = ufo_min_radians
+    self.ufo_max_radians = ufo_max_radians
+    self.ufo_color = (255, 0, 0)
+
+    self.ufo_shot_cooldown = 0
+    self.ufo_health = 0
+    self.ufo_min_shot_cooldown = ufo_min_shot_cooldown
+    self.ufo_max_shot_cooldown = ufo_max_shot_cooldown
+    self.ufo_minimum_health = ufo_minimum_health
+    self.ufo_maximum_health = ufo_maximum_health
+
+    """Physics Constants In case UFOs are used in a physics simulation.
+    At the moment, UFOs are not used in a physics simulation."""
+    self._ufo_density_constant = 1  # Arbitrary value for UFO density
+    self.ufo_mass = self._ufo_density_constant * 100
+    self._ufo_elasticity_constant = 1  # Arbitrary value for UFO elasticity 
+
+def reset_ufo_master_obj(self) -> None:
+    """Reset the UFO master object to its initial state."""
+    self.__init__(self._player_objs_handler,
+                  self._asteroids_enemy_obj_manager,
+                  self._screen_width,
+                  self._screen_height)
+
+def terminate_ufo_object(self) -> None:
+    """Terminate the UFO object and remove it from the enemy object manager."""
+    self._asteroids_enemy_obj_manager.terminate_ufo_object(self)
+
+def draw_ufo_object(self, screen: pygame.Surface) -> None:
+    pass
+
+def normalize_ufo_drawing_coordinates (self, drawing_coordinates: list[tuple[int,int]]) -> list[tuple[int,int]]:
+    """Normalize the UFO drawing coordinates based on the UFO's position."""
+    normalized_coordinates = []
+    for x, y in drawing_coordinates:
+        normalized_x = self.ufo_pos_x + x
+        normalized_y = self.ufo_pos_y + y
+        normalized_coordinates.append((normalized_x, normalized_y))
+    return normalized_coordinates
+
+def calculate_ufo_vector(self) -> None:
+    ufo_magnitude = self.ufo_vector_magnitude
+    base_ufo_velocity = pygame.math.Vector2(0, -ufo_magnitude)
+    adjusted_ufo_velocity = base_ufo_velocity.rotate(math.degrees(self.ufo_radians))
+    self.ufo_velocity = adjusted_ufo_velocity
+
+def calculate_ufo_velocity(self, dt: float) -> None:
+    """Updates the ufo's position based on its velocity and the time delta."""      
+    self.ufo_pos_x += self.ufo_velocity.x * dt
+    self.ufo_pos_y += self.ufo_velocity.y * dt
+
+def spawn_ufo(self, ufo_type: str) -> None:
+    """Spawn an asteroid object at a random position outside the screen bounds."""
+    # Randomly choose a plane (x or y) and a side (min or max) to spawn the asteroid
+    # This will determine if the asteroid spawns on the left/right or top/bottom of the screen
+    # All asteroids spawn in a deadzone area just outside the screen.
+    for attempt_number in range (10):  # Try up to 10 times to find a valid position
+
+        current_ufos = self._asteroids_enemy_obj_manager.ufo_objs
+        ufo_max_pos_x = self.max_ufo_pos_x
+        ufo_max_pos_y = self.max_ufo_pos_y
+        ufo_min_pos_x = self.min_ufo_pos_x
+        ufo_min_pos_y = self.min_ufo_pos_y
+        chosen_plane = random.choice(["x", "y"])
+        chosen_side = random.choice(["min", "max"])
+
+        # Randomly select the position for the asteroid based on the chosen plane and side
+        if chosen_plane == "x":
+            if chosen_side == "min":
+                self.ufo_pos_x = ufo_min_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+            elif chosen_side == "max":
+                self.ufo_pos_x = ufo_max_pos_x
+                self.ufo_pos_y = random.randint(self.min_ufo_pos_y, self.max_ufo_pos_y)
+        elif chosen_plane == "y":
+            if chosen_side == "min":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_min_pos_y
+            elif chosen_side == "max":
+                self.ufo_pos_x = random.randint(self.min_ufo_pos_x, self.max_ufo_pos_x)
+                self.ufo_pos_y = ufo_max_pos_y
+
+        # Set new asteroid properies based on min max range system
+        ufo_x = self.ufo_pos_x
+        ufo_y = self.ufo_pos_y
+        ufo_vector_magnitude = random.randint(self.ufo_min_vector_magnitude, self.ufo_max_vector_magnitude)
+        ufo_radians = random.uniform(self.ufo_min_radians, self.ufo_max_radians)
+        ufo_radius = self.ufo_radius
+        ufo_color = (255, 255, 255)  # Placeholder color
+        
+        # Check if the asteroid is safe to spawn
+        # The asteroid is safe to spawn if it is not too close to other asteroids or the player
+        
+        asteroid_safe_to_spawn = True
+        player_safe_to_spawn = False
+        current_asteroids = self._asteroids_enemy_obj_manager.asteroid_objs
+
+        for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid):
+                mimimum_distance = asteroid_obj.asteroid_radius + ufo_radius + 4
+                asteroid_distance_x = abs(asteroid_obj.asteroid_pos_x - ufo_x)
+                asteroid_distance_y = abs(asteroid_obj.asteroid_pos_y - ufo_y)
+            if asteroid_distance_x < mimimum_distance and asteroid_distance_y < mimimum_distance:
+                asteroid_safe_to_spawn = False
+                break
+        
+        if self._player_primary_obj:
+            
+                player_pos_x = self._player_primary_obj.player_pos_x
+                player_pos_y = self._player_primary_obj.player_pos_y
+                player_radius = self._player_primary_obj.ship_radius_bow_to_stern
+                player_distance_x = abs(player_pos_x - ufo_x)
+                player_distance_y = abs(player_pos_y - ufo_y)
+                player_minimum_distance = player_radius + ufo_radius + 100
+
+                if player_distance_x > player_minimum_distance and player_distance_y > player_minimum_distance:
+                    player_safe_to_spawn = True
+
+        if asteroid_safe_to_spawn and player_safe_to_spawn:
+            if ufo_type == "ufo_classic":
+                new_classic_ufo = UFOClassic(self._player_primary_obj,
+                                        self._player_objs_handler,
+                                        self._asteroids_enemy_obj_manager,
+                                        self._screen_width,
+                                        self._screen_height,
+                                        self.ufo_min_vector_magnitude,
+                                        self.ufo_max_vector_magnitude,
+                                        self.ufo_min_radians,
+                                        self.ufo_max_radians,
+                                        ufo_x,
+                                        ufo_y, 
+                                        ufo_radius, 
+                                        ufo_color, 
+                                        ufo_vector_magnitude,
+                                        ufo_radians,
+                                        )
+                self._asteroids_enemy_obj_manager.create_ufo_object(new_classic_ufo)
+                new_classic_ufo.calculate_ufo_vector()
+
+def check_player_primary_obj_collision(self) -> None:
+    """Check for collision between the asteroid and the player primary object."""
+    player_primary_obj_collision = self._player_primary_obj.\
+                                    player_primary_obj_check_collision_vs_circle(self.ufo_pos_x,
+                                                                                self.ufo_pos_y,
+                                                                                self.ufo_radius)    
+    if player_primary_obj_collision:
+        self.terminate_ufo_object()
+        self._player_primary_obj.player_primary_obj_hit()
+        pygame.quit()
+
+def check_player_projectile_obj_collision(self) -> None:
+    """Check for collision between the asteroid and player projectiles."""
+    player_projectile_objs = self._player_objs_handler.player_projectile_objs
+    number_of_projectiles = self._player_objs_handler.num_player_projectile_objs
+    if number_of_projectiles == 0:
+        return
+    for player_projectile in player_projectile_objs:
+        player_projectile_collision = player_projectile.player_projectile_collision_vs_circle(
+                                                                                    self.ufo_pos_x, 
+                                                                                    self.ufo_pos_y, 
+                                                                                    self.ufo_radius
+                                                                                    )
+        if player_projectile_collision:
+            # If the asteroid is hit by a player projectile, terminate the asteroid
+            # and remove the player projectile
+            self._player_objs_handler.terminate_player_projectile_obj(player_projectile)
+            self._asteroids_enemy_obj_manager.terminate_ufo_object(self)
+            return  # Exit after the first collision to avoid multiple hits on the same asteroid
+
+
+def check_ufo_vs_asteroid_collision(self, asteroid_objs: list) -> None:
+    """Check for collision between the asteroid and other asteroids."""         
+    #print(f"Asteroid at {self.asteroid_pos_x:.1f}, {self.asteroid_pos_y:.1f} checking collisions")
+    is_colliding = False
+    collision_checked = False
+    current_asteroids = asteroid_objs
+    ufo_radius = self.ufo_radius
+    ufo_x = self.ufo_pos_x
+    ufo_y = self.ufo_pos_y
+    for asteroid_obj in current_asteroids:
+            if isinstance(asteroid_obj, asteroids_obj.Asteroid) and asteroid_obj != self:
+                distance_x = asteroid_obj.asteroid_pos_x - ufo_x
+                distance_y = asteroid_obj.asteroid_pos_y - ufo_y
+                true_distance = math.sqrt(distance_x ** 2 + distance_y ** 2)
+                collision_distance = ufo_radius + asteroid_obj.asteroid_radius
+                
+                #print(f"  Distance: {true_distance:.1f}, Need: {collision_distance:.1f} (r1={asteroid_radius}, r2={asteroid_obj.asteroid_radius})")
+                #print(f"  Collision check: {true_distance} < {collision_distance} = {true_distance < collision_distance}")
+
+                if true_distance < collision_distance:
+                    is_colliding = True
+                    if not collision_checked:
+                        collision_checked = True
+                        break
+
+    if is_colliding:
+        self.ufo_color = (255, 0, 0)
+    else:
+        self.ufo_color = (255, 255, 255)
+
+def ufo_out_of_bounds(self) -> None:
+    """Check if the asteroid is out of bounds and wrap it around the screen."""
+    # Horizontal wrapping
+    if self.ufo_pos_x < -self.ufo_radius:
+        self.ufo_pos_x = self._screen_width + self.ufo_radius
+    elif self.ufo_pos_x > self._screen_width + self.ufo_radius:
+        self.ufo_pos_x = -self.ufo_radius
+    # Vertical wrapping
+    if self.ufo_pos_y < -self.ufo_radius:
+        self.ufo_pos_y = self._screen_height + self.ufo_radius
+    elif self.ufo_pos_y > self._screen_height + self.ufo_radius:
+        self.ufo_pos_y = -self.ufo_radius
+
+class UFOClassic(UFOMasterObj):
+def init(self,
+player_primary_obj: "PlayerPrimaryObj",
+player_objs_handler: "PlayerObjManager",
+asteroids_enemy_obj_manager: "AsteroidsEnemyObjManager",
+screen_width: int,
+screen_height: int,
+ufo_min_vector_magnitude: int,
+ufo_max_vector_magnitude: int,
+ufo_min_radians: float,
+ufo_max_radians: float,
+ufo_x: float,
+ufo_y: float,
+ufo_radius: int,
+ufo_color: tuple,
+ufo_vector_magnitude: int,
+ufo_radians: float):
+
+    super().__init__(player_primary_obj,
+                     player_objs_handler,
+                     asteroids_enemy_obj_manager,
+                     screen_width,
+                     screen_height,
+                     ufo_min_vector_magnitude,
+                     ufo_max_vector_magnitude,
+                     ufo_min_radians,
+                     ufo_max_radians)
+    
+    self.ufo_pos_x = ufo_x
+    self.ufo_pos_y = ufo_y 
+    self.ufo_vector_magnitude = ufo_vector_magnitude
+    self.ufo_radius = 10
+    self.ufo_color = ufo_color
+    self.ufo_vector_magnitude = 100
+    self.ufo_radians = ufo_radians
+
+    self._ufo_direction_change_cooldown = 3
+    self.ufo_time_since_last_direction_change = 0
+    self._ufo_shot_cooldown = 1
+    self.ufo_last_shot_time = 0
+    self.ufo_can_shoot = True
+    self.ufo_can_change_directions = True
+
+    self.ufo_polygon_1_coordinates = [(-15,0),
+                                      (-10, 5),
+                                      (10, 5),
+                                      (15, 0),]
+    self.ufo_polygon_2_coordinates = [(-15, 0),
+                                      (-10, -5),
+                                      (10, -5),
+                                      (15, 0),]
+    self.ufo_polygon_3_coordinates = [(-5, -5), (5, -5), (5, -10), (-5, -10)]   
+
+def draw_ufo_object(self, screen: pygame.Surface) -> None:
+    """Draw the UFO object on the screen."""
+    ufo_polygon_1_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_1_coordinates)
+    ufo_polygon_2_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_2_coordinates)
+    ufo_polygon_3_coords = self.normalize_ufo_drawing_coordinates(self.ufo_polygon_3_coordinates)
+
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_1_coords, width = 1)
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_2_coords, width = 1)
+    pygame.draw.polygon(screen, self.ufo_color, ufo_polygon_3_coords, width = 1)
+
+def calc_if_ufo_classic_can_change_directions(self) -> None:
+    """Calculates if the player can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_direction_change = self.ufo_time_since_last_direction_change
+    if (current_time - time_since_last_direction_change) > self._ufo_direction_change_cooldown:          
+        self.ufo_can_change_directions = True
+    else:
+        self.ufo_can_change_directions = False
+
+def ufo_classic_change_directions(self, dt: float) -> None:
+    """If the UFO object can change directions, change directions."""
+    if self.ufo_can_change_directions:
+        self.ufo_radians = random.uniform(self.ufo_min_radians, self.ufo_max_radians)
+        self.calculate_ufo_vector()
+        self.calculate_ufo_velocity(dt)
+        self.ufo_out_of_bounds()
+        self.ufo_time_since_last_direction_change = pygame.time.get_ticks() / 1000
+
+
+def calc_if_ufo_classic_can_shoot(self) -> None:
+    """Calculates if the player can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_shot = self.ufo_last_shot_time
+    print(f"Current: {current_time:.2f}, Last: {time_since_last_shot:.2f}, Diff: {current_time - time_since_last_shot:.2f}, Cooldown: {self.ufo_shot_cooldown}")
+
+    if (current_time - time_since_last_shot) > self._ufo_shot_cooldown:          
+        self.ufo_can_shoot = True
+        print("UFO CAN SHOOT")
+    else:
+        self.ufo_can_shoot = False
+        print("UFO COOLING DOWN")
+
+
+def ufo_classic_shoot(self) -> None:
+    """Handles the shooting logic for the player ship."""
+    player_primary_obj = self._player_primary_obj
+    player_objs_handler = self._player_objs_handler
+    asteroids_enemy_obj_manager = self._asteroids_enemy_obj_manager
+    ufo_velocity = self.ufo_velocity
+    ufo_radians = random.uniform(0, 2 * math.pi)  # Random angle for the bullet
+    screen_width = self._screen_width
+    screen_height = self._screen_height
+    ufo_pos_x = self.ufo_pos_x
+    ufo_pos_y = self.ufo_pos_y
+    if self.ufo_can_shoot:
+        new_classic_bullet = ufo_projectiles.UFOClassicProjectile(player_primary_obj,
+                                                                  player_objs_handler,
+                                                                  asteroids_enemy_obj_manager,
+                                                                  screen_width,
+                                                                  screen_height,
+                                                                  ufo_pos_x,
+                                                                  ufo_pos_y,
+                                                                  ufo_velocity,
+                                                                  ufo_radians)
+        new_classic_bullet.calculate_ufo_projectile_vector()
+        self._asteroids_enemy_obj_manager.create_ufo_projectile_obj(new_classic_bullet)
+    
+        self.ufo_last_shot_time = pygame.time.get_ticks() / 1000
+        self.ufo_can_shoot = False
+
+Boots
+I found another variable mismatch! In your calc_if_ufo_classic_can_shoot() method, you're checking against the wrong variable:
+
+def calc_if_ufo_classic_can_shoot(self) -> None:
+    """Calculates if the player can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_shot = self.ufo_last_shot_time
+    print(f"Current: {current_time:.2f}, Last: {time_since_last_shot:.2f}, Diff: {current_time - time_since_last_shot:.2f}, Cooldown: {self.ufo_shot_cooldown}")
+
+    if (current_time - time_since_last_shot) > self._ufo_shot_cooldown:  # <-- Using self._ufo_shot_cooldown
+        self.ufo_can_shoot = True
+        print("UFO CAN SHOOT")
+    else:
+        self.ufo_can_shoot = False
+        print("UFO COOLING DOWN")
+
+You're using self._ufo_shot_cooldown in the condition but printing self.ufo_shot_cooldown in the debug statement!
+
+Looking at your UFOClassic.__init__():
+
+self._ufo_shot_cooldown = 1  # This is set to 1 second
+
+But in your debug print, you're checking self.ufo_shot_cooldown which doesn't exist or is 0.
+
+The fix: Make sure you're using the same variable everywhere:
+
+def calc_if_ufo_classic_can_shoot(self) -> None:
+    """Calculates if the UFO can shoot based on the cooldown timer."""
+    current_time = pygame.time.get_ticks() / 1000
+    time_since_last_shot = self.ufo_last_shot_time
+    print(f"Current: {current_time:.2f}, Last: {time_since_last_shot:.2f}, Diff: {current_time - time_since_last_shot:.2f}, Cooldown: {self._ufo_shot_cooldown}")
+
+    if (current_time - time_since_last_shot) > self._ufo_shot_cooldown:          
+        self.ufo_can_shoot = True
+        print("UFO CAN SHOOT")
+    else:
+        self.ufo_can_shoot = False
+        print("UFO COOLING DOWN")
+
+Notice I changed the debug print to use self._ufo_shot_cooldown (with the underscore) to match what you're actually checking in the condition.
+
+That should fix your machine gun issue once and for all!
+
+
+Shaunythunder
+I only care about the random directions
+
+Boots
+Ah, got it! For the random shooting directions, your code looks correct:
+
+ufo_radians = random.uniform(0, 2 * math.pi)  # Random angle for the bullet
+
+This should give you bullets flying in completely random directions. If it's not working, the issue is likely in your UFOClassicProjectile.calculate_ufo_projectile_vector() method.
+
+Make sure your UFO projectile class is using the ufo_radians parameter you're passing in. It should look something like:
+
+def calculate_ufo_projectile_vector(self) -> None:
+    """Calculate the projectile's velocity vector based on the UFO's radians."""
+    bullet_magnitude = self.bullet_base_velocity_magnitude
+    base_bullet_velocity = pygame.math.Vector2(0, -bullet_magnitude)
+    adjusted_bullet_velocity = base_bullet_velocity.rotate(math.degrees(self.ufo_radians))
+    self.bullet_velocity = adjusted_bullet_velocity
+
+Are you seeing the bullets go in random directions, or are they all going the same way? If they're all going the same direction, then the ufo_radians isn't being used properly in the projectile's vector calculation.
+
+The random angle generation in your ufo_classic_shoot() method is perfect for chaotic bullet spray!
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

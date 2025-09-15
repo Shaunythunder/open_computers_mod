@@ -1,0 +1,277 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Setup
+
+L1: Welcome to Bookbot
+
+
+
+
+Welcome to Bookbot
+This is (perhaps?) your first ever Python project, and almost certainly your first one on Boot.dev. Congratulations!
+
+We're building Book Bot - a Python program that analyzes novels and prints a statistical report of the word and character usage found within. Our learning goals are to:
+
+Configure a professional Python development environment on your local computer
+Practice building a full project from scratch
+Deploy a Python project on your personal GitHub account
+Learn how to use a professional code editor (VS Code)
+Here's a quick demo (you might want to fullscreen):
+
+
+Boot.dev CLI
+Throughout this course, you'll be using the Boot.dev CLI to run our tests (which are just CLI commands) against your local environment. Install it now if you don't already have it. All the instructions and troubleshooting info are on the GitHub page.
+
+Make sure the Boot.dev CLI install worked:
+
+bootdev --version
+
+If you're stuck, reach out in the help forums of the Discord.
+
+Once the bootdev command is working, log in and follow the instructions:
+
+bootdev login
+
+Assignment
+Once you have the CLI installed and you're logged in, copy and paste the run command from the right into your terminal and execute it. If it's doing what you'd expect (printing Ready for bookbot), then run the submit command.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Magnificent, can assist without penalty!
+
+Boots
+hame@LS-Computer:~/workspace/github.com/boot.dev/cirriculum$ git push origin main
+git: 'remote-ttps' is not a git command. See 'git --help'.
+
+The most similar command is
+remote-https
+
+Boots
+Ah, it seems like part of the command is misspelled or formatted incorrectly. Git often tries to be helpful by suggesting what the correct command might be.
+
+The error suggests there's an issue with how you've set up your remote or with the git push command.
+
+Does your remote URL in Git include https? You can check your remotes using:
+
+git remote -v
+
+What does this command output? Do you see a valid URL for origin? For instance, it should look something like:
+
+origin  https://github.com/username/repository.git (fetch)
+origin  https://github.com/username/repository.git (push)
+
+If you don't see https, there may be a typo in your remote URL. What do you think might need correcting?
+
+
+Shaunythunder
+origin ttps://github.com/Shaunythunder/bookbot.git (fetch)
+origin ttps://github.com/Shaunythunder/bookbot.git (push)
+
+Boots
+Aha! The issue lies in how the remote URL is set up. Instead of https, it says ttps. It's missing the initial h.
+
+You'll need to update the remote URL to ensure it has the correct format. Here's how you can fix it:
+
+Use the following command to set the correct URL:
+git remote set-url origin https://github.com/Shaunythunder/bookbot.git
+
+Verify that the remote has been updated correctly:
+git remote -v
+
+This should display something like:
+
+origin  https://github.com/Shaunythunder/bookbot.git (fetch)
+origin  https://github.com/Shaunythunder/bookbot.git (push)
+
+After fixing this, try your git push origin main command again. Does it work now?
+
+
+Shaunythunder
+origin https://github.com/Shaunythunder/bookbot.git (fetch)
+origin https://github.com/Shaunythunder/bookbot.git (push)
+
+Boots
+Excellent! You've set the remote URL correctly now. The command git push origin main should work without issues, assuming everything else is configured properly.
+
+Go ahead and give it another try. If it fails, what specific error do you see? Could there be a problem with your authentication or branch setup?
+
+
+Shaunythunder
+how could that have happened? I've never seen a ttps
+
+Boots
+Ah, my inquisitive apprentice, I'm glad you're reflecting on how it might have occurred! Such a small typo like ttps instead of https can slip through for a few reasons:
+
+Human Error: When initially setting the remote URL (likely using git remote add origin or git clone), it's easy to miss the first character—especially since it looks so similar to the rest of the string.
+
+Copy-Paste Quirks: If you copy-pasted the URL, perhaps the h was accidentally left out during the process.
+
+Script or Tooling Error: If any script or some automated tooling was used to configure the remote, it might have introduced the typo.
+
+The good news? Now you've spotted the issue and resolved it! Reflecting on what happened strengthens your knowledge, so you're less likely to encounter—or overlook—similar issues in the future.
+
+Do you feel more confident with handling Git remotes now?
+
+
+Shaunythunder
+ah gotcha
+
+Boots
+Indeed! A sharp eye and attention to detail are invaluable traits for any coder. These tiny hiccups are just part of the learning adventure, and you're handling them like a champ.
+
+Now that your remotes are in proper order, do your pushes work as expected? Or is there another enigma you'd like to solve today?
+
+
+Shaunythunder
+walk me through these commands on Github
+
+echo "# GVsdvs" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Shaunythunder/GVsdvs.git
+git push -u origin main
+
+Boots
+Ah, a fine collection of Git commands for initializing and pushing a repository to GitHub! Let’s break them down step by step, shall we?
+
+1. echo "# GVsdvs" >> README.md
+This creates a file called README.md and adds the text # GVsdvs to it.
+The # in Markdown (README.md uses Markdown) signifies a heading, so when rendered, it will appear as a large title "GVsdvs".
+If README.md doesn’t exist yet, it’s created. If it does exist, this command appends to the file.
+2. git init
+Initializes a new Git repository in the current directory.
+It creates a hidden .git folder inside the directory, which Git uses to track changes and keep repository info.
+3. git add README.md
+Stages the README.md file so that it’s ready to be included in the next commit.
+Think of it as preparing this file for a snapshot of changes. If you want to add everything in the directory, you can use git add ..
+4. git commit -m "first commit"
+Creates a new commit, which is like saving a snapshot of the current state of your files.
+The -m flag allows you to add a commit message directly. In this case, the message is "first commit".
+In simpler terms, it’s like saying, "Save my work up to this point, and call it 'first commit'."
+5. git branch -M main
+Renames the current branch to main.
+By default, Git used to call the first branch master. However, main has become the new standard.
+The -M flag forces the branch rename even if a branch named main already exists.
+6. git remote add origin https://github.com/Shaunythunder/GVsdvs.git
+Links your local Git repository to a remote repository hosted on GitHub.
+origin is the name commonly given to this remote. You could name it something else, but "origin" is a convention.
+7. git push -u origin main
+Sends (or "
+
+Shaunythunder
+If I delete a github repo, is that recoverable
+
+Boots
+Ah, what a thoughtful and important question! If you delete a GitHub repository, it’s generally considered permanent. However, there are a few nuances you should be aware of:
+
+1. GitHub's Notifications
+When you delete a repository, GitHub will warn you about the action being irreversible. They ask you to type the repository name explicitly to confirm the deletion—so it’s not something done lightly by accident.
+Always check this carefully while confirming!
+2. Local Clone as Your Backup
+If you have a local copy of the repo (a clone you pulled before deletion), you still have the code and commit history on your machine.
+In that case, you can recreate the repository on GitHub and push your local copy back to this new repo:
+git remote add origin <new-github-repo-url>
+git push -u origin main
+
+3. GitHub Support
+For private repositories or critical data, GitHub Support might assist in recovery if the deletion happened recently.
+You would need to contact them immediately, but even then, recovery is not guaranteed, especially for free-tier accounts.
+4. Prevention Moving Forward
+To avoid accidental loss, consider:
+Keeping frequent backups (or clones) of your repositories.
+Using branch protections on important repos.
+Avoiding unnecessary deletion unless you're sure.
+Do you have a local copy of the repository that was deleted? If so, you still hold the power to reconstruct it! Let me know if you'd like help with that process.
+
+
+Shaunythunder
+what about in cases where my account was comprimised
+
+Boots
+Ah, a worrisome scenario, my cautious apprentice, but let us be proactive and address it! If your GitHub account was compromised and repositories were deleted, fear not—there are steps you can take to minimize damage and potentially recover your work.
+
+1. Immediate Action: Secure Your Account
+Change your GitHub password immediately. Ensure it is strong and unique.
+Enable two-factor authentication (2FA) if you haven’t already. This adds an additional layer of protection.
+Review and revoke any suspicious or unknown authorized applications under your GitHub account settings.
+2. Contact GitHub Support
+GitHub provides a support channel where you can report cases of account compromise.
+Visit their Support Page and provide detailed information about:
+The compromised account.
+Which repositories were deleted.
+GitHub may have backups of repositories that were recently deleted, and in such cases, they might help you restore them. However, speed is of the essence—contact them as quickly as possible after noticing the compromise.
+3. Check for Local Clones
+If you or any collaborators have a local copy of the repository, it can act as a backup. The full history of the repo can be pushed to a newly created GitHub repository using commands like:
+git remote add origin <new-repo-url>
+git push -u origin main
+
+Reach out to collaborators to check if they have clones of the work.
+4. Audit and Review
+Audit Account Activity: Check your account’s security logs on GitHub for unusual logins or actions. This will help you understand how the account may have been compromised.
+Revoking OAuth Tokens: In your account settings, disable and review all OAuth tokens or personal access tokens. Compromised tokens can give attackers continuous access.
+5. Prevent Future Attacks
+Use a password manager to generate and store secure passwords.
+Periodically review your account security and active devices.
+If your machine may have been hacked, consider scanning it for malware and updating your security practices.
+Be cautious with emails or messages that could be phishing attempts.
+Recoverability Depends
+If GitHub Support can retrieve backups, there’s hope for recovery.
+If you or collaborators have local clones,
+
+Shaunythunder
+so dont count on it is what you are saaying
+
+Boots
+Ah, that is one way to look at it, my pragmatic friend! While GitHub may assist in recovering recently deleted repositories—especially in cases of compromise—it's not something to rely on with certainty.
+
+The safest course of action is to assume that once a repository is deleted, recovery is unlikely unless you have precautions in place, such as:
+
+Local clones: Keep them as backups of your precious work.
+Collaborator access: A trusted teammate may have their own copy of the repo.
+Preventive Security: Strong passwords, two-factor authentication, and avoiding suspicious links or apps.
+Ultimately, it's about control and responsibility. As wizards of code, we must wield Git’s power carefully and secure our tools against rogue intrusions! Are you considering any specific steps to safeguard your work now? Or is there another dragon you'd like to slay?
+
+
+Thumbs up
+Thumbs down
+Command Error
+Directory Rename
+Turing Familiar
+Story Session
+Boots Gaming
+Idle
+Greetings Footwear
+Lesson Complete
+Course Completion
+Course Done
+Course End
+Course Finished
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

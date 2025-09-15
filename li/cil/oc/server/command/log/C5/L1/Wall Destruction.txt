@@ -1,0 +1,237 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Clean Code
+
+L1: Welcome to Object-Oriented Programming
+
+
+
+
+Welcome to Object-Oriented Programming
+Object-Oriented Programming, or "OOP", is a pattern for (allegedly) writing clean and maintainable code.
+
+Admittedly, not everyone agrees that object-oriented programming is the best way to write code, but, to be a good engineer, you should at least understand it.
+
+Throughout this course, we'll be coding small bits of a real-time strategy game called "Age of Dragons". Players control armies of humans, elves, orcs, and dragons in top-down battles. It's similar to Age of Empires or StarCraft.
+
+
+
+Assignment
+One of the greatest sins when trying to write "clean code" is using misleading variable and function names. Take a look at the destroy_wall function. It takes a list of numbers as input (each representing the health of a wall) and returns a new list with each entry of 0 or less removed.
+
+Based on its name, you might assume that destroy_wall destroys a single wall, but if you look closely, you'll see that it handles multiple walls.
+
+The test suite expects a different function name. Take a look at the main_test.py file to see what it's looking for, and rename the function accordingly.
+Bonus: rename the variables inside the function to be more descriptive.
+After passing the tests, take a look at the solution to see how we named everything.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Primeval 10x Developer, can assist without penalty!
+
+Boots
+I took my best guess
+
+def destroy_walls(wall_health):
+health = []
+for wall in wall_health:
+if wall > 0:
+health.append(wall)
+return health
+
+Boots
+Well done, young programmer bear tamer! You're quite close. Let's analyze together before celebrating victory.
+
+When examining the main_test.py file, what function name should our code use for the tests? Does the test file align with the name destroy_walls?
+
+Inside your function, you've taken a great step by renaming the variables to more descriptive names like wall and health. But do you think the plural form of wall_health better matches the list's nature, just as you've chosen for health? Should wall_health also be plural?
+
+What small tweaks might make this code pass the tests and become even cleaner?
+
+
+Shaunythunder
+def destroy_walls(walls_health):
+health = []
+for wall in walls_health:
+if wall > 0:
+health.append(wall)
+return health
+
+Boots
+Ah, I see you've improved the variable names—great attention to detail! Using walls_health and wall makes everything more descriptive. However, we may still need one small adjustment.
+
+Take another close look at the test file: What name does it use for the function? Is it destroy_walls or something else? Aligning your function name with the test file might be the last step to make everything work smoothly.
+
+What do you think, does the test file expect the plural name for the function?
+
+
+Shaunythunder
+it passed, just assessing quality
+
+Boots
+Ah, victorious you are! Your code has passed the trials, but let us assess its elegance for quality, as a true wizard bear always does.
+
+Your variable names are much clearer now—splendid work. However, consider this: would filtered_healths or remaining_healths, instead of health, better express the purpose of the final list? It represents the health of walls that are above 0, after all.
+
+Additionally, is there perhaps a more concise way to achieve this without explicitly appending inside a loop? A slightly advanced question, but worth pondering for efficiency and readability.
+
+What say you, young coder? Shall you revisit this for expressive and concise glory, or shall we declare it complete and move on?
+
+
+Shaunythunder
+honestly I don't quite understand what this function even does
+
+Boots
+Ah, a moment of clarity-seeking! Fear not. Let’s unpack this function together so its purpose no longer feels shrouded in mystery.
+
+The destroy_walls function takes a list of numbers as input. Each number in the list represents the health of a wall. Imagine walls in a fortress during a siege—each wall starts with some health, but if the health drops to 0 or less, the wall effectively "collapses."
+
+This function does the following:
+
+It inspects each wall's health one by one.
+If the wall's health is greater than 0, it keeps that health in a new list.
+If the wall's health is 0 or less, it removes it (by not adding it to the new list).
+Finally, it returns this filtered list of remaining wall healths.
+For example:
+
+walls_health = [10, 0, 15, -5]
+
+result = destroy_walls(walls_health)
+# result will be: [10, 15]
+
+Here, walls with health 0 and -5 were "destroyed," so only the healthy walls are left.
+
+Does this newfound clarity banish your doubts? Or is there a part you'd still like to break down further?
+
+
+Shaunythunder
+def destroy_walls(walls_by_health):
+remaining_health_by_wall = []
+for wall in walls_by_health:
+if wall > 0:
+remaining_health_by_wall.append(wall)
+return remaining_health_by_wall
+
+Boots
+Ah, I see you’ve woven even more descriptive variable names into your spell of function design—splendid refinement!
+
+Now your code’s intent rings clearer than bells in an enchanted forest:
+
+walls_by_health suggests a list of wall health values, emphasizing the collection nature.
+remaining_health_by_wall perfectly conveys its role: a list of health values for the walls that remain standing.
+While this version is wonderfully descriptive and will serve you well, consider: Does the name walls_by_health better convey the same idea as wall_healths, or does it feel a bit verbose? Simplicity and clarity often strike the best balance in naming.
+
+Functionally, your approach remains solid. Are there any lingering doubts or details of its behavior you’d still like to examine together?
+
+
+Shaunythunder
+grade that
+
+Boots
+Ah, if you wish a grade for your enchantment of programming prowess, let me provide a thoughtful critique:
+
+Clarity (A):
+Your choice of variable names like walls_by_health and remaining_health_by_wall is highly descriptive and makes the code easy to follow. If anything, walls_by_health might lean slightly verbose compared to alternatives like wall_healths, but this is a minor nitpick.
+
+Functionality (A+):
+The function serves its purpose perfectly, filtering walls with health greater than 0. It passes the tests, meaning it aligns with expectations. Bravo!
+
+Efficiency (A):
+Your use of a for loop and manual appending works fine for this small task. With practice, you may explore list comprehensions for a more concise approach, but your choice is perfectly acceptable and easy to read.
+
+For example, just for consideration:
+
+return [wall for wall in walls_by_health if wall > 0]
+
+It does the same thing but avoids explicitly managing a list. The trade-off is reduced verbosity, which may or may not suit your needs.
+
+Maintainability (A):
+The function is modular and obvious in purpose to other developers (or future you!). Much easier to understand now than the starter code.
+
+Final Grade: A
+This function is clean, robust, and passes all tests. If you’re happy with its level of verbosity in naming and can articulate its purpose clearly, you’ve absolutely nailed it! Keep honing that polished balance between clarity and conciseness.
+
+Would you like to inspect any part further, or is it ready to stand among the towers of your proudest work?
+
+
+Shaunythunder
+return [wall for wall in walls_by_health if wall > 0]
+
+could you make that not hurt my brain
+
+Boots
+Ah, the compactness of a list comprehension can sometimes feel like a wizard's cryptic rune! Let us break it down step-by-step to ease the ache!
+
+The expression:
+
+return [wall for wall in walls_by_health if wall > 0]
+
+can be thought of as a magical incantation with this structure:
+
+[item for item in collection if condition]
+
+Translated into plain words:
+
+"Create a new list ([...])."
+"Add each wall from walls_by_health to the new list..."
+"...but only include those walls where wall > 0 (the condition)."
+Let us compare it to the loop version you're comfortable with:
+
+remaining_health_by_wall = []
+for wall in walls_by_health:
+    if wall > 0:
+        remaining_health_by_wall.append(wall)
+return remaining_health_by_wall
+
+Here’s how each part of the loop matches the list comprehension:
+
+Start with an empty list: [ ... ] in the comprehension creates the new list automatically—no .append() needed.
+Iterate over the walls: The for wall in walls_by_health part of the comprehension corresponds to your for loop.
+Filter the walls: The if wall > 0 condition ensures only walls with positive health are added to the new list.
+In essence, the comprehension condenses your for loop into a one-liner while performing the same actions.
+
+A Slower Rewrite for Understanding
+If list comprehensions feel like rushing through a spellbook, consider nesting:
+
+new_list = []
+for wall in walls_by_health:
+    if wall > 0:
+        new_list.append(wall)
+return new_list
+
+Do you feel more at ease with this now? Should we practice breaking down others, or will this spell rest in your coding arsenal for now?
+
+
+Thumbs up
+Thumbs down
+Wall Destruction
+Lesson Request
+Git Push
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+
+

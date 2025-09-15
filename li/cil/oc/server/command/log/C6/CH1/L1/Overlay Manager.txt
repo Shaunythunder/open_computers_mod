@@ -1,0 +1,298 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+724e396 (HEAD -> main, origin/main, origin/HEAD) AU: Migrated the overlay drawing logic to a manager instead of the main menu. Game is now fully functional. Also cleaned up an issue where the main UFO object was defaulted to none. Will work on expanding the overlay system to include a game over overlay, a controls selection overlay, and a UI. Will probably split reponsibilities between interactable overlays and non interactable overlays.
+a28e5c8 AT: Working on converting the Overlay handling to a centralized manager that will handle all of the overlays and will allow multiple overlays to be drawn at once. The manager takes the state from the gamestate manager and then draws the cooresponding overlay. This is a work in progress and the game is currently broken and cannot even run. This system is required for the various overlays like game over, pause menu, choosing whether to use mouse or keyboard, etc. Ran out of time and will continue working on it next session.
+0da9697 AS: Implemented screen wrapping for player bullets and gave them a expiration timer. Bullets will now wrap around the screen for lining up screen based shots like in the original game. Additionally migrated the spawning logic out of the event loop. Will implement lives (AKA health) next and game over logic.
+1b05afb AR: Finished implementation of the UFO Classic enemy. The UFO flies around the screen, shoots projectiles randomly, and crashes into asteroids. Additionally, player will get hit if they collide with either the UFO projectile or the UFO itself. We now have all of the elements of the original game save a few things, lives, heads up display of lives and highscore, high score system, player bullet screen wrapping, player bullet termination after a period of time. Once those things are online, the asteroids game is complete. Additionally, the wave system will need to be implemented and tested out. Will need two asteroids and ttwo UFO types to properly test out a enemy requesting system. Lastly, discovered a game bug where once the asteroids left go below a certain number, the asteroids will spawn far more than requested. With the wave manager, this may be an issue not worth considering.
+c7383b3 AQ: Worked on UFO shooting logic. There is a type error with the UFO classic projectile super init that needs to be addressed as it is crashing the game. Short work session.
+75798a2 AP: Added comments for new asteroid split logic. Cleaned up comments in asteroids_obj.py.
+4479c1d AO: Fixed the asteroids splitting into you bug as far as the angles are concerned. Needs a second look as the asteroid sizes cause overlap onto the player if they are too close. This will need to be taken care of when the game is finished as this is a balancing issue, not a mechanics issue. If worse comes to worse, just make sure that the distance to the player equals the radius of the asteroid, plus some breathig room. Getting UFO projectiles up and running is up next.
+26bf9f3 AN: Refactored codebase to comply with new naming standards. Refactored player bullet system to comply with the modernized structure of the UFO bullet system. Detected an issue with the asteroids breaking when the player is close to them. Sometimes thier new vector is towards the player and kills them instantly, with no chance to prevent it. Will need to add logic to detect player direction and set up a no-go directional zone.
+2f4baed AM: Built class system for the UFO projectiles. UFO projectiles will have a master class and will each have thier own inividual classes for the various projectile types. Next up is to build out the classic style projectile and then get UFOs to fire these projectiles.
+bad7282 AL: Completed blocking out UFO structure and have a UFO master class online. Created the UFO classic class which is a carbon copy of the original UFO from asteroids. The UFO is drawn on the screen and is correctly moving around. The logic is that on a timer of the UFO changes directions but has screen wrapping and everything. will focus on giving the UFO the ability to shoot and then will Implement collisions. Just like the original asteroids, asteroid collisions will be lethal. Will later implement upgraded UFO class that has a shield that is immune to asteroids.
+c5fbc17 AK: Completed asteroid splitting mechanics. Asteroids split based off of a procedurally generated algorithm. Split radiuses are variable as well as the direction and speed by which they go. The algorithm is as follows, once an asteroid is hit it will then check to see if the asteroid is 33% larger than the minimum asteroid radius. Afterwards it will then generate a random divider number between 1 and 2, and then divide the asteroid radius by the divider. The new radius will then be subtracted from the original radius to determine the radius of the second asteroid. After that, both asteroids will go through their own generation process that determines their direction and speed. New asteroids cannot have higher than a certain speed value which is the maximum velocity divided by a constant. Constant is adjustable. Plan on making UFOs next,. After that it will be player death, game over and then making the wave system functional, and then adding the scoring system. Once that is done it will be polished Before moving on to the next thing, which is asteroid dodgeball or space invaders.
+31ac903 AJ: Resolved all pending bugs. The game is fully functional again as far as I can tell. Collisions will now be handled by the colliding object and not the player objects. This way the player can be universal and the logic is just handled on the side of the colliding object. next step is asteroid splitting for normal asteroids.
+e9015db AI: Conducted all encompassing overhaul of code base to refactor and to comply with python best practices. All methods now have type hints. Added doc strings to ensure t:
+
+Boots
+It looks like you have a well-documented series of commits as you've developed your Asteroids game. Each message details progress, refactors, new features, and bug fixes. This is great for tracking how the game is evolving!
+
+If you have any questions about a specific commit, want a code review, or would like to practice some version control or game dev concepts, just let me know! Would you like a quiz about anything you've worked on so far, or is there something specific you'd like to discuss?
+
+
+Shaunythunder
+import pygame
+
+class GameOverOverlay:
+"""Class to handle the game over overlay in the game."""
+def init(self,
+surface: pygame.Surface,
+color: tuple[int, int, int],
+rect: pygame.Rect,
+width: int,
+border_radius: int):
+self.surface = surface
+self.color = color
+self.rect = rect
+self.width = width
+self.border_radius = border_radius
+
+def draw_game_over_box(self, screen: pygame.Surface) -> None:
+    """Draw the game over overlay on the screen."""
+    pygame.draw.rect(self.surface, (0 ,0 ,0 ), self.rect, width = 0)
+    pygame.draw.rect(self.surface, self.color, self.rect, self.width, self.border_radius)
+    screen.blit(self.surface, (0, 0))
+
+class PauseMenuObj:
+"""Class to handle individual objects in the game over overlay."""
+def init(self,
+text_font_size: int,
+text: str,
+text_color: tuple[int, int, int],
+text_pos_x: float,
+text_pos_y: float):
+self.text = text
+self.text_font_size = text_font_size
+self.text_color = text_color
+self.text_pos_x = text_pos_x
+self.text_pos_y = text_pos_y
+self.is_selected = False
+self.font = pygame.font.Font(None, text_font_size)
+self.game_over_obj = self.font.render(self.text, False, self.text_color, None)
+self.game_over_obj_rect = self.game_over_obj.get_rect(center=(self.text_pos_x, self.text_pos_y))
+
+def draw_pause_menu_obj(self, screen: pygame.Surface) -> None:
+    """Checks if object is selected from TitleScreen class and changes state respectively"""  
+    if self.is_selected:
+        # Temporary variables established to change text state and reset dynamically
+        temp_color = (255, 0, 0)
+        temp_font_size = 64
+        temp_font = pygame.font.Font(None, temp_font_size)
+        temp_game_over_obj = temp_font.render(self.text, False, temp_color, None)
+        temp_game_over_obj_rect = temp_game_over_obj.get_rect(center = self.game_over_obj_rect.center)
+    else:
+        # Reset logic when no longer selecte
+        temp_color = self.text_color
+        temp_font_size = self.text_font_size
+        temp_font = self.font
+        temp_game_over_obj = self.game_over_obj
+        temp_game_over_obj_rect = self.game_over_obj_rect
+    
+    # Draw object on screen after modifyng attributes
+    screen.blit(temp_game_over_obj, temp_game_over_obj_rect)
+
+def draw_pause_title(self, screen: pygame.Surface) -> None:
+    """Draw the game over overlay title on the screen."""
+    # To bypass the draw_pause_menu_obj method and render without the hover mechanics
+    screen.blit(self.game_over_obj, self.game_over_obj_rect)
+
+quality check me
+
+Boots
+Happy to take a look, apprentice! Let’s step through your code for clarity, maintainability, and style.
+
+GameOverOverlay
+Docstring: Present and clear.
+init: Nicely uses type hints and is clear.
+draw_game_over_box:
+You correctly draw a filled black rectangle, then an outlined colored rectangle with border radius, then blit.
+The order is correct if you want your colored border to show on top of a solid black background.
+Naming is clear.
+PauseMenuObj
+Docstring: Present.
+init:
+Good use of type hints.
+You render the text and calculate the rect on initialization, which is good.
+draw_pause_menu_obj:
+Logic for highlighting selection works, but you create new font and render objects on every frame when selected, which could be optimized by caching them.
+Comments are helpful.
+draw_pause_title: Good for bypassing selection logic.
+General suggestions
+1. Font rendering:
+Repeatedly creating new pygame.font.Font and rendering the same string can be expensive during the render loop. Consider initializing both the normal and selected renders once, then just switching which to draw. For example, in __init__, store both versions in self, or generate them lazily on first selection.
+
+2. Consistent naming:
+Your class is named PauseMenuObj, but is used within a game over overlay context (judging from the variable names and usage). Make sure the class naming matches its context/usage. If it's used for both Pause and Game Over overlays, make this clear in the docstring.
+
+3. Redundant surface blitting in GameOverOverlay:
+If your self.surface is the same as screen, the double blitting is unnecessary. If it's a sub-surface, this is fine. Just be aware of what surfaces/blitting order you have outside this function.
+
+4. Readability and docstrings:
+Code is easy to read; your docstrings and inline comments help clarify intent.
+
+5. Border Radius (PyGame versions):
+If your project has to support older PyGame versions, note that border_radius is only available in more recent versions. Otherwise, it's fine.
+
+6. Typo:
+Minor typo:
+
+In comments: "no longer selecte" should be "no longer selected".
+Would you like an example of optimizing your font rendering, or do you wish for any testing suggestions?
+
+
+Shaunythunder
+how would you do it then
+
+Boots
+Certainly! Let’s see how we might optimize your text rendering so that fonts and rendered text surfaces aren’t regenerated every frame. The key idea: render them once during initialization, or when selected state changes, then reuse them.
+
+Here’s how you could approach it:
+
+1. Render both “normal” and “selected” versions only when needed
+You can do this in __init__, or in a helper method if the selection state can change at runtime.
+
+import pygame
+
+class PauseMenuObj:
+    """Class to handle individual objects in an overlay (pause, game over, etc)."""
+    def __init__(self, 
+                 text_font_size: int, 
+                 text: str, 
+                 text_color: tuple[int, int, int],
+                 text_pos_x: float, 
+                 text_pos_y: float):
+        self.text = text
+        self.text_font_size = text_font_size
+        self.text_color = text_color
+        self.text_pos_x = text_pos_x
+        self.text_pos_y = text_pos_y
+        self.is_selected = False
+
+        # Pre-render normal state
+        self.font = pygame.font.Font(None, text_font_size)
+        self.text_surface = self.font.render(self.text, False, self.text_color, None)
+        self.text_rect = self.text_surface.get_rect(center=(self.text_pos_x, self.text_pos_y))
+
+        # Pre-render selected (hover) state
+        self.selected_color = (255, 0, 0)
+        self.selected_font_size = 64
+        self.selected_font = pygame.font.Font(None, self.selected_font_size)
+        self.selected_surface = self.selected_font.render(self.text, False, self.selected_color, None)
+        self.selected_rect = self.selected_surface.get_rect(center=(self.text_pos_x, self.text_pos_y))
+
+    def draw_pause_menu_obj(self, screen: pygame.Surface) -> None:
+        """Draws the menu object, changing appearance if selected."""
+        if self.is_selected:
+            screen.blit(self.selected_surface, self.selected_rect)
+        else:
+            screen.blit(self.text_surface, self.text_rect)
+
+    def draw_pause_title(self, screen: pygame.Surface) -> None:
+        """Draws the unselectable title."""
+        screen.blit(self.text_surface, self.text_rect)
+
+Advantages:
+
+Each version is only rendered once; drawing is fast.
+You can still tweak .is_selected for runtime state changes, and the correct pre-rendered surface is drawn.
+Would you like to see how to further abstract this if more states or color/font variations are needed, or is this approach clear and sufficient for your overlay system?
+
+
+Shaunythunder
+Now does this really matter for something that when it renders EVERYTHING else stops
+
+Boots
+Great question! In a small-scale game, especially one where the overlay pauses the rest of the game loop—and the overlay only redraws infrequently—the difference is minor and unlikely to impact performance in any noticeable way on modern hardware.
+
+The main reasons to cache rendered surfaces like this are:
+
+Efficiency: Unnecessary calls to font rendering functions are avoided, which can matter if you need to scale up, or reuse overlays in menus with lots of rapid updates.
+Good habits: It’s good practice to separate things that are expensive (creating fonts, rendering text) from your render loop, especially as your projects grow.
+Maintainability: Code that pre-renders assets is usually easier to maintain as you add new overlay features or animations.
+For your current use case—drawing a simple pause or game over screen that halts game updates—you likely won’t see a real-world difference in speed or responsiveness. So, while it's the "textbook best practice" to cache these things, it's not strictly required for your current overlay.
+
+Would you like a quiz about game loops and overlays, or do you want to talk more about performance considerations in larger games?
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

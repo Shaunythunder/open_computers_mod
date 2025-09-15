@@ -1,0 +1,159 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+Hi boots I completed the lesson and passed
+
+Boots
+Congratulations, young apprentice! How did you feel about working with the CLI and running those commands? Was there anything that tripped you up, or did everything make sense? If you have any reflections or questions about what you learned, feel free to share!
+
+
+Shaunythunder
+I actually have a question about pygame
+
+Boots
+Ah, curious mind! I’m delighted to help with questions about Pygame. What aspect are you wondering about? Are you asking how to set it up, how to draw things, or something else entirely? Tell me more so I can guide you down the right path.
+
+
+Shaunythunder
+I understand it’s a 2D language
+
+Boots
+That’s an insightful observation! Pygame itself isn’t exactly a language—it’s a Python library, which means it’s a set of tools you use within Python to create games and multimedia applications. And yes, its drawing and rendering features are focused entirely on 2D graphics.
+
+Why do you think Pygame is more suited for 2D games rather than 3D? What might be missing from Pygame that you’d need for a 3D game?
+
+
+Shaunythunder
+What if I tried to make a 3D game in pygame
+
+Boots
+A brave and ambitious idea! Let’s think it through together. If you tried to make a 3D game using only Pygame’s tools, what challenges do you think you’d encounter? For example, how would you handle drawing objects from different angles or simulating camera movement in a 3D space using just 2D surfaces?
+
+
+Shaunythunder
+you would have to probably use vector math to simulate 3D coords
+
+Boots
+Precisely! You’d need to do quite a bit of math—using vectors, matrices, and projection calculations—to convert your 3D coordinates into 2D positions that Pygame can actually draw. This process is called projecting 3D points onto a 2D surface.
+
+Now, if you wanted to show cubes or rotating 3D objects, how would you decide which sides or faces should be visible to the player? What other challenges could arise as you try to make things look realistic?
+
+
+Shaunythunder
+I think it would be a good learning project
+
+Boots
+I admire your spirit! Taking on a project like that can teach you a ton about both math and graphics programming. Trying to build your own 3D projection engine could deepen your understanding of topics like linear algebra and game development fundamentals.
+
+What sort of simple 3D scene or effect do you think would be a good starting point—maybe a spinning cube, or plotting basic 3D points? And, if you get stuck, how might you break the problem down into smaller, manageable steps?
+
+
+Shaunythunder
+like I could try to do the donut rotating as my first real project for the boot.dev course
+
+Boots
+Ah, the famous spinning ASCII donut—a wondrous place to start! That classic demo is a clever use of math to project and shade a rotating 3D object in just two dimensions. It’s a fantastic mix of programming, trigonometry, and creativity.
+
+What do you think would be your first step in approaching such a project? Would you start by trying to render the points, or perhaps by understanding how the rotation math works? How might Pygame help you visualize the donut compared to printing characters to a terminal?
+
+
+Shaunythunder
+Ultimately I’m here to be a game dev so I feel my projects should support that end
+
+Boots
+A wise approach, indeed! Tailoring your projects toward your game development ambitions will help you build both skill and confidence.
+
+If that’s your goal, what kinds of games or mechanics are you most interested in mastering first—movement, collision, user input, or something else? How do you think small, focused projects (like the donut or simple arcade clones) might prepare you for creating larger, more complex games in the future?
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

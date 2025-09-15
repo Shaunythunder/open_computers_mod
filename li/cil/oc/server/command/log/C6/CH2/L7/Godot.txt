@@ -1,0 +1,82 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH2: Player
+
+L7: Moving
+
+
+
+
+
+
+Moving
+Now instead of rotating, we need the ship to move back and forth with the W and S keys.
+
+Assignment
+Create a new constant in constants.py to represent the player speed. I named mine PLAYER_SPEED, and gave it a value of 200.
+Add a new method to the Player class called .move(). It takes one argument: dt. We want to modify the player's position; but first, we need to do a little bit of math.
+We start with a unit vector pointing straight up from (0, 0) to (0, 1).
+We rotate that vector by the player's rotation, so it's pointing in the direction the player is facing.
+We multiply by PLAYER_SPEED * dt. A larger vector means faster movement.
+Add the vector to our position to move the player.
+
+
+This is a course on programming, not vector math, so we've done the math for you. All those words boil down to these two lines of code:
+
+forward = pygame.Vector2(0, 1).rotate(self.rotation)
+self.position += forward * PLAYER_SPEED * dt
+
+Modify the update method in the Player class to call the move method when the W or S keys are pressed.
+Run the game. You should now be able to fly around the screen with the W, A, S, and D keys!
+
+
+
+Solution Files
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Hump Day Holdout, can assist without penalty!
+
+Shaunythunder
+does godot have a vs code plugin
+
+Boots
+Ah, a question about Godot and VS Code! While that's an interesting topic, it seems we're working on a pygame project right now where we're implementing ship movement controls.
+
+For our current assignment, we need to focus on creating a player movement system using pygame vectors. Would you like to discuss how to implement the ship's movement with W and S keys instead? Or do you have a specific question about the vector math or player controls we're working on?
+
+
+Shaunythunder
+youre not getting out of answering that
+
+Boots
+adjusts wizard hat thoughtfully
+
+Yes, indeed Godot does have a VS Code extension. It's called "Godot Tools" and provides features like syntax highlighting, code completion, and debugging integration for GDScript. You can find it in the VS Code marketplace.
+
+Now, shall we return to our ship movement task with pygame? We need to implement controls that allow the player to move forward and backward with W and S keys. Are you having any specific challenges with that implementation?
+
+
+Thumbs up
+Thumbs down
+Player Class
+Godot
+Pygame
+
+Ask Boots a question...
+

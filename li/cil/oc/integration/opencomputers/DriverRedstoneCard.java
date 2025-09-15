@@ -1,0 +1,73 @@
+/*    */ package li.cil.oc.integration.opencomputers;@ScalaSignature(bytes = "\006\001}<Q!\001\002\t\0025\t!\003\022:jm\026\024(+\0323ti>tWmQ1sI*\0211\001B\001\016_B,gnY8naV$XM]:\013\005\0251\021aC5oi\026<'/\031;j_:T!a\002\005\002\005=\034'BA\005\013\003\r\031\027\016\034\006\002\027\005\021A.[\002\001!\tqq\"D\001\003\r\025\001\"\001#\001\022\005I!%/\033<feJ+Gm\035;p]\026\034\025M\0353\024\t=\021\"$\b\t\003'ai\021\001\006\006\003+Y\tA\001\\1oO*\tq#\001\003kCZ\f\027BA\r\025\005\031y%M[3diB\021abG\005\0039\t\021A!\023;f[B\021a$J\007\002?)\021\001%I\001\005SR,WN\003\002#G\0051AM]5wKJT!\001\n\004\002\007\005\004\030.\003\002'?\tI\001j\\:u\003^\f'/\032\005\006Q=!\t!K\001\007y%t\027\016\036 \025\0035AQaK\b\005B1\n\021b^8sWN<\026\016\0365\025\0055\032\004C\001\0302\033\005y#\"\001\031\002\013M\034\027\r\\1\n\005Iz#a\002\"p_2,\027M\034\005\006i)\002\r!N\001\006gR\f7m\033\t\003mqj\021a\016\006\003AaR!!\017\036\002\0235Lg.Z2sC\032$(\"A\036\002\0079,G/\003\002>o\tI\021\n^3n'R\f7m\033\005\006=!\t\005Q\001\022GJ,\027\r^3F]ZL'o\0348nK:$HcA!H\021B\021!)R\007\002\007*\021AiI\001\b]\026$xo\034:l\023\t15I\001\nNC:\fw-\0323F]ZL'o\0348nK:$\b\"\002\033?\001\004)\004\"B%?\001\004Q\025\001\0025pgR\004\"AQ&\n\0051\033%aD#om&\024xN\\7f]RDun\035;\t\0139{A\021I(\002\tMdw\016\036\013\003!N\003\"aE)\n\005I#\"AB*ue&tw\rC\0035\033\002\007Q\007C\003V\037\021\005c+\001\003uS\026\024HCA,[!\tq\003,\003\002Z_\t\031\021J\034;\t\013Q\"\006\031A\033\b\013q{\001\022A/\002\021A\023xN^5eKJ\004\"AX0\016\003=1Q\001Y\b\t\002\005\024\001\002\025:pm&$WM]\n\004?J\021\007CA2e\033\005\t\023BA3\"\005M)eN^5s_:lWM\034;Qe>4\030\016Z3s\021\025As\f\"\001h)\005i\006\"B5`\t\003R\027AD4fi\026sg/\033:p]6,g\016\036\013\003Wz\004$\001\\;\021\0075\0048O\004\002/]&\021qnL\001\007!J,G-\0324\n\005E\024(!B\"mCN\034(BA80!\t!X\017\004\001\005\023YD\027\021!A\001\006\0039(aA0%cE\021\001p\037\t\003]eL!A_\030\003\0179{G\017[5oOB\021a\006`\005\003{>\0221!\0218z\021\025!\004\0161\0016\001")
+/*    */ public final class DriverRedstoneCard { public static boolean isDrone(Class<? extends EnvironmentHost> paramClass) {
+/*    */     return DriverRedstoneCard$.MODULE$.isDrone(paramClass);
+/*    */   }
+/*    */   public static boolean isMicrocontroller(Class<? extends EnvironmentHost> paramClass) {
+/*    */     return DriverRedstoneCard$.MODULE$.isMicrocontroller(paramClass);
+/*    */   }
+/*    */   public static boolean isTablet(Class<? extends EnvironmentHost> paramClass) {
+/*    */     return DriverRedstoneCard$.MODULE$.isTablet(paramClass);
+/*    */   }
+/*    */   public static boolean isServer(Class<? extends EnvironmentHost> paramClass) {
+/*    */     return DriverRedstoneCard$.MODULE$.isServer(paramClass);
+/*    */   }
+/*    */   public static boolean isRotatable(Class<? extends EnvironmentHost> paramClass) {
+/*    */     return DriverRedstoneCard$.MODULE$.isRotatable(paramClass);
+/*    */   }
+/*    */   public static boolean isRobot(Class<? extends EnvironmentHost> paramClass) {
+/*    */     return DriverRedstoneCard$.MODULE$.isRobot(paramClass);
+/*    */   }
+/*    */   public static boolean isComputer(Class<? extends EnvironmentHost> paramClass) {
+/*    */     return DriverRedstoneCard$.MODULE$.isComputer(paramClass);
+/*    */   }
+/*    */   public static boolean isAdapter(Class<? extends EnvironmentHost> paramClass) {
+/*    */     return DriverRedstoneCard$.MODULE$.isAdapter(paramClass);
+/*    */   }
+/*    */   public static boolean isOneOf(ItemStack paramItemStack, Seq<ItemInfo> paramSeq) {
+/*    */     return DriverRedstoneCard$.MODULE$.isOneOf(paramItemStack, paramSeq);
+/*    */   }
+/*    */   public static NBTTagCompound dataTag(ItemStack paramItemStack) {
+/*    */     return DriverRedstoneCard$.MODULE$.dataTag(paramItemStack);
+/*    */   }
+/*    */   public static boolean worksWith(ItemStack paramItemStack, Class<? extends EnvironmentHost> paramClass) {
+/*    */     return DriverRedstoneCard$.MODULE$.worksWith(paramItemStack, paramClass);
+/*    */   }
+/*    */   public static int tier(ItemStack paramItemStack) {
+/*    */     return DriverRedstoneCard$.MODULE$.tier(paramItemStack);
+/*    */   }
+/*    */   public static String slot(ItemStack paramItemStack) {
+/*    */     return DriverRedstoneCard$.MODULE$.slot(paramItemStack);
+/*    */   }
+/*    */   
+/*    */   public static ManagedEnvironment createEnvironment(ItemStack paramItemStack, EnvironmentHost paramEnvironmentHost) {
+/*    */     return DriverRedstoneCard$.MODULE$.createEnvironment(paramItemStack, paramEnvironmentHost);
+/*    */   }
+/*    */   
+/*    */   public static boolean worksWith(ItemStack paramItemStack) {
+/*    */     return DriverRedstoneCard$.MODULE$.worksWith(paramItemStack);
+/*    */   }
+/*    */   
+/*    */   public static class Provider$ implements EnvironmentProvider { public Provider$() {
+/* 51 */       MODULE$ = this;
+/*    */     } public static final Provider$ MODULE$;
+/*    */     public Class<?> getEnvironment(ItemStack stack) {
+/* 54 */       boolean isAdvanced = (DriverRedstoneCard$.MODULE$.tier(stack) == 1);
+/* 55 */       boolean hasBundled = (li.cil.oc.integration.util.BundledRedstone$.MODULE$.isAvailable() && isAdvanced);
+/* 56 */       boolean hasWireless = (li.cil.oc.integration.util.WirelessRedstone$.MODULE$.isAvailable() && isAdvanced);
+/* 57 */       return DriverRedstoneCard$.MODULE$.worksWith(stack) ? (hasBundled ? (
+/* 58 */         hasWireless ? Redstone.BundledWireless.class : 
+/* 59 */         Redstone.Bundled.class) : 
+/*    */ 
+/*    */         
+/* 62 */         Redstone.Vanilla.class) : 
+/*    */ 
+/*    */         
+/* 65 */         null;
+/*    */     } }
+/*    */    }
+
+
+/* Location:              C:\Users\shame\AppData\Roaming\PrismLauncher\instances\GT_New_Horizons_2.7.4_Java_17-21\.minecraft\mods\OpenComputers-1.10.30-GTNH.jar!\li\cil\oc\integration\opencomputers\DriverRedstoneCard.class
+ * Java compiler version: 8 (52.0)
+ * JD-Core Version:       1.1.3
+ */

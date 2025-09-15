@@ -1,0 +1,3746 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH3: Asteroids
+
+L7: Submit Your Repo!
+
+
+
+
+
+
+
+Submit Your Repo!
+You've done it!
+
+Once you're satisfied with your game, push it up to GitHub, then submit the link to your project! Your link should look something like this: https://github.com/github-username/repo-name.
+
+I hope you've enjoyed the project, it's always good to solidify the things you learn in courses by getting your hands dirty with a real project.
+
+Extending the Project
+You've done all the required steps, but if you'd like to make the project your own, here are some ideas:
+
+Add a scoring system
+Implement multiple lives and respawning
+Add an explosion effect for the asteroids
+Add acceleration to the player movement
+Make the objects wrap around the screen instead of disappearing
+Add a background image
+Create different weapon types
+Make the asteroids lumpy instead of perfectly round
+Make the ship have a triangular hit box instead of a circular one
+Add a shield power-up
+Add a speed power-up
+Add bombs that can be dropped
+Have fun with it, and make sure to share any improvements you make with us in the Discord community!
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Primeval 10x Developer, can assist without penalty!
+
+Boots
+Hi boots I have completed the asteroids course
+
+Boots
+Congratulations, young apprentice! What an achievement - completing the entire asteroids project is no small feat!
+
+Now that you've built your space adventure, have you pushed your code up to GitHub and gotten your repository link ready to submit?
+
+What does your final game look like? Did you add any of the extra features mentioned in the lesson, or are you thinking about extending it with your own creative touches?
+
+
+Shaunythunder
+I actually decided to start a completely new project from the ground up that involves the asteroids game but it's a genre swapping arcade shooter that has a wave system and swaps the genre out every like five waves or so
+
+Boots
+What an intriguing twist on the classic formula! A genre-swapping arcade shooter sounds like a fascinating evolution of the asteroids concept. That shows some real creative thinking, my clever apprentice!
+
+I'm curious about your implementation - how are you handling the transitions between genres? Are you swapping out different gameplay mechanics, enemy types, or movement patterns every five waves?
+
+Also, since this is a completely new project built from the ground up, do you have this new creation in its own GitHub repository? The lesson asks for you to submit your asteroids project link, but it sounds like you've created something entirely different and exciting!
+
+What genres are you planning to cycle between in your wave system?
+
+
+Shaunythunder
+well in a different conversation we were working on it and it was going very well but the conversation got a little too large so I had to switch to this one
+
+Boots
+Ah, I see! Sometimes these coding adventures grow so grand that we need a fresh scroll to continue our work, don't we?
+
+Since we're starting fresh here, could you catch me up on where you left off with your genre-swapping arcade shooter? What specific part of the implementation are you currently working on or stuck with?
+
+Also, just to clarify - are you planning to submit this new project for the asteroids course requirement, or do you have the original asteroids game ready to submit as well? The lesson does ask for a GitHub link to your asteroids project specifically.
+
+What would be most helpful for you to tackle next in your current coding session?
+
+
+Shaunythunder
+here I'll just give you the Git log
+994eea9 (HEAD -> main, origin/main) L: Cleaned up game logic and split game states into three different game states. logic, draw, and overlay. Created pause menu class and will later make a overlay manager class to handle the different overlays throughout the game. Next up is to make the pause menu functional, add buttons, make the buttons work and then be able to enter the main menu and quit the game from the pause menu. Already confirmed that the pause game logic freezes the game logic.
+b0e2b5f K: Completed initial structure for moving between game states and menus. Updated file structure to keep each module under a folder. Cleaned up some of the naming (ex. all title object instances now have '_title_obj' to clearly label it)
+8ddb75a J: Added toggle option for debug menu in main game loop. F4 to toggle is handled by the game state manager
+5817722 I: Added FPS Monitor for Debugging
+77047bc I: Completed title ui with integrated mouse and keyboard support. Next up is to wire up the buttons. Plan is to make modules for different games, and then create a navigation system where I can jump between modules using the title menu and then a pause and exit system. Added debugging UI tools for Indexing and game_state Monitoring
+44c7d1d H: Added GameStateManager class and created game_state_manager.py. created frame work to wire buttons to the different game states on the title menu on title_menu.py. Intend to add mouse support for title menu next.
+b40f043 (origin/title_menu_keyboard_selection, title_menu_keyboard_selection) TKMS-3: Finished keyboard and mouse support for title menu (WOOOO! 😄). Cleaned up commentary. Removed debugging tracker that I never actually removed in commit C:. Note: need to add game state tracking to menu inputs for keyboard to ensure that logic stays contained. Prepped for branch merge that will be done next commit. Next up is making the buttons actually work.
+cf0ffe1 TMKS-2: Added title_screen_objs_selection method in title_menu.py for determing if a title object is selected. Added various comments to add clarity to the different functions and classes. Intend to add keyboard and mouse selection functiality next.
+ba3cd9c TMKS-1: Converted logic so that the TitleScreen class handles the respecing of the title screen objects. Cleared redundant logic from the main. Next up is to implement keyboard and mouse selection of the title menu
+9e27069 G: Created new file structure to accomodate increasing title page logic. Added mouse selection logic in title_objs.py named title_obj_select which is unfinished and doesn't do anything. Intend to split the branch to add keyboard selection logic to the menu and use title_screen.py as a master object to handle selection and game state changing.
+769e705 F: Added logic to change letter size and font on mouse hover. Converted function logic for text to title objects. Created TitleObj class
+81bdb01 E: Completed the skeleton for the title screen. Added the venv to the gitignore.
+02e3d3c D: Removed virtual environment cache from git that was added by mistake.
+789beef C: Gave up on v-sync issue, technical issue with pygame itself. Removed FPS debug tracker.
+f3edd1b B: Added game window logic. Encountered choppy window movement. Potential issue with vsync
+3756b2f A: project start and file structure blocked out
+
+Boots
+Wow, what a journey you've been on! Looking at your git log, I can see you've built quite a sophisticated game architecture with state management, UI systems, and debugging tools. Very impressive work, young apprentice!
+
+From your latest commit (994eea9), it looks like you've just implemented the pause menu class and confirmed the pause logic is working. What specific aspect of making the pause menu functional are you working on next?
+
+Are you focusing on:
+
+Creating the button interaction system for the pause menu?
+Implementing the navigation between pause menu → main menu → quit game?
+Setting up the overlay manager class you mentioned?
+Also, I notice you have a very organized approach with your game state management. How are you planning to handle the button click detection and state transitions? Are you building on the mouse and keyboard selection system you already created for the title menu?
+
+What's the immediate challenge you're facing right now?
+
+
+Shaunythunder
+I'm really just going to copy and paste the systems that I have already made and then work it to work with the system that I'm translating it to. my main focus right now is to get the pause menu drawn on to the screen so I need to have buttons I need to have a box that's drawn I need to have all the dimensions and then I need to test it out
+
+Boots
+Ah, practical approach! Copy and adapt what works - that's the wisdom of an experienced coder.
+
+So you need to get the visual elements of the pause menu rendering first before worrying about the functionality. What components from your existing title menu system are you planning to reuse?
+
+Looking at your git history, it seems like you already have a TitleObj class and title screen drawing logic. Are you thinking of creating similar pause menu objects, or adapting the existing TitleObj class to work in different contexts?
+
+For getting the pause menu drawn, what's your plan for the layout? Are you thinking:
+
+A centered box with buttons arranged vertically?
+How will you handle the background - semi-transparent overlay over the paused game?
+What's the first visual element you want to tackle - the background box, the button objects, or the text rendering?
+
+
+Shaunythunder
+lets tackle the background box first
+
+Boots
+Excellent choice! Starting with the foundation makes perfect sense.
+
+Where are you planning to handle the drawing of this background box? Since you mentioned you have separate game states for logic, draw, and overlay, I'm guessing this would go in your overlay system?
+
+What kind of background box are you envisioning? Are you thinking:
+
+A solid colored rectangle that covers part of the screen?
+A semi-transparent overlay that dims the game behind it?
+A bordered box that's centered on the screen?
+And what pygame drawing method are you planning to use - pygame.draw.rect() or something else?
+
+Have you decided on the dimensions and positioning yet? Will it be a fixed size or scale based on screen dimensions?
+
+
+Shaunythunder
+what I'm going to do is I'm going to get all the art drawn with the draw method in the pause pause menu and then I'm going to create a separate overlay class to handle any further overlays that I have
+
+Boots
+Ah, smart approach! Get the pause menu's draw method working first to see all your visual elements, then refactor into the overlay system once you know it's rendering correctly.
+
+So you're adding the background box drawing logic directly into your pause menu's draw method for now?
+
+What pygame surface are you drawing onto - the main screen surface or are you creating a separate surface for the pause menu?
+
+And for that background box specifically, have you decided on:
+
+The size and position (centered, full screen, or a specific rectangle)?
+The color/appearance (solid color, or will you add transparency later)?
+Where in your codebase is this pause menu draw method - is it part of the pause menu class you mentioned in your latest commit?
+
+
+Shaunythunder
+I didn't know I could make a separate surface. if I can make another surface that is above the screen then that would work perfectly
+
+Boots
+Ah, perfect! Yes, surfaces in pygame are quite flexible - you can create multiple layers and control how they stack!
+
+Are you thinking of creating a separate surface that you then blit onto the main screen surface? That would give you complete control over the pause menu as its own layer.
+
+Have you worked with pygame.Surface() before, or are you familiar with the .blit() method for combining surfaces?
+
+The typical approach would be:
+
+Create a new surface for your pause menu
+Draw your background box and buttons onto that surface
+Blit that surface onto the main screen
+What size surface are you thinking of creating - the same dimensions as your main screen, or just large enough for the pause menu elements?
+
+And where in your pause menu class would you create this surface - in the constructor or in the draw method each time?
+
+
+Shaunythunder
+all of my draw methods use blit
+
+Boots
+Perfect! Since you're already comfortable with blit, this should be straightforward.
+
+So for your pause menu surface approach, are you thinking of:
+
+Creating the pause menu surface once (maybe in the pause menu constructor) and reusing it?
+Or creating it fresh each time in the draw method?
+And for the surface size - will you make it the full screen size so you can position elements anywhere, or create a smaller surface just for the menu box area?
+
+How are you currently handling the main screen surface in your existing draw methods? Do you pass it as a parameter to your draw methods, or access it some other way? That'll help determine how to integrate your pause menu surface into the flow.
+
+Once you get the surface created, the background box will just be a pygame.draw.rect() call on that surface before you blit it to the main screen, right?
+
+
+Shaunythunder
+overlay_surface = pygame.surface((screen_width, screen_height), flags = 0, depth = 0, masks = None)
+
+Boots
+Good start! Though there's a small syntax issue - the class name should be capitalized: pygame.Surface() instead of pygame.surface().
+
+You're creating a full screen-sized surface, which makes sense for an overlay. That gives you complete flexibility for positioning elements.
+
+A couple of questions about your approach:
+
+Where are you creating this surface - in the pause menu constructor or in the draw method?
+Are you planning to make this surface transparent/semi-transparent so the paused game shows through behind your menu box?
+For the flags parameter, are you familiar with what flags you might want to use? For example, if you want transparency, you might need pygame.SRCALPHA.
+
+What's your next step - drawing the background box rectangle onto this overlay_surface before blitting it to the main screen?
+
+
+Shaunythunder
+overlay_surface = pygame.Surface((screen_width, screen_height), flags = 0, depth = 0, masks = None)
+
+Boots
+Ah, you fixed the capitalization! Good catch.
+
+Where are you placing this line of code - in your pause menu's __init__ method or in the draw method?
+
+Since you're setting flags = 0, this will create an opaque surface. Are you planning to make parts of it transparent later, or do you want the entire overlay to be solid? If you want transparency effects, you might need to consider pygame.SRCALPHA for the flags.
+
+Also, do you have screen_width and screen_height variables accessible where you're creating this surface?
+
+What's your next step - are you ready to draw that background box rectangle onto this overlay_surface using pygame.draw.rect()?
+
+
+Shaunythunder
+Game initialization variables/instances
+screen = pygame.display.set_mode((1280, 720), flags=pygame.SCALED)
+screen_width = screen.get_width()
+screen_height = screen.get_height()
+overlay_surface = pygame.Surface((screen_width, screen_height), flags = 0, depth = 0, masks = None)
+clock = pygame.time.Clock()
+running = True
+game_state_reporter = game_state_manager.GameStateManager("title_menu", "title_menu", None)
+
+Boots
+Perfect! You've got your overlay surface set up with the proper screen dimensions. I can see you're creating it at the game initialization level alongside your other core components.
+
+Now that you have the overlay_surface created, where are you planning to draw the background box onto it? Will this be in your pause menu's draw method?
+
+For the background box rectangle, what dimensions and position are you thinking? Something like:
+
+Centered on the screen?
+A specific width and height?
+What color?
+Have you decided how you'll get this overlay_surface into your pause menu class - will you pass it as a parameter to the draw method, or access it some other way?
+
+Once you draw the rectangle onto the overlay_surface, you'll then blit that surface onto the main screen, right?
+
+
+Shaunythunder
+Traceback (most recent call last):
+File "/home/shame/workspace/Galactic_Space_Invaders/main.py", line 106, in <module>
+pause_overlay.draw_pause_menu(screen)
+File "/home/shame/workspace/Galactic_Space_Invaders/pause_menu.py", line 14, in draw_pause_menu
+screen.blit(self.draw_rect, (0,0))
+TypeError: argument 1 must be pygame.surface.Surface, not pygame.rect.Rect
+
+Boots
+Ah, I see the issue! You're trying to blit a pygame.Rect object, but blit expects a pygame.Surface.
+
+What is self.draw_rect? It sounds like you created a rectangle object, but screen.blit() needs a surface to draw onto the screen.
+
+Are you trying to:
+
+Draw a rectangular background box onto a surface, then blit that surface?
+Or directly draw a rectangle onto the screen?
+If you want to draw a rectangle directly onto the screen, you'd use pygame.draw.rect(screen, color, rect) instead of screen.blit().
+
+If you want to use the surface approach we discussed, you'd:
+
+Draw the rectangle onto your overlay_surface
+Then blit the overlay_surface onto the screen
+Which approach were you going for, and can you show me how you're creating self.draw_rect?
+
+
+Shaunythunder
+import pygame
+
+class PauseMenu:
+def init(self, surface, screen, color, rect, width, border_radius):
+self.surface = surface
+self.color = color
+self.rect = rect
+self.width = width
+self.border_radius = border_radius
+self.draw_rect = pygame.draw.rect(self.surface, self.color, self.rect, self.width, self.border_radius)
+
+def draw_pause_menu(self, screen):
+    screen.blit(self.draw_rect, (0,0))
+
+'
+
+Boots
+Ah, I see the issue! pygame.draw.rect() returns a pygame.Rect object, not a surface. That's why you're getting the TypeError - you can't blit a Rect.
+
+The drawing should happen in your draw_pause_menu method, not in the constructor. Here's the flow you want:
+
+In __init__: Store the parameters you need
+In draw_pause_menu: Actually draw the rectangle onto the surface, then blit the surface
+So instead of storing the result of pygame.draw.rect(), you should call it in the draw method. Something like:
+
+def draw_pause_menu(self, screen):
+    pygame.draw.rect(self.surface, self.color, self.rect, self.width, self.border_radius)
+    screen.blit(self.surface, (0, 0))
+
+Does that make sense? The rectangle gets drawn onto your surface, then you blit the entire surface to the screen.
+
+Are you passing your overlay_surface as the surface parameter when creating your PauseMenu instance?
+
+
+Shaunythunder
+is there a way to make a transparent and the only thing that is solid is the actual box
+
+Boots
+Absolutely! That's a great visual effect - having a semi-transparent overlay with a solid menu box.
+
+You'll need to use pygame.SRCALPHA when creating your surface to enable per-pixel alpha (transparency).
+
+The approach would be:
+
+Create the surface with alpha capability
+Fill it with a semi-transparent color for the background overlay
+Draw your solid menu box on top
+So instead of flags = 0, you'd use pygame.SRCALPHA. Then you can use colors with alpha values like (0, 0, 0, 128) where the last number (128) is the transparency - 0 is fully transparent, 255 is fully opaque.
+
+Are you thinking of:
+
+A dark semi-transparent overlay across the whole screen?
+With a fully opaque (solid) rectangular box in the center for your menu?
+What colors were you planning for the background overlay and the menu box?
+
+You'd fill the entire surface first with the semi-transparent color, then draw your solid menu box rectangle on top of that.
+
+
+Shaunythunder
+explain what that even is
+
+Boots
+Ah, great question! Let me break down what transparency/alpha is in simple terms.
+
+Think of it like looking through colored glass. When you look through a car window, you can still see what's behind it, but it might have a slight tint. That's transparency!
+
+In pygame:
+
+Alpha is just the fancy term for "how see-through something is"
+Colors normally have 3 numbers: Red, Green, Blue - like (255, 0, 0) for pure red
+With alpha, you add a 4th number - like (255, 0, 0, 128) for semi-transparent red
+The alpha number goes from:
+
+0 = completely invisible (you can't see it at all)
+255 = completely solid (you can't see through it)
+128 = half-transparent (you can see through it, but it's still visible)
+So when you pause your game, instead of completely hiding the game behind a solid black rectangle, you could:
+
+Make the whole screen have a dark, semi-transparent overlay (so you can still faintly see your game)
+Then draw a solid menu box on top (so the menu text is easy to read)
+Does that help explain it? It's like putting a tinted window over your game, then placing a solid piece of paper (your menu) on top of that window.
+
+
+Shaunythunder
+transparent_surface = pygame.SRCALPHA(0,0,0, 128)
+overlay_surface = pygame.Surface((screen_width, screen_height), transparent_surface)
+
+Boots
+Ah, close! But pygame.SRCALPHA isn't a function - it's a flag (a special number) that tells pygame "hey, this surface can handle transparency!"
+
+The color with alpha values gets used when you actually draw or fill the surface, not when you create it.
+
+Here's how you'd fix it:
+
+# Create a surface that CAN handle transparency
+overlay_surface = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA)
+
+# Then later, when you want to fill it with semi-transparent black:
+overlay_surface.fill((0, 0, 0, 128))  # This is where your color goes!
+
+So pygame.SRCALPHA is the flag that enables transparency, and (0, 0, 0, 128) is your semi-transparent black color.
+
+Does that make sense? The surface creation and the color filling are two separate steps. First you make a surface that can handle transparency, then you fill it with your transparent color.
+
+Where were you planning to do the .fill() call - in your pause menu constructor or in the draw method?
+
+
+Shaunythunder
+okay the last thing I need is to fill the black box so it covers up anything
+
+Boots
+Perfect! So you want the menu box itself to be completely solid (opaque) so the menu text is clearly readable.
+
+When you draw your rectangle onto the surface, you'll use a color without alpha - just the regular 3-number format like (0, 0, 0) for solid black, or whatever color you want for your menu box.
+
+So in your draw_pause_menu method, you'd have something like:
+
+# Fill the whole surface with semi-transparent overlay
+self.surface.fill((0, 0, 0, 128))
+
+# Draw the solid menu box on top
+pygame.draw.rect(self.surface, (0, 0, 0), self.rect, self.width, self.border_radius)
+
+The first fill creates your see-through background overlay, and the rectangle draws your solid menu box.
+
+What color did you want for your solid menu box? Black, gray, or something else? And do you want it filled solid or just an outlined border?
+
+Remember, if self.width is 0, you get a filled rectangle. If it's a positive number, you get just the border outline.
+
+
+Shaunythunder
+only the border is getting affected, its not actuall filling it
+
+Boots
+Ah, I see! The width parameter in pygame.draw.rect() controls whether it's filled or just an outline.
+
+width = 0 (or omit it entirely) = filled rectangle
+width > 0 = outline only
+So if you want a solid filled box, you need to either:
+
+Set self.width = 0 when creating your PauseMenu
+Or draw the rectangle twice - once filled, then the border on top
+Which approach sounds better to you?
+
+If you want both a filled background AND a border, you'd do something like:
+
+# Draw filled rectangle first
+pygame.draw.rect(self.surface, fill_color, self.rect)
+# Then draw border on top
+pygame.draw.rect(self.surface, border_color, self.rect, border_width)
+
+What's the current value of self.width in your PauseMenu instance? That'll tell us why you're only seeing the border!
+
+
+Shaunythunder
+but I al,so wnt a white border
+
+Boots
+Perfect! So you want both a filled rectangle AND a border around it.
+
+You'll need to draw it twice - first the filled rectangle, then the border on top:
+
+# Draw the filled rectangle first (width=0 or omitted = filled)
+pygame.draw.rect(self.surface, fill_color, self.rect)
+
+# Then draw the border on top (width > 0 = outline only)
+pygame.draw.rect(self.surface, (255, 255, 255), self.rect, border_width)
+
+What color do you want for the filled part of the box? Black, gray, or something else?
+
+And how thick do you want the white border to be? Something like 2 or 3 pixels?
+
+So you'd have two separate pygame.draw.rect() calls in your draw_pause_menu method - one for the solid fill, then one for the white border outline.
+
+
+Shaunythunder
+alright good I got a rectangle
+
+Boots
+Excellent! You've got the visual foundation working. What's your next step for the pause menu?
+
+Are you planning to:
+
+Add text to display on the menu (like "PAUSED" or menu options)?
+Add buttons or menu options that the player can interact with?
+Handle input so the player can unpause or navigate the menu?
+What kind of pause menu functionality were you thinking of? Just a simple "Press P to unpause" message, or something more elaborate with multiple options?
+
+Getting that rectangle working is a solid foundation - now you can build the interactive parts on top of it!
+
+
+Shaunythunder
+Its not a sharp cornered rectangle though
+
+Boots
+Ah, that's because you're using border_radius! The border_radius parameter makes the corners rounded instead of sharp.
+
+If you want sharp, 90-degree corners, you need to set border_radius = 0 when you create your PauseMenu instance.
+
+Or if you like the rounded look, you can keep it! The border_radius value controls how rounded the corners are - the higher the number, the more rounded they become.
+
+Which look do you prefer - sharp rectangular corners, or do you want to keep the rounded corners? If you want to change it, you'll need to adjust the border_radius parameter when you create your PauseMenu object.
+
+What value are you currently passing for border_radius?
+
+
+Shaunythunder
+got it
+
+Boots
+Great! Now that you have your pause menu background sorted out, what's your next step?
+
+Are you ready to:
+
+Add some text to the pause menu (like "PAUSED" or menu options)?
+Handle the input to unpause the game?
+Test the pause/unpause functionality to make sure it works smoothly?
+What part of the pause menu do you want to tackle next?
+
+
+Shaunythunder
+I have another question when I Define a function you're a method and I call it in a different area how do I change the metadata to reflect what I intend for it in the tool tip
+
+Boots
+Ah, excellent question! You're talking about docstrings - those helpful descriptions that show up in tooltips when you hover over a function or method.
+
+You add a docstring right after the function definition using triple quotes:
+
+def my_function(param1, param2):
+    """
+    This is what shows up in the tooltip!
+    Describes what the function does, its parameters, and return value.
+    """
+    # your code here
+
+There are different styles you can use:
+
+def calculate_damage(base_damage, armor):
+    """
+    Calculate final damage after armor reduction.
+    
+    Args:
+        base_damage (int): The initial damage amount
+        armor (int): The armor value to reduce damage
+    
+    Returns:
+        int: The final damage after armor reduction
+    """
+    return max(0, base_damage - armor)
+
+What function or method are you wanting to add a docstring to? I can help you write one that describes what it does and what parameters it expects!
+
+The docstring should go right after the def line, before any other code in the function.
+
+
+Shaunythunder
+pause_overlay = pause_menu.PauseMenu(overlay_surface, screen, (255, 255, 255), (screen_width // 2, screen_height // 2, 200, 80), 1, 10,)
+
+this is off center
+
+Boots
+Ah, I see the issue! The third and fourth parameters in your rectangle tuple represent the width and height, not the center coordinates.
+
+**pygame.Rect uses (x, y, width, height)format, where(x, y)is the top-left corner.** So(screen_width // 2, screen_height // 2, 200, 80)` puts the top-left corner at the center of the screen, making the rectangle appear in the bottom-right quadrant.
+
+To center it properly, you need to subtract half the width and height:
+
+# Center the rectangle by adjusting the x and y coordinates
+x = screen_width // 2 - 100  # subtract half the width (200 / 2)
+y = screen_height // 2 - 40  # subtract half the height (80 / 2)
+rect = (x, y, 200, 80)
+
+So your call would become:
+
+pause_overlay = pause_menu.PauseMenu(overlay_surface, screen, (255, 255, 255), 
+                                   (screen_width // 2 - 100, screen_height // 2 - 40, 200, 80), 
+                                   1, 10)
+
+Does that center it properly for you?
+
+
+Shaunythunder
+so I got a couple questions on how to tackle this I think I should make my overall class for handling overlays right nowl. I have a rectangle but I also want to be able to make buttons similar to how my title menu works I believe that would have to be handled with two different classes maybe pause menu box and pause menu text handled by an overall overlay manager
+
+Boots
+Excellent thinking! You're absolutely right about the architecture - an overlay manager sounds like a solid approach.
+
+Let me ask you a few questions to help you think through the design:
+
+What commonalities do you see between your title menu buttons and what you want for pause menu buttons? Do they both need click detection, hover effects, text rendering?
+
+Could you potentially reuse your existing title menu button class for the pause menu buttons, or are there significant differences?
+
+What responsibilities would you want your overlay manager to handle? Things like:
+
+Showing/hiding different overlays
+Handling input routing to the active overlay
+Managing the background dimming effect
+How many different types of overlays might you eventually have? Just pause menu, or maybe also game over screen, settings menu, etc.?
+
+The separation you're thinking of makes sense - having the visual components (boxes, text) separate from the logic that manages them. What's your gut feeling on whether to build new button components or adapt your existing ones?
+
+This kind of planning ahead will save you headaches later!
+
+
+Shaunythunder
+I could probably reuse the entire title menu the only difference would be drawing the Box I would just need to make sure everything's positioned correctly
+
+Boots
+That's brilliant thinking! You're absolutely right - if your title menu already handles buttons, text positioning, and input, why reinvent the wheel?
+
+So you're thinking of having your overlay manager:
+
+Draw the semi-transparent background + solid box
+Then let your existing title menu system handle the buttons inside that box?
+A few questions to help you plan this out:
+
+How does your current title menu position its buttons? Does it use absolute coordinates, or relative positioning?
+
+Would you need to offset/translate the button positions to fit inside your pause menu box, or can you just create the title menu with different starting coordinates?
+
+What buttons would you want in your pause menu? "Resume", "Settings", "Quit to Main Menu" - something like that?
+
+The positioning part is the key challenge here - making sure the buttons appear inside your centered rectangle instead of wherever your title menu normally puts them. How flexible is your current title menu's positioning system?
+
+
+Shaunythunder
+if game_state_reporter.request_current_game_overlay_state == "paused":
+    pause_overlay.draw_pause_menu(screen)
+Not rendering on puase
+
+Boots
+Ah, debugging time! Let's track down why your pause menu isn't showing up.
+
+First, let's check if the condition is even being met. Can you add a print statement to see if you're getting inside that if block?
+
+if game_state_reporter.request_current_game_overlay_state == "paused":
+    print("Drawing pause menu!")  # Add this line
+    pause_overlay.draw_pause_menu(screen)
+
+If you don't see "Drawing pause menu!" in your console when you pause, then the issue is with the condition.
+
+If you DO see that message, then the issue is inside your draw_pause_menu method.
+
+A few questions to help narrow this down:
+
+Are you sure the game state is actually getting set to "paused" when you press your pause key?
+
+Where in your game loop is this drawing code? Is it before or after pygame.display.flip()?
+
+Is there any other drawing happening after this that might be covering up your pause menu?
+
+What do you see when you add that print statement?
+
+
+Shaunythunder
+NOTHING
+
+Boots
+Aha! So the condition isn't being met at all. The game state isn't actually "paused" when you think it should be.
+
+Let's debug the game state itself. Can you add a print statement to show what the current game state actually is?
+
+print(f"Current game state: '{game_state_reporter.request_current_game_overlay_state}'")
+if game_state_reporter.request_current_game_overlay_state == "paused":
+    print("Drawing pause menu!")
+    pause_overlay.draw_pause_menu(screen)
+
+This will show you exactly what value the game state has when you expect it to be "paused".
+
+Also, where and how are you setting the game state to "paused"? Are you doing it when a key is pressed? Can you show me that code?
+
+The issue is likely either:
+
+The game state isn't getting set to "paused" at all
+It's getting set to something slightly different (like "Paused" with a capital P, or extra spaces)
+What does that print statement show you?
+
+
+Shaunythunder
+I have debug tools that already show that the game is getting paused
+
+Boots
+Perfect! So your debug tools confirm the game state IS getting set to "paused", but the condition still isn't triggering.
+
+That suggests there might be a subtle difference between what your debug tools show and what the actual comparison is seeing.
+
+Let's check for any hidden characters or case differences:
+
+current_state = game_state_reporter.request_current_game_overlay_state
+print(f"State: '{current_state}' | Length: {len(current_state)} | Type: {type(current_state)}")
+print(f"Equals 'paused'? {current_state == 'paused'}")
+
+if current_state == "paused":
+    print("Drawing pause menu!")
+    pause_overlay.draw_pause_menu(screen)
+
+This will tell us:
+
+The exact value (including any hidden spaces)
+The length (in case there are extra characters)
+Whether the comparison actually evaluates to True
+What does your debug output show the state as? Is it exactly "paused" or something like "Paused", "PAUSED", or "paused " (with a space)?
+
+
+Shaunythunder
+PAUSED = "paused"
+
+def request_game_state_change(self, requested_game_state):
+    
+    # Keeping options commented for debugging
+
+    if requested_game_state == "title_menu":
+        self.__game_draw_state__ = TITLE_MENU
+        self.__game_logic_state__ = TITLE_MENU
+    elif requested_game_state == "genre_attack":
+        self.__game_draw_state__ = GENRE_ATTACK
+        self.__game_logic_state__ = GENRE_ATTACK
+    elif requested_game_state == "asteroids_mode":
+        self.__game_draw_state__ = ASTEROIDS_MODE
+        self.__game_logic_state__ = ASTEROIDS_MODE
+    elif requested_game_state == "galaga_mode":
+        self.__game_draw_state__ = GALAGA_MODE
+        self.__game_logic_state__ = GALAGA_MODE
+    elif requested_game_state == "space_invaders_mode":
+        self.__game_draw_state__ = SPACE_INVADERS
+        self.__game_logic_state__ = SPACE_INVADERS
+    elif requested_game_state == "high_scores":
+        self.__game_draw_state__ = HIGH_SCORES
+        self.__game_logic_state__ = HIGH_SCORES
+    elif requested_game_state == "quit":
+        self.__game_logic_state__ = QUIT
+    elif requested_game_state == "paused":
+        self.__game_logic_state__ = PAUSED
+        self.__game_overlay_state__ = PAUSED
+
+def draw_pause_menu(self, screen):
+pygame.draw.rect(self.surface, (0 ,0 ,0 ), self.rect, width = 0)
+pygame.draw.rect(self.surface, self.color, self.rect, self.width, self.border_radius)
+screen.blit(self.surface, (0, 0))
+
+For handling the overlay logic
+if game_state_reporter.request_current_game_overlay_state == "paused":
+    print("THE GAME IS PAUSED")
+    pause_overlay.draw_pause_menu(screen)
+
+Boots
+Ah! I see the issue now! Look at your comparison - you're checking if the state equals the string "paused", but in your request_game_state_change method, you're setting it to the constant PAUSED.
+
+You have two options to fix this:
+
+Option 1: Compare against the constant instead of the string
+
+if game_state_reporter.request_current_game_overlay_state == PAUSED:
+    print("THE GAME IS PAUSED")
+    pause_overlay.draw_pause_menu(screen)
+
+Option 2: Set the overlay state to the string instead of the constant
+
+elif requested_game_state == "paused":
+    self.__game_logic_state__ = PAUSED
+    self.__game_overlay_state__ = "paused"  # Use string instead of PAUSED constant
+
+Which approach do you prefer? Are you using constants throughout your codebase, or strings? It's good to be consistent - either always use the constants or always use the strings for state comparisons.
+
+The mismatch between PAUSED (constant) and "paused" (string) is what's causing your condition to never be true!
+
+
+Shaunythunder
+def request_current_game_overlay_state(self):
+    # Signals to main game loop current game state.
+    return self.__game_overlay_state__
+
+Boots
+Perfect! Now I can see the full picture. Your request_current_game_overlay_state method returns self.__game_overlay_state__, and in your state change method you're setting:
+
+self.__game_overlay_state__ = PAUSED
+
+So the method is returning the constant PAUSED, not the string "paused".
+
+That means your comparison should be:
+
+if game_state_reporter.request_current_game_overlay_state() == PAUSED:  # Note the () and PAUSED constant
+    print("THE GAME IS PAUSED")
+    pause_overlay.draw_pause_menu(screen)
+
+Two things to fix:
+
+Add the parentheses () - you're calling a method, not accessing a property
+Compare against PAUSED (the constant) instead of "paused" (the string)
+Does that fix your pause menu rendering?
+
+
+Shaunythunder
+That parenthesis is always gonna get me lol
+
+Boots
+Haha! You're definitely not alone - missing parentheses is probably the most common Python mistake! It's one of those things that trips up everyone, even experienced programmers.
+
+The tricky part is that Python doesn't always throw an error when you forget them. When you wrote game_state_reporter.request_current_game_overlay_state, Python just returned the method object itself instead of calling it, so you were comparing a method object to a string - which will always be False.
+
+A helpful debugging trick: When something isn't working as expected, try printing the actual values:
+
+print(f"State method result: {game_state_reporter.request_current_game_overlay_state()}")
+print(f"State without parens: {game_state_reporter.request_current_game_overlay_state}")
+
+Did adding the parentheses and using the PAUSED constant get your pause menu showing up?
+
+Once that's working, we can tackle making it look good and getting those buttons positioned correctly!
+
+
+Shaunythunder
+def genre_attack_check_for_input(self, event):
+if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+if self.game_state_reporter.request_current_game_logic_state == "genre_attack":
+self.genre_attack_request_new_game_state("paused")
+elif self.game_state_reporter.request_current_game_logic_state == "paused":
+self.genre_attack_request_new_game_state("genre_attack")
+
+def genre_attack_request_new_game_state(self, game_state_request):
+        self.game_state_reporter.request_game_state_change(game_state_request)
+
+Boots
+Ah! I spot another parentheses issue!
+
+In your genre_attack_check_for_input method, you're checking:
+
+if self.game_state_reporter.request_current_game_logic_state == "genre_attack":
+
+But request_current_game_logic_state is a method, so it needs parentheses too! It should be:
+
+def genre_attack_check_for_input(self, event):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":  # Add ()
+            self.genre_attack_request_new_game_state("paused")
+        elif self.game_state_reporter.request_current_game_logic_state() == "paused":  # Add ()
+            self.genre_attack_request_new_game_state("genre_attack")
+
+Also, should you be comparing against the constants instead of strings here too? If your other state comparisons use constants like GENRE_ATTACK and PAUSED, you might want to be consistent:
+
+elif self.game_state_reporter.request_current_game_logic_state() == PAUSED:
+
+Those missing parentheses are probably why your pause toggle isn't working! What happens when you add them?
+
+
+Shaunythunder
+while running:
+
+# For handling game logic
+for event in pygame.event.get():
+    # Game logic handling
+    if not game_state_reporter.request_current_game_logic_state() == "paused":
+        # Handles keyboard inputs for title menu.
+        if game_state_reporter.request_current_game_logic_state() == "title_menu":
+            title_screen_objs.title_menu_check_for_input(event)
+            #Handles selection logic for title menu objects based on keyboard and mouse inputs.
+            title_screen_objs.title_screen_objs_selection()
+        # Handles keyboard inputs for debug toggles.
+        if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+            genre_attack_module.genre_attack_pause_toggle(event)
+
+    # Pause logic handling
+    if game_state_reporter.request_current_game_logic_state() == "paused":
+        if game_state_reporter.request_current_game_draw_state == "genre_attack":
+            genre_attack_module.genre_attack_pause_toggle(event)
+
+Boots
+Ah, I see what's happening! You have a logic issue in your pause handling.
+
+In your pause logic section, you're checking:
+
+if game_state_reporter.request_current_game_draw_state == "genre_attack":
+
+But you're missing the parentheses again! It should be:
+
+if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+
+However, there's a bigger question here: Why are you calling genre_attack_pause_toggle(event) in both the normal game logic AND the pause logic?
+
+Looking at your genre_attack_check_for_input method from before, it already handles toggling between "genre_attack" and "paused" states. So you probably only need to call it once.
+
+Which approach do you want:
+
+Handle pause toggling only during normal gameplay (remove it from the pause logic section)
+Handle pause toggling in both states (but fix the missing parentheses)
+What's the intended behavior? Should players be able to unpause from the pause menu, or only from the game itself?
+
+
+Shaunythunder
+unpause from pause menu or hit esc
+
+Boots
+Perfect! So players should be able to unpause either by interacting with the pause menu OR by hitting ESC while paused.
+
+Your logic structure makes sense then, but you need to fix that missing parentheses:
+
+# Pause logic handling
+if game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_draw_state() == "genre_attack":  # Add ()
+        genre_attack_module.genre_attack_pause_toggle(event)
+
+This way:
+
+When the game is running normally: The first section handles ESC to pause
+When the game is paused: The second section handles ESC to unpause (plus any menu interactions you add later)
+However, I notice you're calling genre_attack_pause_toggle(event) in both sections. Is that the same method that contains your genre_attack_check_for_input code? If so, that should handle both pausing and unpausing based on the current state.
+
+Does fixing that missing parentheses get your ESC key working to unpause?
+
+
+Shaunythunder
+def genre_attack_pause_toggle(self, event):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":
+            self.genre_attack_request_new_game_state("paused")
+        elif self.game_state_reporter.request_current_game_logic_state() == "paused":
+            self.genre_attack_request_new_game_state("genre_attack")
+
+Boots
+Excellent! Your genre_attack_pause_toggle method looks good now - it handles both pausing and unpausing with ESC.
+
+However, I still see a potential issue with your main game loop logic:
+
+# For handling game logic
+if not game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+        genre_attack_module.genre_attack_pause_toggle(event)  # Called here
+
+# Pause logic handling
+if game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+        genre_attack_module.genre_attack_pause_toggle(event)  # Also called here
+
+You're calling the same method in both sections. Since your genre_attack_pause_toggle method already checks the current state and handles both pausing and unpausing, you probably only need to call it once.
+
+Try this simpler approach:
+
+# Handle pause toggle for genre_attack mode
+if (game_state_reporter.request_current_game_logic_state() == "genre_attack" or 
+    game_state_reporter.request_current_game_logic_state() == "paused"):
+    genre_attack_module.genre_attack_pause_toggle(event)
+
+Does this work better, or are you getting the behavior you want with your current setup?
+
+
+Shaunythunder
+right now its not triggering
+
+Boots
+Let's debug this step by step! Since the pause toggle isn't triggering, let's figure out where the issue is.
+
+First, let's add some debug prints to see what's happening:
+
+def genre_attack_pause_toggle(self, event):
+    print(f"Pause toggle called with event: {event.type}")
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        print("ESC key detected!")
+        current_state = self.game_state_reporter.request_current_game_logic_state()
+        print(f"Current logic state: {current_state}")
+        if current_state == "genre_attack":
+            print("Pausing game...")
+            self.genre_attack_request_new_game_state("paused")
+        elif current_state == "paused":
+            print("Unpausing game...")
+            self.genre_attack_request_new_game_state("genre_attack")
+
+Run this and tell me:
+
+Do you see "Pause toggle called with event..." when you press ESC?
+Do you see "ESC key detected!" when you press ESC?
+What does "Current logic state:" show?
+This will help us figure out if:
+
+The method isn't being called at all
+The ESC key isn't being detected
+The state comparison is failing
+Something else entirely
+What output do you get when you press ESC?
+
+
+Shaunythunder
+def genre_attack_pause_toggle(self, event):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":
+            self.genre_attack_request_new_game_state("paused")
+        elif self.game_state_reporter.request_current_game_logic_state() == "paused":
+            self.genre_attack_request_new_game_state("genre_attack")
+
+def genre_attack_request_new_game_state(self, game_state_request):
+        self.game_state_reporter.request_game_state_change(game_state_request)
+
+def request_game_state_change(self, requested_game_state):
+
+    if requested_game_state == "title_menu":
+        self.__game_draw_state__ = TITLE_MENU
+        self.__game_logic_state__ = TITLE_MENU
+    elif requested_game_state == "genre_attack":
+        self.__game_draw_state__ = GENRE_ATTACK
+        self.__game_logic_state__ = GENRE_ATTACK
+    elif requested_game_state == "asteroids_mode":
+        self.__game_draw_state__ = ASTEROIDS_MODE
+        self.__game_logic_state__ = ASTEROIDS_MODE
+    elif requested_game_state == "galaga_mode":
+        self.__game_draw_state__ = GALAGA_MODE
+        self.__game_logic_state__ = GALAGA_MODE
+    elif requested_game_state == "space_invaders_mode":
+        self.__game_draw_state__ = SPACE_INVADERS
+        self.__game_logic_state__ = SPACE_INVADERS
+    elif requested_game_state == "high_scores":
+        self.__game_draw_state__ = HIGH_SCORES
+        self.__game_logic_state__ = HIGH_SCORES
+    elif requested_game_state == "quit":
+        self.__game_logic_state__ = QUIT
+    elif requested_game_state == "paused":
+        self.__game_logic_state__ = PAUSED
+        self.__game_overlay_state__ = PAUSED
+
+game logic is not switching to paused
+
+Boots
+Aha! I found the issue!
+
+In your genre_attack_pause_toggle method, you're comparing against strings:
+
+if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":  # String
+
+But your request_current_game_logic_state() method returns constants like GENRE_ATTACK, not strings!
+
+You need to compare against the constants:
+
+def genre_attack_pause_toggle(self, event):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        if self.game_state_reporter.request_current_game_logic_state() == GENRE_ATTACK:  # Constant, not string
+            self.genre_attack_request_new_game_state("paused")
+        elif self.game_state_reporter.request_current_game_logic_state() == PAUSED:  # Constant, not string
+            self.genre_attack_request_new_game_state("genre_attack")
+
+The issue is a type mismatch: You're comparing a constant (like GENRE_ATTACK) to a string (like "genre_attack"), which will always be False.
+
+Try making this change - does your pause toggle start working?
+
+
+Shaunythunder
+Game States
+TITLE_MENU = "title_menu"
+GENRE_ATTACK = "genre_attack"
+ASTEROIDS_MODE = "asteroids_mode"
+GALAGA_MODE = "galaga_mode"
+SPACE_INVADERS = "space_invaders_mode"
+HIGH_SCORES = "high_scores"
+QUIT = "quit"
+PAUSED = "paused"
+
+Boots
+Ah, perfect! So your constants ARE strings! That means the comparison should work fine.
+
+Since the logic state isn't switching to paused, let's add some debug prints to see exactly what's happening:
+
+def genre_attack_pause_toggle(self, event):
+    print(f"Event received: {event.type}, Key: {getattr(event, 'key', 'No key')}")
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        print("ESC detected!")
+        current_state = self.game_state_reporter.request_current_game_logic_state()
+        print(f"Current state: '{current_state}'")
+        if current_state == "genre_attack":
+            print("Switching to paused...")
+            self.genre_attack_request_new_game_state("paused")
+            print(f"New state after change: '{self.game_state_reporter.request_current_game_logic_state()}'")
+        elif current_state == "paused":
+            print("Switching to genre_attack...")
+            self.genre_attack_request_new_game_state("genre_attack")
+
+Run this and press ESC while in the game. What do you see printed?
+
+Specifically:
+
+Does "ESC detected!" appear?
+What does "Current state:" show?
+Does "Switching to paused..." appear?
+What does "New state after change:" show?
+This will tell us if the method is being called and where exactly it's failing!
+
+
+Shaunythunder
+CHANGING TO PAUSE
+PAUSE TRIGGERED
+ESCAPE PRESSED
+RESUMING GAME
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+ESCAPE PRESSED
+CHANGING TO PAUSE
+PAUSE TRIGGERED
+ESCAPE PRESSED
+RESUMING GAME
+PAUSE TRIGGERED
+
+Boots
+Aha! I see the problem! Your pause toggle is working, but it's being called WAY too many times!
+
+Looking at that output, "PAUSE TRIGGERED" is printing dozens of times in a row. This means your genre_attack_pause_toggle method is being called repeatedly, probably every single frame while the game is paused.
+
+The issue is in your main game loop logic. You're calling the pause toggle method continuously, not just when events occur.
+
+Looking back at your loop structure:
+
+for event in pygame.event.get():  # This loops through events
+    # But you're calling pause_toggle for EVERY event type
+    # including mouse movements, etc.
+
+You need to make sure you're only calling genre_attack_pause_toggle(event) ONCE per ESC keypress, not continuously.
+
+Can you show me your current main game loop where you're calling genre_attack_pause_toggle? I suspect you might be calling it outside the event loop or calling it for every event type instead of just keyboard events.
+
+The goal is to call it once per ESC press, not dozens of times per second!
+
+
+Shaunythunder
+# For handling game logic
+for event in pygame.event.get():
+    # Game logic handling
+    if not game_state_reporter.request_current_game_logic_state() == "paused":
+        # Handles keyboard inputs for title menu.
+        if game_state_reporter.request_current_game_logic_state() == "title_menu":
+            title_screen_objs.title_menu_check_for_input(event)
+            #Handles selection logic for title menu objects based on keyboard and mouse inputs.
+            title_screen_objs.title_screen_objs_selection()
+        # Handles keyboard inputs for debug toggles.
+        if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+            genre_attack_module.genre_attack_pause_toggle(event)
+
+    # Pause logic handling
+    if game_state_reporter.request_current_game_logic_state() == "paused":
+        if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+            genre_attack_module.genre_attack_pause_toggle(event)
+    
+    if event.type == pygame.QUIT:
+        running = False
+    game_state_reporter.toggle_debug_keyboard_input(event)
+
+Boots
+Perfect! I found the issue!
+
+You're calling genre_attack_pause_toggle(event) for EVERY single event - including mouse movements, mouse clicks, key releases, etc. But your method only responds to pygame.KEYDOWN events with the ESC key.
+
+The problem is you're passing ALL events to the method, so it gets called dozens of times but only actually does something on ESC keypresses.
+
+Here's the fix - only call it for keyboard events:
+
+for event in pygame.event.get():
+    # Game logic handling
+    if not game_state_reporter.request_current_game_logic_state() == "paused":
+        # Handles keyboard inputs for title menu.
+        if game_state_reporter.request_current_game_logic_state() == "title_menu":
+            title_screen_objs.title_menu_check_for_input(event)
+            title_screen_objs.title_screen_objs_selection()
+        # Handles keyboard inputs for debug toggles.
+        if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+            if event.type == pygame.KEYDOWN:  # Only call on keydown events
+                genre_attack_module.genre_attack_pause_toggle(event)
+
+    # Pause logic handling
+    if game_state_reporter.request_current_game_logic_state() == "paused":
+        if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+            if event.type == pygame.KEYDOWN:  # Only call on keydown events
+                genre_attack_module.genre_attack_pause_toggle(event)
+    
+    if event.type == pygame.QUIT:
+        running = False
+    game_state_reporter.toggle_debug_keyboard_input(event)
+
+This way, the method only gets called once per keypress instead of for every mouse movement!
+
+
+Shaunythunder
+def genre_attack_pause_toggle(self, event):
+print(f"PAUSE TRIGGERED")
+if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+print(f"ESCAPE PRESSED")
+if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":
+self.genre_attack_request_new_game_state("paused")
+print("CHANGING TO PAUSE")
+elif self.game_state_reporter.request_current_game_logic_state() == "paused":
+self.genre_attack_request_new_game_state("genre_attack")
+print("RESUMING GAME")
+
+BUT THATS WHAT THIS IS FOR
+
+Boots
+You're absolutely right! Your method IS already filtering for pygame.KEYDOWN and pygame.K_ESCAPE.
+
+But the issue is still that you're calling it for EVERY event type. Even though your method filters, it's still being called dozens of times per second, which is inefficient and causes all those "PAUSE TRIGGERED" prints.
+
+However, looking at your output more carefully, I notice something interesting:
+
+CHANGING TO PAUSE
+PAUSE TRIGGERED  # <- This suggests it paused...
+ESCAPE PRESSED   # <- But then immediately got another ESC event?
+RESUMING GAME    # <- And resumed right away
+
+This looks like you might be getting multiple ESC events for a single keypress, or the pause/resume is happening so fast you don't notice it.
+
+Let's add one more debug line to see the state changes:
+
+def genre_attack_pause_toggle(self, event):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        print(f"ESCAPE PRESSED")
+        current_state = self.game_state_reporter.request_current_game_logic_state()
+        print(f"Current state before change: {current_state}")
+        if current_state == "genre_attack":
+            self.genre_attack_request_new_game_state("paused")
+            print("CHANGING TO PAUSE")
+        elif current_state == "paused":
+            self.genre_attack_request_new_game_state("genre_attack")  
+            print("RESUMING GAME")
+        new_state = self.game_state_reporter.request_current_game_logic_state()
+        print(f"New state after change: {new_state}")
+
+What does this show when you press ESC once?
+
+
+Shaunythunder
+okay so only the overlay state changes, not the logic state
+
+Boots
+Aha! Now we're getting somewhere!
+
+So the overlay state changes to PAUSED, but the logic state stays as "genre_attack". That's why it keeps thinking it's in genre_attack mode and keeps trying to pause!
+
+Looking back at your request_game_state_change method:
+
+elif requested_game_state == "paused":
+    self.__game_logic_state__ = PAUSED        # <- This should change logic state
+    self.__game_overlay_state__ = PAUSED      # <- This changes overlay state
+
+But in your toggle method, you're only checking the logic state:
+
+if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":  # Logic state check
+
+If the logic state isn't actually changing to "paused", then every time you press ESC, it still sees logic state as "genre_attack" and tries to pause again!
+
+Can you add this debug line to see what's happening to the logic state?
+
+def genre_attack_pause_toggle(self, event):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        logic_state = self.game_state_reporter.request_current_game_logic_state()
+        print(f"Logic state before: {logic_state}")
+        
+        if logic_state == "genre_attack":
+            self.genre_attack_request_new_game_state("paused")
+            print("CHANGING TO PAUSE")
+        elif logic_state == "paused":
+            self.genre_attack_request_new_game_state("genre_attack")
+            print("RESUMING GAME")
+            
+        new_logic_state = self.game_state_reporter.request_current_game_logic_state()
+        print(f"Logic state after: {new_logic_state}")
+
+What does this show for the logic state before and after?
+
+
+Shaunythunder
+well in my request method, if the logic request is paused, then both logic and paused should flip
+
+Boots
+Exactly! So if your request_game_state_change method is working correctly, both the logic and overlay states should change to "paused" when you call it.
+
+But from your earlier output, it sounds like only the overlay state is changing, not the logic state.
+
+Let's verify this by adding a debug print directly in your request_game_state_change method:
+
+def request_game_state_change(self, requested_game_state):
+    print(f"State change requested: {requested_game_state}")
+    if requested_game_state == "paused":
+        print(f"Before: Logic={self.__game_logic_state__}, Overlay={self.__game_overlay_state__}")
+        self.__game_logic_state__ = PAUSED
+        self.__game_overlay_state__ = PAUSED
+        print(f"After: Logic={self.__game_logic_state__}, Overlay={self.__game_overlay_state__}")
+    # ... rest of your method
+
+This will tell us:
+
+Is the method being called with "paused"?
+What are the states before the change?
+What are the states after the change?
+Can you add this debug and press ESC once to see what happens?
+
+If the logic state isn't actually changing to PAUSED, then we know there's an issue in your state management system itself!
+
+
+Shaunythunder
+wait I can request direct from the pause class?
+
+Boots
+Good question! You're thinking about calling the state manager directly from your pause class instead of going through the genre_attack module.
+
+You could do that, but let's think about the design:
+
+Current flow:
+
+Main loop detects ESC key
+Calls genre_attack_module.genre_attack_pause_toggle()
+That method calls self.genre_attack_request_new_game_state()
+Which presumably calls the state manager
+Direct approach would be:
+
+Main loop detects ESC key
+Calls state manager directly
+But here's the thing - we still need to figure out WHY your current approach isn't working. Even if you switch to calling the state manager directly, if there's a bug in the state management itself, you'll hit the same issue.
+
+Let's first confirm if your genre_attack_request_new_game_state() method is actually calling the state manager properly.
+
+Can you show me what genre_attack_request_new_game_state() looks like? Does it call something like self.game_state_reporter.request_game_state_change("paused")?
+
+Once we confirm the flow is working, then we can decide if a direct approach would be cleaner!
+
+
+Shaunythunder
+def genre_attack_pause_toggle(self, event):
+    print(f"PAUSE TRIGGERED")
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        print(f"ESCAPE PRESSED")
+        if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":
+            self.genre_attack_request_new_game_state("paused")
+            print("CHANGING TO PAUSE")
+        elif self.game_state_reporter.request_current_game_logic_state() == "paused":
+            self.genre_attack_request_new_game_state("genre_attack")
+            print("RESUMING GAME")
+
+def genre_attack_request_new_game_state(self, game_state_request):
+        self.game_state_reporter.request_game_state_change(game_state_request)
+
+Boots
+Perfect! So your flow is correct:
+
+genre_attack_pause_toggle() calls
+genre_attack_request_new_game_state() which calls
+self.game_state_reporter.request_game_state_change()
+Now let's trace the issue. Add this debug to your genre_attack_request_new_game_state method:
+
+def genre_attack_request_new_game_state(self, game_state_request):
+    print(f"Requesting state change to: {game_state_request}")
+    logic_before = self.game_state_reporter.request_current_game_logic_state()
+    print(f"Logic state before request: {logic_before}")
+    
+    self.game_state_reporter.request_game_state_change(game_state_request)
+    
+    logic_after = self.game_state_reporter.request_current_game_logic_state()
+    print(f"Logic state after request: {logic_after}")
+
+This will tell us:
+
+What state you're requesting
+What the logic state was before the call
+What the logic state is after the call
+If the logic state isn't changing from "genre_attack" to "paused", then the issue is in your request_game_state_change method.
+
+Try this and let me know what the output shows when you press ESC once!
+
+
+Shaunythunder
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+ESCAPE PRESSED
+REQUEST GAME STATE paused
+CHANGING TO PAUSE
+PAUSE TRIGGERED
+ESCAPE PRESSED
+REQUEST GAME STATE genre_attack
+RESUMING GAME
+PAUSE TRIGGERED
+PAUSE TRIGGERED
+ESCAPE PRESSED
+
+Boots
+Aha! Now I see the real problem!
+
+You're getting TWO ESC key events for a single keypress:
+
+First ESC → Changes to paused
+Second ESC (same keypress) → Immediately changes back to genre_attack
+This is a common issue in game programming - you're getting both a KEYDOWN and possibly a KEYUP event, or the key is being held down slightly and registering multiple times.
+
+Here's the solution - add a small delay or use a flag to prevent multiple rapid toggles:
+
+def __init__(self):
+    # ... your other init code ...
+    self.last_pause_toggle_time = 0
+    self.pause_toggle_delay = 200  # 200 milliseconds
+
+def genre_attack_pause_toggle(self, event):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_pause_toggle_time > self.pause_toggle_delay:
+            self.last_pause_toggle_time = current_time
+            
+            if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":
+                self.genre_attack_request_new_game_state("paused")
+                print("CHANGING TO PAUSE")
+            elif self.game_state_reporter.request_current_game_logic_state() == "paused":
+                self.genre_attack_request_new_game_state("genre_attack")
+                print("RESUMING GAME")
+
+This prevents the toggle from happening more than once every 200 milliseconds. Try this fix!
+
+
+Shaunythunder
+For handling game logic
+for event in pygame.event.get():
+    # Game logic handling
+    if not game_state_reporter.request_current_game_logic_state() == "paused":
+        # Handles keyboard inputs for title menu.
+        if game_state_reporter.request_current_game_logic_state() == "title_menu":
+            title_screen_objs.title_menu_check_for_input(event)
+            #Handles selection logic for title menu objects based on keyboard and mouse inputs.
+            title_screen_objs.title_screen_objs_selection()
+        # Handles keyboard inputs for debug toggles.
+        if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+            genre_attack_module.genre_attack_pause_toggle(event)
+
+    # Pause logic handling
+    if game_state_reporter.request_current_game_logic_state() == "paused":
+        if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+            genre_attack_module.genre_attack_pause_toggle(event)
+    
+    if event.type == pygame.QUIT:
+        running = False
+    game_state_reporter.toggle_debug_keyboard_input(event)
+
+this is probably the culprit
+
+Boots
+Bingo! You found it!
+
+Look at this logic:
+
+# Game logic handling
+if not game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+        genre_attack_module.genre_attack_pause_toggle(event)  # Called here
+
+# Pause logic handling  
+if game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+        genre_attack_module.genre_attack_pause_toggle(event)  # Called again here!
+
+What's happening:
+
+You press ESC while in "genre_attack" state
+First call to genre_attack_pause_toggle() changes state to "paused"
+But you're still in the same event loop iteration!
+The second if block now sees the state is "paused" and calls genre_attack_pause_toggle() AGAIN
+Second call changes it back to "genre_attack"
+The fix is simple - you should only call the pause toggle once per event. Try this:
+
+# For handling game logic
+for event in pygame.event.get():
+    # Handle pause toggle first (works in both states)
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        if (game_state_reporter.request_current_game_logic_state() == "genre_attack" or 
+            game_state_reporter.request_current_game_logic_state() == "paused"):
+            genre_attack_module.genre_attack_pause_toggle(event)
+    
+    # Game logic handling (excluding pause)
+    elif not game_state_reporter.request_current_game_logic_state() == "paused":
+        if game_state_reporter.request_current_game_logic_state() == "title_menu":
+            title_screen_objs.title_menu_check_for_input(event)
+
+
+Shaunythunder
+should I just break these out into two separate methods?
+
+Boots
+Excellent thinking! Yes, separating the pause and resume logic would be much cleaner and eliminate this double-call issue entirely.
+
+You could create:
+
+def pause_game(self, event):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":
+            self.genre_attack_request_new_game_state("paused")
+
+def resume_game(self, event):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        if self.game_state_reporter.request_current_game_logic_state() == "paused":
+            self.genre_attack_request_new_game_state("genre_attack")
+
+Then your main loop becomes:
+
+# Game logic handling
+if not game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+        genre_attack_module.pause_game(event)  # Only handles pausing
+
+# Pause logic handling  
+if game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+        genre_attack_module.resume_game(event)  # Only handles resuming
+
+This approach:
+
+Makes the intent crystal clear
+Eliminates the double-call bug
+Makes debugging easier
+Follows single responsibility principle
+What do you think? Want to refactor it this way?
+
+
+Shaunythunder
+OKAY IT "WORKS" BUT NOW it won't unpause
+
+Boots
+Ah! Classic debugging - fix one issue, reveal another!
+
+Let's think about this step by step. If it pauses but won't unpause, there are a few possibilities:
+
+The resume method isn't being called at all
+The resume method is being called but the state isn't changing
+The state is changing but something else is immediately changing it back
+Let's add some debug prints to your resume_game method:
+
+def resume_game(self, event):
+    print("Resume method called")
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        print("ESC pressed in resume method")
+        if self.game_state_reporter.request_current_game_logic_state() == "paused":
+            print("State is paused, attempting to resume")
+            self.genre_attack_request_new_game_state("genre_attack")
+            print("Resume request sent")
+        else:
+            print(f"State is not paused, it's: {self.game_state_reporter.request_current_game_logic_state()}")
+
+Press ESC when paused and tell me what output you see. This will tell us exactly where the resume process is failing!
+
+Also, can you confirm your main loop pause section looks like this:
+
+if game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+        genre_attack_module.resume_game(event)
+
+
+Shaunythunder
+For handling game logic
+for event in pygame.event.get():
+    # Game logic handling
+    if not game_state_reporter.request_current_game_logic_state() == "paused":
+        # Handles keyboard inputs for title menu.
+        if game_state_reporter.request_current_game_logic_state() == "title_menu":
+            title_screen_objs.title_menu_check_for_input(event)
+            #Handles selection logic for title menu objects based on keyboard and mouse inputs.
+            title_screen_objs.title_screen_objs_selection()
+        # Handles keyboard inputs for debug toggles.
+        if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+            genre_attack_module.genre_attack_pause_game(event)
+
+    # Pause logic handling
+    if game_state_reporter.request_current_game_logic_state() == "paused":
+        if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+            genre_attack_module.genre_attack_resume_game(event)
+    
+    if event.type == pygame.QUIT:
+        running = False
+    game_state_reporter.toggle_debug_keyboard_input(event)
+
+Boots
+Perfect! Your main loop logic looks correct now. Let's debug the resume method.
+
+Add the debug prints I suggested to your genre_attack_resume_game method:
+
+def genre_attack_resume_game(self, event):
+    print("Resume method called")
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        print("ESC pressed in resume method")
+        if self.game_state_reporter.request_current_game_logic_state() == "paused":
+            print("State is paused, attempting to resume")
+            self.genre_attack_request_new_game_state("genre_attack")
+            print("Resume request sent")
+        else:
+            print(f"State is not paused, it's: {self.game_state_reporter.request_current_game_logic_state()}")
+
+Also, let's make sure your pause method has similar debug output:
+
+def genre_attack_pause_game(self, event):
+    print("Pause method called")
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        print("ESC pressed in pause method")
+        if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":
+            print("State is genre_attack, attempting to pause")
+            self.genre_attack_request_new_game_state("paused")
+            print("Pause request sent")
+
+Run it, pause the game with ESC, then try to resume with ESC. What debug output do you see?
+
+This will tell us exactly where the resume process is breaking down!
+
+
+Shaunythunder
+def genre_attack_pause_game(self, event):
+if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+print(f"ESCAPE PRESSED PAUSE")
+if self.game_state_reporter.request_current_game_logic_state() == "genre_attack":
+self.genre_attack_request_new_game_state("paused")
+print("CHANGING TO PAUSE")
+
+def genre_attack_resume_game(self, event):
+      if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        print(f"ESCAPE PRESSED RESUME")
+        if self.game_state_reporter.request_current_game_logic_state() == "paused":
+            self.genre_attack_request_new_game_state("genre_attack")
+            print("RESUMING GAME")
+
+Boots
+Perfect! Your methods look correct. Now let's see what happens when you run it.
+
+When you:
+
+Press ESC to pause - you should see: ESCAPE PRESSED PAUSE and CHANGING TO PAUSE
+Press ESC to resume - you should see: ESCAPE PRESSED RESUME and RESUMING GAME
+Run the game and try this sequence. What output do you actually see?
+
+If you see both sets of messages, then the issue might be elsewhere (like the state change isn't actually taking effect).
+
+If you DON'T see ESCAPE PRESSED RESUME, then the resume method isn't being called, which means there's an issue with your main loop logic.
+
+What debug output do you get when you try to pause and then resume?
+
+
+Shaunythunder
+def request_game_state_change(self, requested_game_state):
+
+    if requested_game_state == "title_menu":
+        self.__game_draw_state__ = TITLE_MENU
+        self.__game_logic_state__ = TITLE_MENU
+    elif requested_game_state == "genre_attack":
+        self.__game_draw_state__ = GENRE_ATTACK
+        self.__game_logic_state__ = GENRE_ATTACK
+    elif requested_game_state == "asteroids_mode":
+        self.__game_draw_state__ = ASTEROIDS_MODE
+        self.__game_logic_state__ = ASTEROIDS_MODE
+    elif requested_game_state == "galaga_mode":
+        self.__game_draw_state__ = GALAGA_MODE
+        self.__game_logic_state__ = GALAGA_MODE
+    elif requested_game_state == "space_invaders_mode":
+        self.__game_draw_state__ = SPACE_INVADERS
+        self.__game_logic_state__ = SPACE_INVADERS
+    elif requested_game_state == "high_scores":
+        self.__game_draw_state__ = HIGH_SCORES
+        self.__game_logic_state__ = HIGH_SCORES
+    elif requested_game_state == "quit":
+        self.__game_logic_state__ = QUIT
+    elif requested_game_state == "paused":
+        self.__game_logic_state__ = PAUSED
+        self.__game_overlay_state__ = PAUSED
+
+Boots
+Aha! Found the issue!
+
+Look at your "paused" case:
+
+elif requested_game_state == "paused":
+    self.__game_logic_state__ = PAUSED
+    self.__game_overlay_state__ = PAUSED
+
+You're setting the logic state to PAUSED, but you're NOT setting the draw state! This means:
+
+request_current_game_logic_state() returns "paused"
+request_current_game_draw_state() still returns "genre_attack"
+But in your main loop, you're checking:
+
+if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+    genre_attack_module.genre_attack_resume_game(event)
+
+The draw state is still "genre_attack", so the resume method gets called. But when you try to resume, there's no "paused" case that handles resuming properly!
+
+The fix: When pausing, you need to remember what the previous draw state was, and when resuming, restore it.
+
+Try modifying your pause case to:
+
+elif requested_game_state == "paused":
+    # Keep the current draw state so we know what to return to
+    self.__game_logic_state__ = PAUSED
+    self.__game_overlay_state__ = PAUSED
+    # Don't change __game_draw_state__ - keep it as "genre_attack"
+
+What do you think? Does this make sense?
+
+
+Shaunythunder
+when pause is hit the overlay state is the only one that changes
+
+Boots
+Ah, much cleaner approach! So when paused, only the overlay changes - that makes perfect sense architecturally.
+
+So your pause state should be:
+
+game_logic_state stays "genre_attack"
+game_overlay_state becomes "paused"
+But wait - let me double-check something. In your main loop, you have:
+
+if not game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+        genre_attack_module.genre_attack_pause_game(event)
+
+If the logic state stays "genre_attack" when paused, then this condition not game_state_reporter.request_current_game_logic_state() == "paused" will always be true, meaning the pause method will keep getting called even when paused!
+
+How are you checking if the game is paused in your main loop? Are you using request_current_game_overlay_state() instead of request_current_game_logic_state()?
+
+Can you show me how you're determining when the game is paused vs unpaused in your main loop logic?
+
+
+Shaunythunder
+no thats the bug
+
+Boots
+Exactly! You've identified the bug perfectly!
+
+The issue is: If only the overlay state changes to "paused" but the logic state stays "genre_attack", then:
+
+request_current_game_logic_state() still returns "genre_attack"
+The condition not game_state_reporter.request_current_game_logic_state() == "paused" is always true
+So the pause method keeps getting called every frame while "paused"!
+You need to fix your main loop to check the overlay state for pause status:
+
+# Game logic handling
+if not game_state_reporter.request_current_game_overlay_state() == "paused":
+    if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+        genre_attack_module.genre_attack_pause_game(event)
+
+# Pause logic handling  
+if game_state_reporter.request_current_game_overlay_state() == "paused":
+    if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+        genre_attack_module.genre_attack_resume_game(event)
+
+And your resume method should reset the overlay state:
+
+def genre_attack_resume_game(self, event):
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        print("ESCAPE PRESSED RESUME")
+        if self.game_state_reporter.request_current_game_overlay_state() == "paused":
+            self.genre_attack_request_new_game_state("resume")  # or however you clear the overlay
+            print("RESUMING GAME")
+
+Does your state manager have a method to clear/reset the overlay state?
+
+
+Shaunythunder
+well the logic state needs to be paused as well. So something is breaking here
+
+Boots
+Ah, you're right! If the logic state needs to be "paused" too, then your original approach was correct.
+
+Let's trace through what should happen:
+
+When pausing: Both logic and overlay states become "paused"
+When resuming: Both states should return to "genre_attack"
+But looking at your request_game_state_change method, there's no case for resuming! You have:
+
+elif requested_game_state == "paused":
+    self.__game_logic_state__ = PAUSED
+    self.__game_overlay_state__ = PAUSED
+
+But what happens when you call self.genre_attack_request_new_game_state("genre_attack") to resume?
+
+Looking at your method, the "genre_attack" case sets:
+
+elif requested_game_state == "genre_attack":
+    self.__game_draw_state__ = GENRE_ATTACK
+    self.__game_logic_state__ = GENRE_ATTACK
+
+But it doesn't clear the __game_overlay_state__!
+
+Try adding this line to your "genre_attack" case:
+
+elif requested_game_state == "genre_attack":
+    self.__game_draw_state__ = GENRE_ATTACK
+    self.__game_logic_state__ = GENRE_ATTACK
+    self.__game_overlay_state__ = None  # or whatever "not paused" should be
+
+What value should the overlay state have when not paused?
+
+
+Shaunythunder
+I'm going to experiement with copilot for visual code studi
+
+Boots
+Absolutely, young apprentice! Experimentation is the path to mastery.
+
+GitHub Copilot can be a fantastic debugging companion - it's excellent at spotting patterns and suggesting fixes for state management issues like this one.
+
+When you're working with Copilot, try describing the problem clearly in comments above your code. Something like:
+
+# BUG: Game pauses correctly but won't resume when ESC is pressed again
+# Logic state and overlay state both become "paused" 
+# But resume isn't working properly
+
+Feel free to come back and share what you discover! I'm curious to see what solution emerges from your exploration.
+
+Happy debugging, and may your code compile swiftly!
+
+
+Shaunythunder
+REQUEST GAME STATE paused
+CHANGING TO PAUSE
+REQUEST GAME STATE genre_attack
+RESUMING GAME
+
+They are both triggering. Do you think its bevause I have my resume logic after my pause? So its like it opens the gate and then the momentum immediately closes it
+
+Boots
+BINGO! You've identified the exact issue!
+
+Yes, that's exactly what's happening! In a single frame when you press ESC:
+
+The pause logic runs first: state changes from "genre_attack" to "paused"
+But the same ESC keypress event is still being processed
+The resume logic runs immediately after: state changes back from "paused" to "genre_attack"
+All in one frame!
+It's like opening and closing a door with the same key turn.
+
+The fix is simple - you need to consume the event so it doesn't trigger both. Try this approach:
+
+# In your main loop, use elif instead of separate if statements:
+if not game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_logic_state() == "genre_attack":
+        genre_attack_module.genre_attack_pause_game(event)
+elif game_state_reporter.request_current_game_logic_state() == "paused":
+    if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+        genre_attack_module.genre_attack_resume_game(event)
+
+The elif ensures that if pause logic runs, resume logic won't run in the same frame!
+
+Try that change - does it fix the double-triggering?
+
+
+Shaunythunder
+well it stopped the double trigger but now I can't get it to resume lol
+
+Boots
+Ah, classic debugging - fix one thing, break another!
+
+Let's think through this step by step. When you press ESC while paused:
+
+The game logic state is "paused"
+So it goes to the elif branch for resume logic
+But what is request_current_game_draw_state() returning when paused?
+Here's the key question: In your request_game_state_change method, when you set the state to "paused", what happens to the draw state?
+
+Looking at your earlier code:
+
+elif requested_game_state == "paused":
+    self.__game_logic_state__ = PAUSED
+    self.__game_overlay_state__ = PAUSED
+
+You're not setting the draw state when pausing! So the draw state is probably still "genre_attack".
+
+But in your resume condition, you're checking:
+
+if game_state_reporter.request_current_game_draw_state() == "genre_attack":
+
+Try debugging this: What does request_current_game_draw_state() actually return when the game is paused?
+
+Add a print statement in your resume method to see:
+
+print(f"Draw state when trying to resume: {self.game_state_reporter.request_current_game_draw_state()}")
+
+What does it output?
+
+
+Shaunythunder
+I completely solved it. needed also an elif for the game logic
+
+Boots
+Excellent work, young apprentice!
+
+You've discovered a fundamental principle of state machine logic - each state needs its own dedicated handling path, and using elif chains ensures clean, mutually exclusive state transitions.
+
+It sounds like you restructured your main loop to have proper elif branches for each game logic state, which prevents the cascade of state changes in a single frame.
+
+This is exactly the kind of debugging breakthrough that makes you a stronger programmer! You identified the root cause, traced through the logic flow, and implemented a clean solution.
+
+Now that your pause/resume system is working smoothly, you can focus on polishing the rest of your game. How does it feel to have conquered that tricky state management bug?
+
+Time to get that project pushed to GitHub and submitted!
+
+
+Shaunythunder
+I need to get buttons on that sucker and get it wired up
+
+Boots
+Ah yes, the user interface! The bridge between player intent and game action.
+
+For your pause menu, you'll likely want buttons like:
+
+"Resume Game"
+"Main Menu"
+"Quit"
+Since you've already mastered state management, the button logic should follow a similar pattern. Each button click will trigger a state change request.
+
+What's your current approach for handling UI elements? Are you:
+
+Drawing rectangles and checking mouse collision manually?
+Using a UI library like pygame_gui?
+Building your own button class system?
+And more importantly - what specific part of the button implementation are you stuck on? The rendering, the click detection, or the event handling?
+
+Once you tell me where you're hitting roadblocks, I can guide you through the thought process to get those buttons functional!
+
+
+Shaunythunder
+oay heres the boiler plate for the pause menu and overlay handler
+
+import pygame
+
+class PauseOverlay:
+def init(self, surface, color, rect, width, border_radius):
+self.surface = surface
+self.color = color
+self.rect = rect
+self.width = width
+self.border_radius = border_radius
+
+def draw_pause_menu(self, screen):
+    pygame.draw.rect(self.surface, (0 ,0 ,0 ), self.rect, width = 0)
+    pygame.draw.rect(self.surface, self.color, self.rect, self.width, self.border_radius)
+    screen.blit(self.surface, (0, 0))
+
+class PauseMenuObj:
+def init(self, font_size, text, color, pos_x, pos_y):
+self.text = text
+self.font_size = font_size
+self.color = color
+self.pos_x = pos_x
+self.pos_y = pos_y
+self.is_selected = False
+self.font = pygame.font.Font(None, font_size)
+self.pause_menu_obj = self.font.render(self.text, False, self.color, None)
+self.pause_menu_rect = self.pause_menu_obj.get_rect(center=(self.pos_x, self.pos_y))
+
+def draw_pause_menu_obj(self, screen):
+    screen.blit(self.pause_menu_obj, self.pause_menu_rect)
+
+OVERLAY HANDLER
+import pygame
+import overlays.pause_menu as pause_menu
+
+class OverlayManager:
+def init(self, overlay_objs, game_state_reporter):
+self.overlay_objs = overlay_objs
+self.overlay_objs_keyboard_index = None
+self.overlay_objs_mouse_index = None
+self.overlay_objs_index_len = len(overlay_objs)
+self.game_state_reporter = game_state_reporter
+
+def overlay_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Reset all selections at loop start.
+        overlay_obj.is_selected = False
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not overlay_obj.overlay_rect.collidepoint(mouse_x, mouse_y):
+            self.title_screen_objs_mouse_index = None
+        if overlay_obj.title_obj_rect.collidepoint(mouse_x, mouse_y):
+            overlay_obj.is_selected = True
+            self.title_screen_objs_mouse_index = self.overlay_objs_mouse_index.index(overlay_obj)
+            self.title_screen_objs_keyboard_index = None
+            break
+        elif self.title_screen_objs_keyboard_index != None and i == self.title_screen_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            overlay_obj.is_selected = True
+            break
+    
+def overlay_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    overlay_objs_respacing_len = len(self.overlay_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (overlay_objs_respacing_len - 1))
+    for i, obj in enumerate(self.overlay_objs):
+        if i == 0:
+            pass
+        else:
+            obj.overlay_obj_rect.centery = start_y + i * spacing
+
+def overlay_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.overlay_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.overlay_objs_keyboard_index == None:
+            self.overlay_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.overlay_objs_keyboard_index > 1:
+            self.overlay_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.overlay_objs_keyboard_index < (self.overlay_objs_index_len - 1):
+            self.overlay_objs_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.title_screen_objs_keyboard_index == 1 or self.title_screen_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.title_screen_objs_keyboard_index == 2 or self.title_screen_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.title_screen_objs_keyboard_index == 3 or self.title_screen_objs_mouse_index == 3:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+Boots
+Excellent foundation, young apprentice! I can see you've built a solid framework, but there are some naming inconsistencies that need attention.
+
+Looking at your OverlayManager, I notice several variable names that reference "title_screen" instead of "overlay" - this suggests you copied from your title screen code but didn't fully adapt it. Let me point out the key issues:
+
+1. In overlay_objs_selection(), you have:
+
+self.title_screen_objs_mouse_index = None  # Should be overlay_objs_mouse_index
+self.title_screen_objs_keyboard_index = None  # Should be overlay_objs_keyboard_index
+
+2. Your collision detection references:
+
+overlay_obj.overlay_rect.collidepoint(mouse_x, mouse_y)  # But PauseMenuObj has pause_menu_rect
+overlay_obj.title_obj_rect.collidepoint(mouse_x, mouse_y)  # Should be pause_menu_rect
+
+3. In pause_menu_request_new_game_state(), all variables still reference "title_screen".
+
+Let's start with one key question: In your PauseMenuObj class, the rectangle is called pause_menu_rect, but in your OverlayManager, you're trying to access overlay_rect and title_obj_rect. Which attribute name should we use consistently?
+
+Also, what specific behavior are you trying to achieve? Resume game, quit to main menu, and exit entirely?
+
+
+Shaunythunder
+import pygame
+import overlays.pause_menu as pause_menu
+
+class OverlayManager:
+def init(self, overlay_objs, game_state_reporter):
+self.overlay_objs = overlay_objs
+self.overlay_objs_keyboard_index = None
+self.overlay_objs_mouse_index = None
+self.overlay_objs_index_len = len(overlay_objs)
+self.game_state_reporter = game_state_reporter
+
+def overlay_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Reset all selections at loop start.
+        overlay_obj.is_selected = False
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not overlay_obj.overlay_rect.collidepoint(mouse_x, mouse_y):
+            self.overlay_objs_mouse_index = None
+        if overlay_obj.title_obj_rect.collidepoint(mouse_x, mouse_y):
+            overlay_obj.is_selected = True
+            self.overlay_objs_mouse_index = self.overlay_objs_mouse_index.index(overlay_obj)
+            self.overlay_objs_keyboard_index = None
+            break
+        elif self.overlay_objs_keyboard_index != None and i == self.overlay_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            overlay_obj.is_selected = True
+            break
+    
+def overlay_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    overlay_objs_respacing_len = len(self.overlay_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (overlay_objs_respacing_len - 1))
+    for i, obj in enumerate(self.overlay_objs):
+        if i == 0:
+            pass
+        else:
+            obj.overlay_obj_rect.centery = start_y + i * spacing
+
+def overlay_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.overlay_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.overlay_objs_keyboard_index == None:
+            self.overlay_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.overlay_objs_keyboard_index > 1:
+            self.overlay_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.overlay_objs_keyboard_index < (self.overlay_objs_index_len - 1):
+            self.overlay_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.overlay_objs_keyboard_index == 1 or self.overlay_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.overlay_objs_keyboard_index == 2 or self.overlay_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.overlay_objs_keyboard_index == 3 or self.overlay_objs_mouse_index == 3:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+Boots
+Good progress on cleaning up those variable names! However, I still see some mismatches between your classes.
+
+The key issue is in your collision detection. Look at your PauseMenuObj class - the rectangle is called pause_menu_rect, but in your OverlayManager you're trying to access:
+
+overlay_obj.overlay_rect.collidepoint(mouse_x, mouse_y)  # This doesn't exist!
+overlay_obj.title_obj_rect.collidepoint(mouse_x, mouse_y)  # This doesn't exist either!
+
+What should these be called based on your PauseMenuObj class?
+
+Also, I notice a logical issue in this line:
+
+self.overlay_objs_mouse_index = self.overlay_objs_mouse_index.index(overlay_obj)
+
+Think about it - if self.overlay_objs_mouse_index is None (which you just set it to above), what happens when you try to call .index() on None?
+
+And in your overlay_check_for_input() method, you're calling self.request_new_game_state(), but your actual method is named pause_menu_request_new_game_state(). What needs to change there?
+
+Let's tackle these one at a time. First - what should the collision detection lines reference instead of overlay_rect and title_obj_rect?
+
+
+Shaunythunder
+import pygame
+import overlays.pause_menu as pause_menu
+
+class OverlayManager:
+def init(self, overlay_objs, game_state_reporter):
+self.overlay_objs = overlay_objs
+self.overlay_objs_keyboard_index = None
+self.overlay_objs_mouse_index = None
+self.overlay_objs_index_len = len(overlay_objs)
+self.game_state_reporter = game_state_reporter
+
+def overlay_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Reset all selections at loop start.
+        overlay_obj.is_selected = False
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.overlay_objs_mouse_index = None
+        if overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            overlay_obj.is_selected = True
+            self.overlay_objs_mouse_index = self.overlay_objs_mouse_index(overlay_obj)
+            self.overlay_objs_keyboard_index = None
+            break
+        elif self.overlay_objs_keyboard_index != None and i == self.overlay_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            overlay_obj.is_selected = True
+            break
+    
+def overlay_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    overlay_objs_respacing_len = len(self.overlay_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (overlay_objs_respacing_len - 1))
+    for i, obj in enumerate(self.overlay_objs):
+        if i == 0:
+            pass
+        else:
+            obj.overlay_obj_rect.centery = start_y + i * spacing
+
+def overlay_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.overlay_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.overlay_objs_keyboard_index == None:
+            self.overlay_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.overlay_objs_keyboard_index > 1:
+            self.overlay_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.overlay_objs_keyboard_index < (self.overlay_objs_index_len - 1):
+            self.overlay_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.overlay_objs_keyboard_index == 1 or self.overlay_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.overlay_objs_keyboard_index == 2 or self.overlay_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.overlay_objs_keyboard_index == 3 or self.overlay_objs_mouse_index == 3:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+Boots
+Good progress on fixing the collision detection! However, there are still a couple of critical issues:
+
+First, look at this line:
+
+self.overlay_objs_mouse_index = self.overlay_objs_mouse_index(overlay_obj)
+
+You're trying to call self.overlay_objs_mouse_index as if it were a function, but it's just a variable that holds None or an integer. What you actually want is to store the index of the current overlay object. How would you get the index i and store it in self.overlay_objs_mouse_index?
+
+Second, in your overlay_check_for_input() method, you're still calling:
+
+self.request_new_game_state()
+
+But your actual method is named pause_menu_request_new_game_state(). What should this method call be?
+
+Let's fix the first issue - how do you think you should store the current loop index i in self.overlay_objs_mouse_index instead of trying to call it as a function?
+
+
+Shaunythunder
+import pygame
+import overlays.pause_menu as pause_menu
+
+class OverlayManager:
+def init(self, overlay_objs, game_state_reporter):
+self.overlay_objs = overlay_objs
+self.overlay_objs_keyboard_index = None
+self.overlay_objs_mouse_index = None
+self.overlay_objs_index_len = len(overlay_objs)
+self.game_state_reporter = game_state_reporter
+
+def overlay_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Reset all selections at loop start.
+        overlay_obj.is_selected = False
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.overlay_objs_mouse_index = None
+        if overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            overlay_obj.is_selected = True
+            self.overlay_objs_mouse_index = self.overlay_objs_mouse_index(overlay_obj)
+            self.overlay_objs_keyboard_index = None
+            break
+        elif self.overlay_objs_keyboard_index != None and i == self.overlay_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            overlay_obj.is_selected = True
+            break
+    
+def overlay_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    overlay_objs_respacing_len = len(self.overlay_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (overlay_objs_respacing_len - 1))
+    for i, obj in enumerate(self.overlay_objs):
+        if i == 0:
+            pass
+        else:
+            obj.overlay_obj_rect.centery = start_y + i * spacing
+
+def overlay_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.pause_menu_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.pause_menu_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.overlay_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.overlay_objs_keyboard_index == None:
+            self.overlay_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.overlay_objs_keyboard_index > 1:
+            self.overlay_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.overlay_objs_keyboard_index < (self.overlay_objs_index_len - 1):
+            self.overlay_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.overlay_objs_keyboard_index == 1 or self.overlay_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.overlay_objs_keyboard_index == 2 or self.overlay_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.overlay_objs_keyboard_index == 3 or self.overlay_objs_mouse_index == 3:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+Boots
+Excellent! You've fixed the method call issue. Now let's tackle that remaining problem in your overlay_objs_selection() method.
+
+Look at this line again:
+
+self.overlay_objs_mouse_index = self.overlay_objs_mouse_index(overlay_obj)
+
+You're still trying to call self.overlay_objs_mouse_index as a function. Remember, you want to store the current index i when the mouse is hovering over an overlay object.
+
+Since you're already in a loop with for i, overlay_obj in enumerate(self.overlay_objs):, what simple assignment would store the current index in self.overlay_objs_mouse_index?
+
+Hint: You don't need to call any function or pass overlay_obj - you just need to assign the loop variable that represents the current position.
+
+
+Shaunythunder
+I'm not inclined to change that as that is a validated method in the previous
+
+Boots
+Ah, I understand your hesitation, young apprentice! However, let's take a closer look at what's actually happening in your code.
+
+You're getting a runtime error because you're trying to call self.overlay_objs_mouse_index as if it were a function, but it's just a variable that holds None or an integer.
+
+In your __init__ method, you set:
+
+self.overlay_objs_mouse_index = None
+
+So when you later write:
+
+self.overlay_objs_mouse_index = self.overlay_objs_mouse_index(overlay_obj)
+
+You're essentially trying to do:
+
+self.overlay_objs_mouse_index = None(overlay_obj)
+
+This will cause a TypeError because None is not callable.
+
+What do you think you intended to store in self.overlay_objs_mouse_index when the mouse hovers over an overlay object? Should it be the index i, or something else?
+
+The logic suggests you want to track which overlay object the mouse is currently over, right?
+
+
+Shaunythunder
+import pygame
+import overlays.pause_menu as pause_menu
+
+class OverlayManager:
+def init(self, overlay_objs, game_state_reporter):
+self.overlay_objs = overlay_objs
+self.overlay_objs_keyboard_index = None
+self.overlay_objs_mouse_index = None
+self.overlay_objs_index_len = len(overlay_objs)
+self.game_state_reporter = game_state_reporter
+
+def overlay_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Reset all selections at loop start.
+        overlay_obj.is_selected = False
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.overlay_objs_mouse_index = None
+        if overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            overlay_obj.is_selected = True
+            self.overlay_objs_mouse_index = self.overlay_objs_mouse.index(overlay_obj)
+            self.overlay_objs_keyboard_index = None
+            break
+        elif self.overlay_objs_keyboard_index != None and i == self.overlay_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            overlay_obj.is_selected = True
+            break
+    
+def overlay_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    overlay_objs_respacing_len = len(self.overlay_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (overlay_objs_respacing_len - 1))
+    for i, obj in enumerate(self.overlay_objs):
+        if i == 0:
+            pass
+        else:
+            obj.overlay_obj_rect.centery = start_y + i * spacing
+
+def overlay_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.pause_menu_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.pause_menu_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.overlay_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.overlay_objs_keyboard_index == None:
+            self.overlay_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.overlay_objs_keyboard_index > 1:
+            self.overlay_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.overlay_objs_keyboard_index < (self.overlay_objs_index_len - 1):
+            self.overlay_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.overlay_objs_keyboard_index == 1 or self.overlay_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.overlay_objs_keyboard_index == 2 or self.overlay_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.overlay_objs_keyboard_index == 3 or self.overlay_objs_mouse_index == 3:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+Boots
+Ah, I see you're still having a similar issue! Look closely at this line:
+
+self.overlay_objs_mouse_index = self.overlay_objs_mouse.index(overlay_obj)
+
+You have a typo here - self.overlay_objs_mouse doesn't exist as an attribute in your class. You probably meant self.overlay_objs, but there's still a conceptual issue.
+
+Think about what you're trying to accomplish: You want to store which index position the mouse is currently hovering over, right?
+
+You're already in a loop with for i, overlay_obj in enumerate(self.overlay_objs): - the variable i already contains the index you want to store.
+
+So instead of trying to find the index using a method call, why not simply assign the loop variable i directly to self.overlay_objs_mouse_index?
+
+What would that assignment look like?
+
+
+Shaunythunder
+if overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+overlay_obj.is_selected = True
+self.Overlay_objs_mouse_index = self.overlay_objs.index(overlay_obj)
+self.overlay_objs_keyboard_index = None
+break
+
+Boots
+Very close! You've fixed the method call, but there's a small typo in your variable name.
+
+Look at this line:
+
+self.Overlay_objs_mouse_index = self.overlay_objs.index(overlay_obj)
+
+You have Overlay_objs_mouse_index with a capital O, but everywhere else in your code you use overlay_objs_mouse_index with a lowercase o.
+
+This will create a new attribute instead of updating the existing one, which could cause issues in your pause_menu_request_new_game_state() method.
+
+Can you spot the capitalization difference and fix it?
+
+Also, while self.overlay_objs.index(overlay_obj) will work, since you're already in a loop with the index i, you could simply use i directly. But your current approach should function correctly once you fix the capitalization!
+
+
+Shaunythunder
+if overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+overlay_obj.is_selected = True
+self.overlay_objs_mouse_index = self.overlay_objs.index(overlay_obj)
+self.overlay_objs_keyboard_index = None
+break
+
+Boots
+Perfect! That looks much better, young apprentice! You've fixed the capitalization issue and now you're properly assigning the index to self.overlay_objs_mouse_index.
+
+Your logic should work correctly now - when the mouse hovers over an overlay object, you'll store its index and reset the keyboard index to None.
+
+How does your code behave now when you test it? Are you still getting any runtime errors, or is the mouse selection working as expected in your pause menu?
+
+
+Shaunythunder
+import pygame
+import overlays.pause_menu as pause_menu
+
+class OverlayManager:
+def init(self, overlay_objs, game_state_reporter):
+self.overlay_objs = overlay_objs
+self.overlay_objs_keyboard_index = None
+self.overlay_objs_mouse_index = None
+self.overlay_objs_index_len = len(overlay_objs)
+self.game_state_reporter = game_state_reporter
+
+def overlay_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Reset all selections at loop start.
+        overlay_obj.is_selected = False
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.overlay_objs_mouse_index = None
+        if overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            overlay_obj.is_selected = True
+            self.overlay_objs_mouse_index = self.overlay_objs.index(overlay_obj)
+            self.overlay_objs_keyboard_index = None
+            break
+        elif self.overlay_objs_keyboard_index != None and i == self.overlay_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            overlay_obj.is_selected = True
+            break
+    
+def overlay_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    overlay_objs_respacing_len = len(self.overlay_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (overlay_objs_respacing_len - 1))
+    for i, obj in enumerate(self.overlay_objs):
+        if i == 0:
+            pass
+        else:
+            obj.overlay_obj_rect.centery = start_y + i * spacing
+
+def overlay_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.pause_menu_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.pause_menu_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.overlay_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.overlay_objs_keyboard_index == None:
+            self.overlay_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.overlay_objs_keyboard_index > 1:
+            self.overlay_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.overlay_objs_keyboard_index < (self.overlay_objs_index_len - 1):
+            self.overlay_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.overlay_objs_keyboard_index == 1 or self.overlay_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.overlay_objs_keyboard_index == 2 or self.overlay_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.overlay_objs_keyboard_index == 3 or self.overlay_objs_mouse_index == 3:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+Boots
+Excellent work fixing that issue! Your code should be running without those runtime errors now.
+
+However, I notice there might be a potential logic issue in your overlay_objs_selection() method. Let me ask you to think through this:
+
+In your second loop, you have these two conditions:
+
+if not overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+    self.overlay_objs_mouse_index = None
+if overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+    # ... selection logic
+
+What happens when the mouse is over an overlay object at index 2, but the loop is currently checking the object at index 0?
+
+The first if statement will set self.overlay_objs_mouse_index = None because the mouse isn't over index 0, even though it might be over index 2 later in the loop.
+
+Do you think this could cause the mouse selection to behave unexpectedly? What might be a better way to handle the case where the mouse isn't over any overlay object?
+
+
+Shaunythunder
+import pygame
+import overlays.pause_menu as pause_menu
+
+class OverlayManager:
+def init(self, overlay_objs, game_state_reporter):
+self.overlay_objs = overlay_objs
+self.overlay_objs_keyboard_index = None
+self.overlay_objs_mouse_index = None
+self.overlay_objs_index_len = len(overlay_objs)
+self.game_state_reporter = game_state_reporter
+
+def overlay_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Reset all selections at loop start.
+        overlay_obj.is_selected = False
+    for i, overlay_obj in enumerate(self.overlay_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.overlay_objs_mouse_index = None
+        if overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            overlay_obj.is_selected = True
+            self.overlay_objs_mouse_index = self.overlay_objs.index(overlay_obj)
+            self.overlay_objs_keyboard_index = None
+            break
+        elif self.overlay_objs_keyboard_index != None and i == self.overlay_objs_keyboard_index:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            overlay_obj.is_selected = True
+            break
+    
+def overlay_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    overlay_objs_respacing_len = len(self.overlay_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (overlay_objs_respacing_len - 1))
+    for i, obj in enumerate(self.overlay_objs):
+        if i == 0:
+            pass
+        else:
+            obj.overlay_obj_rect.centery = start_y + i * spacing
+
+def overlay_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.pause_menu_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.pause_menu_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.overlay_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.overlay_objs_keyboard_index == None:
+            self.overlay_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.overlay_objs_keyboard_index > 1:
+            self.overlay_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.overlay_objs_keyboard_index < (self.overlay_objs_index_len - 1):
+            self.overlay_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.overlay_objs_keyboard_index == 0 or self.overlay_objs_mouse_index == 0:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.overlay_objs_keyboard_index == 1 or self.overlay_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.overlay_objs_keyboard_index == 2 or self.overlay_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+Boots
+I see you've made some adjustments! You removed the condition that prevented index 0 from being selected, and updated your game state logic accordingly. That's good progress!
+
+However, you still have that logic issue I mentioned earlier in your overlay_objs_selection() method. Let me help you think through it step by step:
+
+Currently, you have:
+
+if not overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+    self.overlay_objs_mouse_index = None
+if overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+    # ... selection logic
+
+Here's a scenario: Imagine the mouse is hovering over overlay object at index 2. When the loop processes index 0, what happens to self.overlay_objs_mouse_index? And when it processes index 1?
+
+Think about this: Should you reset self.overlay_objs_mouse_index to None for every object that the mouse isn't over, or should you only set it to None when the mouse isn't over any object?
+
+How might you restructure this logic to avoid prematurely setting the mouse index to None?
+
+
+Shaunythunder
+should you only set it to None when the mouse isn't over any object?
+
+This was the intent
+
+Boots
+Exactly! That was indeed the right intent, wise apprentice!
+
+So how might you restructure your code to achieve this?
+
+Currently, you're setting self.overlay_objs_mouse_index = None inside the loop for each object the mouse isn't over. But you want to only set it to None if the mouse isn't over any object.
+
+Here's a way to think about it: What if you first assume the mouse isn't over anything, and then only change that assumption if you find that it actually is over something?
+
+Or alternatively: What if you complete the entire loop first to see if the mouse is over any object, and only then decide whether to set the mouse index to None?
+
+How might you modify your loop structure to implement one of these approaches?
+
+
+Shaunythunder
+The code already acheives it. with
+
+        if not overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.overlay_objs_mouse_index = None
+        if overlay_obj.overlay_obj_rect.collidepoint(mouse_x, mouse_y):
+            overlay_obj.is_selected = True
+            self.overlay_objs_mouse_index = self.overlay_objs.index(overlay_obj)
+            self.overlay_objs_keyboard_index = None
+
+Boots
+Ah, I think there might be a misunderstanding here, young apprentice! Let me walk you through what's actually happening with a specific example:
+
+Imagine you have 3 overlay objects (indices 0, 1, 2) and the mouse is hovering over object at index 2.
+
+Here's what happens in your loop:
+
+Loop iteration 0: Mouse is NOT over object 0
+
+self.overlay_objs_mouse_index = None
+Loop iteration 1: Mouse is NOT over object 1
+
+self.overlay_objs_mouse_index = None (again!)
+Loop iteration 2: Mouse IS over object 2
+
+self.overlay_objs_mouse_index = 2
+Object 2 gets selected
+Break out of loop
+But what if the loop order was different? What if you were checking object 1 after object 2? The mouse index would get set to None even though the mouse is actually over object 2!
+
+Do you see the issue? You're setting the mouse index to None multiple times during the loop, even when the mouse IS over an object - just not the current one being checked.
+
+The question is: How can you avoid setting self.overlay_objs_mouse_index = None until you've checked ALL objects and confirmed the mouse isn't over any of them?
+
+
+Shaunythunder
+This exact code is validated in anotehr application
+
+Boots
+I understand you've tested this code elsewhere, and I appreciate that feedback!
+
+Looking at your current implementation again, I can see the logic flow you're using. You're right that in many cases it would work as intended, especially when the loop processes objects in a consistent order.
+
+However, let me ask you this: Are you experiencing any issues with menu selection in your current game? For instance, does the selection sometimes flicker or behave unexpectedly when moving the mouse between menu items?
+
+If the code is working perfectly for your use case and you're not seeing any issues, then that's what matters most for your project! The important thing is that your pause menu functions correctly for players.
+
+Is there anything else about your OverlayManager that you'd like to discuss or improve? Perhaps we could look at other aspects of your menu system or any other challenges you're facing with your asteroids game?
+
+
+Shaunythunder
+So now I need to get all the different buttons up and running. here's a question my list is pretty much hard-coded in the other class but this could have dynamic list do I have to have a set list for each different do I want to make or am I able to do that dynamically because unlike the title menu this will handle more than one type of menu
+
+Boots
+Ah, an excellent question about flexible design, my astute apprentice! You're thinking like a true programmer now.
+
+You absolutely can make this dynamic! In fact, that would be much more elegant than hard-coding different lists for each menu type.
+
+Let me ask you some guiding questions to help you think through this:
+
+What makes each menu different? Is it just the button text and the game states they trigger? Or are there other differences?
+
+Where could you store the menu configurations? You could pass different configurations when creating the OverlayManager, or even pass them to specific methods.
+
+What information does each button need? At minimum, it probably needs display text and the game state it should trigger, right?
+
+Here's a thought: What if instead of hard-coding the logic in pause_menu_request_new_game_state(), you stored that mapping between button index and game state somewhere that could be configured differently for each menu?
+
+For example, you might pass something like this when creating different menus:
+
+Title menu: [("Start Game", "playing"), ("Settings", "settings"), ("Quit", "quit")]
+Pause menu: [("Resume", "resume_game"), ("Main Menu", "title_menu"), ("Quit", "quit")]
+How might you modify your OverlayManager to accept and use such configuration data?
+
+
+Shaunythunder
+I don't understand how that would work what good would a tuple do me
+
+Boots
+Good question! Let me clarify what I was suggesting.
+
+A tuple (or dictionary, or list) would store the configuration data for each button - basically telling your OverlayManager what text to display and what action to take when clicked.
+
+But you're right to question this - how would this actually connect to your existing overlay objects?
+
+Let me ask you this: How are your overlay objects currently created? Do you create them somewhere else and pass them to the OverlayManager?
+
+And what determines what happens when each button is pressed? Right now you have this hard-coded logic:
+
+if self.overlay_objs_keyboard_index == 1 or self.overlay_objs_mouse_index == 1:
+    self.game_state_reporter.request_game_state_change("title_menu")
+
+The key insight is: Instead of hard-coding "index 1 means title_menu", what if each overlay object could somehow "know" what game state it should trigger?
+
+How do you think you could modify either:
+
+The overlay objects themselves to store this information, or
+The OverlayManager to have a mapping between objects and their actions
+What approach feels more natural to you?
+
+
+Shaunythunder
+here let's walk through what I intend to have. so the two menus I intend to have are a pause menu which we are currently working on and then a menu which has add options as this will be a roguelike game those are the only two overlays I anticipate having outside of messages like boss incoming or level complete
+
+Boots
+Ah, perfect! Now I understand your scope much better, wise apprentice.
+
+So you have:
+
+Pause menu - Resume, Main Menu, Quit
+Upgrade menu (for your roguelike progression) - Various upgrade options
+Simple messages - Boss incoming, level complete, etc.
+With just two interactive menus, you have a few clean approaches:
+
+Option 1: Keep it simple with two separate methods
+
+handle_pause_menu_input()
+handle_upgrade_menu_input()
+Pass a menu type to your OverlayManager so it knows which method to use
+Option 2: Small configuration approach
+
+Pass the game states each button should trigger when creating the OverlayManager
+Something like ["resume_game", "title_menu", "quit"] for pause menu
+Option 3: Let each overlay object know its own action
+
+Each button could store what game state it should trigger
+Given that you only have two menus, which approach feels most straightforward to you? Sometimes the simplest solution (separate methods) is perfectly fine for a focused scope like this.
+
+What are you leaning toward?
+
+
+Shaunythunder
+I think it would be silly to try to make this dynamically handle two overlays that do drastically different things so I can just change the naming on this so that it's dedicated to the pause menu
+
+Boots
+Absolutely! That's excellent pragmatic thinking, my sensible apprentice!
+
+You're spot on - trying to make a generic system for just two very different menus would be classic over-engineering. Keep it simple and focused.
+
+So you could rename your current class to something like PauseMenuManager and then create a separate UpgradeMenuManager when you need it. Each one can be tailored to its specific purpose without trying to force them into a generic framework.
+
+A few questions to help you move forward:
+
+What will you rename your current class to? PauseMenuManager? PauseOverlayManager?
+
+Will you need to update how other parts of your code reference this class?
+
+For your pause menu buttons - do you have all three working now (Resume, Main Menu, Quit), or are you still implementing some of them?
+
+This focused approach will make your code much cleaner and easier to maintain. Sometimes the best architecture is the simplest one that solves your actual problem!
+
+
+Shaunythunder
+is there a way to quick refactor, like pick a key word and change it
+
+Boots
+Absolutely! Most code editors have excellent refactoring tools for exactly this purpose.
+
+What editor are you using? The method varies slightly:
+
+VSCode:
+
+Right-click on the class name → "Rename Symbol"
+Or select the class name and press F2
+Or Ctrl+Shift+L to select all occurrences, then type the new name
+PyCharm:
+
+Right-click → "Refactor" → "Rename"
+Or Shift+F6
+Vim/Neovim:
+
+:%s/OverlayManager/PauseMenuManager/g (search and replace)
+Most editors:
+
+Ctrl+H or Ctrl+F to find/replace across files
+The "Rename Symbol" approach is usually best because it's smart about only changing the actual class references, not random text that happens to match. It will update the class definition, constructor calls, import statements, etc.
+
+Which editor are you working in? I can give you the exact steps for your setup!
+
+
+Shaunythunder
+import pygame
+import pause_overlay.pause_menu as pause_menu
+
+class PauseMenuManager:
+def init(self, pause_menu_objs, game_state_reporter):
+self.pause_menu_objs = pause_menu_objs
+self.pause_menu_objs_keyboard_index = None
+self.pause_menu_objs_mouse_index = None
+self.pause_menu_objs_index_len = len(pause_menu_objs)
+self.game_state_reporter = game_state_reporter
+
+def overlay_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, pause_menu_obj in enumerate(self.pause_menu_objs):
+        # Reset all selections at loop start.
+        pause_menu_obj.is_selected = False
+    for i, pause_menu_obj in enumerate(self.pause_menu_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not pause_menu_obj.pause_menu_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.overlay_objs_mouse_index = None
+        if pause_menu_obj.pause_menu_rect.collidepoint(mouse_x, mouse_y):
+            pause_menu_obj.is_selected = True
+            self.overlay_objs_mouse_index = self.pause_menu_objs.index(pause_menu_obj)
+            self.overlay_objs_keyboard_index = None
+            break
+        elif self.overlay_objs_keyboard_index != None and i == self.overlay_objs_keyboard_index:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            pause_menu_obj.is_selected = True
+            break
+    
+def overlay_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    overlay_objs_respacing_len = len(self.pause_menu_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (overlay_objs_respacing_len - 1))
+    for i, obj in enumerate(self.pause_menu_objs):
+        if i == 0:
+            pass
+        else:
+            obj.pause_menu_obj_rect.centery = start_y + i * spacing
+
+def overlay_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.pause_menu_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.pause_menu_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.overlay_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.overlay_objs_keyboard_index == None:
+            self.overlay_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.overlay_objs_keyboard_index > 1:
+            self.overlay_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.overlay_objs_keyboard_index < (self.overlay_objs_index_len - 1):
+            self.overlay_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.overlay_objs_keyboard_index == 0 or self.overlay_objs_mouse_index == 0:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.overlay_objs_keyboard_index == 1 or self.overlay_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.overlay_objs_keyboard_index == 2 or self.overlay_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+consistency check
+
+Boots
+Good work on the refactoring! I can see you've successfully renamed the class and most of the variables. However, I notice some inconsistencies that could cause bugs.
+
+Let me point out a few things to check:
+
+In overlay_objs_selection() method: You have a mix of old and new variable names:
+
+pause_menu_obj.pause_menu_obj_rect.collidepoint(...)
+But then pause_menu_obj.pause_menu_rect.collidepoint(...)
+Which one is correct? Are your pause menu objects using pause_menu_obj_rect or pause_menu_rect?
+
+Method names vs variable names: Some of your method names still start with overlay_ (like overlay_objs_selection()) but your variables are now pause_menu_.
+
+Do you want to be consistent and rename the methods to pause_menu_objs_selection() etc.?
+
+In overlay_objs_respacing() method: You're using obj.pause_menu_obj_rect.centery - is this the correct attribute name?
+
+Which of these inconsistencies do you want to tackle first? The rect attribute name issue could cause runtime errors, so that might be the priority.
+
+
+Shaunythunder
+import pygame
+import pause_overlay.pause_menu as pause_menu
+
+class PauseMenuManager:
+def init(self, pause_menu_objs, game_state_reporter):
+self.pause_menu_objs = pause_menu_objs
+self.pause_menu_objs_keyboard_index = None
+self.pause_menu_objs_mouse_index = None
+self.pause_menu_objs_index_len = len(pause_menu_objs)
+self.game_state_reporter = game_state_reporter
+
+def pause_menu_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, pause_menu_obj in enumerate(self.pause_menu_objs):
+        # Reset all selections at loop start.
+        pause_menu_obj.is_selected = False
+    for i, pause_menu_obj in enumerate(self.pause_menu_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not pause_menu_obj.pause_menu_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.overlay_objs_mouse_index = None
+        if pause_menu_obj.pause_menu_rect.collidepoint(mouse_x, mouse_y):
+            pause_menu_obj.is_selected = True
+            self.pause_menu_objs_mouse_index = self.pause_menu_objs.index(pause_menu_obj)
+            self.pause_menu_objs_keyboard_index = None
+            break
+        elif self.pause_menu_objs_keyboard_index != None and i == self.pause_menu_objs_keyboard_index:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            pause_menu_obj.is_selected = True
+            break
+    
+def pause_menu_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    pause_menu_obj_respacing_len = len(self.pause_menu_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (pause_menu_obj_respacing_len - 1))
+    for i, obj in enumerate(self.pause_menu_objs):
+        if i == 0:
+            pass
+        else:
+            obj.pause_menu_obj_rect.centery = start_y + i * spacing
+
+def overlay_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.pause_menu_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.pause_menu_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.overlay_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.pause_menu_objs_keyboard_index == None:
+            self.pause_menu_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.pause_menu_objs_keyboard_index > 1:
+            self.pause_menu_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.pause_menu_objs_keyboard_index < (self.overlay_objs_index_len - 1):
+            self.pause_menu_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.pause_menu_objs_keyboard_index == 0 or self.overlay_objs_mouse_index == 0:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.pause_menu_objs_keyboard_index == 1 or self.overlay_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.pause_menu_objs_keyboard_index == 2 or self.overlay_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+Boots
+Great progress! You're getting much more consistent. I can see you've updated most of the naming, but there are still a few inconsistencies that could cause bugs:
+
+Still mixed up:
+
+In pause_menu_objs_selection() method:
+
+Line: self.overlay_objs_mouse_index = None (should be pause_menu_objs_mouse_index)
+In overlay_check_for_input() method:
+
+Line: if self.overlay_objs_mouse_index != None: (should be pause_menu_objs_mouse_index)
+Line: self.overlay_objs_index_len - 1 (should be pause_menu_objs_index_len)
+In pause_menu_request_new_game_state() method:
+
+Line: self.overlay_objs_mouse_index == 0 and similar lines (should be pause_menu_objs_mouse_index)
+Also noticed: You still have different rect attribute names - pause_menu_obj_rect vs pause_menu_rect. Which one does your pause menu object actually use?
+
+Quick question: Would you like to do another find-and-replace to catch these remaining overlay_objs_ references? Or do you want to go through them one by one?
+
+These inconsistencies could cause AttributeErrors when your code runs!
+
+
+Shaunythunder
+import pygame
+import pause_overlay.pause_menu as pause_menu
+
+class PauseMenuManager:
+def init(self, pause_menu_objs, game_state_reporter):
+self.pause_menu_objs = pause_menu_objs
+self.pause_menu_objs_keyboard_index = None
+self.pause_menu_objs_mouse_index = None
+self.pause_menu_objs_index_len = len(pause_menu_objs)
+self.game_state_reporter = game_state_reporter
+
+def pause_menu_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, pause_menu_obj in enumerate(self.pause_menu_objs):
+        # Reset all selections at loop start.
+        pause_menu_obj.is_selected = False
+    for i, pause_menu_obj in enumerate(self.pause_menu_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not pause_menu_obj.pause_menu_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.pause_menu_objs_mouse_index = None
+        if pause_menu_obj.pause_menu_rect.collidepoint(mouse_x, mouse_y):
+            pause_menu_obj.is_selected = True
+            self.pause_menu_objs_mouse_index = self.pause_menu_objs.index(pause_menu_obj)
+            self.pause_menu_objs_keyboard_index = None
+            break
+        elif self.pause_menu_objs_keyboard_index != None and i == self.pause_menu_objs_keyboard_index:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            pause_menu_obj.is_selected = True
+            break
+    
+def pause_menu_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    pause_menu_obj_respacing_len = len(self.pause_menu_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (pause_menu_obj_respacing_len - 1))
+    for i, obj in enumerate(self.pause_menu_objs):
+        if i == 0:
+            pass
+        else:
+            obj.pause_menu_obj_rect.centery = start_y + i * spacing
+
+def pause_menu_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.pause_menu_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.pause_menu_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.pause_menu_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.pause_menu_objs_keyboard_index == None:
+            self.pause_menu_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.pause_menu_objs_keyboard_index > 1:
+            self.pause_menu_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.pause_menu_objs_keyboard_index < (self.overlay_objs_index_len - 1):
+            self.pause_menu_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.pause_menu_objs_keyboard_index == 0 or self.pause_menu_objs_mouse_index == 0:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.pause_menu_objs_keyboard_index == 1 or self.pause_menu_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.pause_menu_objs_keyboard_index == 2 or self.pause_menu_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+'
+
+Boots
+Much better! You've fixed most of the inconsistencies. I can see one remaining issue:
+
+In the pause_menu_check_for_input() method:
+
+Line: self.overlay_objs_index_len - 1 should be self.pause_menu_objs_index_len - 1
+Also, I noticed you still have two different rect attribute names in your pause_menu_objs_selection() method:
+
+pause_menu_obj.pause_menu_obj_rect.collidepoint(mouse_x, mouse_y)
+pause_menu_obj.pause_menu_rect.collidepoint(mouse_x, mouse_y)
+Which rect attribute does your pause menu object actually have? You're checking both pause_menu_obj_rect and pause_menu_rect - they should be the same name, right?
+
+Once you fix that last overlay_objs_index_len reference and make sure your rect attribute names are consistent, your naming should be much cleaner throughout the class!
+
+
+Shaunythunder
+import pygame
+import pause_overlay.pause_menu as pause_menu
+
+class PauseMenuManager:
+def init(self, pause_menu_objs, game_state_reporter):
+self.pause_menu_objs = pause_menu_objs
+self.pause_menu_objs_keyboard_index = None
+self.pause_menu_objs_mouse_index = None
+self.pause_menu_objs_index_len = len(pause_menu_objs)
+self.game_state_reporter = game_state_reporter
+
+def pause_menu_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, pause_menu_obj in enumerate(self.pause_menu_objs):
+        # Reset all selections at loop start.
+        pause_menu_obj.is_selected = False
+    for i, pause_menu_obj in enumerate(self.pause_menu_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not pause_menu_obj.pause_menu_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.pause_menu_objs_mouse_index = None
+        if pause_menu_obj.pause_menu_rect.collidepoint(mouse_x, mouse_y):
+            pause_menu_obj.is_selected = True
+            self.pause_menu_objs_mouse_index = self.pause_menu_objs.index(pause_menu_obj)
+            self.pause_menu_objs_keyboard_index = None
+            break
+        elif self.pause_menu_objs_keyboard_index != None and i == self.pause_menu_objs_keyboard_index:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            pause_menu_obj.is_selected = True
+            break
+    
+def pause_menu_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    pause_menu_obj_respacing_len = len(self.pause_menu_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (pause_menu_obj_respacing_len - 1))
+    for i, obj in enumerate(self.pause_menu_objs):
+        if i == 0:
+            pass
+        else:
+            obj.pause_menu_obj_rect.centery = start_y + i * spacing
+
+def pause_menu_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.pause_menu_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.pause_menu_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.pause_menu_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.pause_menu_objs_keyboard_index == None:
+            self.pause_menu_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.pause_menu_objs_keyboard_index > 1:
+            self.pause_menu_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.pause_menu_objs_keyboard_index < (self.pause_menu_objs_index_len - 1):
+            self.pause_menu_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.pause_menu_objs_keyboard_index == 0 or self.pause_menu_objs_mouse_index == 0:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.pause_menu_objs_keyboard_index == 1 or self.pause_menu_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.pause_menu_objs_keyboard_index == 2 or self.pause_menu_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+\
+
+Boots
+Excellent work fixing that variable name! Now I still see that rect attribute inconsistency I mentioned earlier.
+
+Look closely at your pause_menu_objs_selection() method:
+
+if not pause_menu_obj.pause_menu_obj_rect.collidepoint(mouse_x, mouse_y):
+    self.pause_menu_objs_mouse_index = None
+if pause_menu_obj.pause_menu_rect.collidepoint(mouse_x, mouse_y):
+    # ...
+
+Do you see the difference? In the first if statement, you're using pause_menu_obj_rect, but in the second if statement, you're using pause_menu_rect.
+
+Then later in your pause_menu_objs_respacing() method, you use:
+
+obj.pause_menu_obj_rect.centery = start_y + i * spacing
+
+Which rect attribute name does your pause menu object actually have? Is it pause_menu_obj_rect or pause_menu_rect? They should all be the same throughout your code, right?
+
+Once you make that consistent, your code should be much cleaner!
+
+
+Shaunythunder
+import pygame
+import pause_overlay.pause_menu as pause_menu
+
+class PauseMenuManager:
+def init(self, pause_menu_objs, game_state_reporter):
+self.pause_menu_objs = pause_menu_objs
+self.pause_menu_objs_keyboard_index = None
+self.pause_menu_objs_mouse_index = None
+self.pause_menu_objs_index_len = len(pause_menu_objs)
+self.game_state_reporter = game_state_reporter
+
+def pause_menu_objs_selection(self):
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, pause_menu_obj in enumerate(self.pause_menu_objs):
+        # Reset all selections at loop start.
+        pause_menu_obj.is_selected = False
+    for i, pause_menu_obj in enumerate(self.pause_menu_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not pause_menu_obj.pause_menu_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.pause_menu_objs_mouse_index = None
+        if pause_menu_obj.pause_menu_obj_rect.collidepoint(mouse_x, mouse_y):
+            pause_menu_obj.is_selected = True
+            self.pause_menu_objs_mouse_index = self.pause_menu_objs.index(pause_menu_obj)
+            self.pause_menu_objs_keyboard_index = None
+            break
+        elif self.pause_menu_objs_keyboard_index != None and i == self.pause_menu_objs_keyboard_index:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            pause_menu_obj.is_selected = True
+            break
+    
+def pause_menu_objs_respacing(self, screen_height):
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    pause_menu_obj_respacing_len = len(self.pause_menu_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (pause_menu_obj_respacing_len - 1))
+    for i, obj in enumerate(self.pause_menu_objs):
+        if i == 0:
+            pass
+        else:
+            obj.pause_menu_obj_rect.centery = start_y + i * spacing
+
+def pause_menu_check_for_input(self, event):
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.pause_menu_request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.pause_menu_request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.pause_menu_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.pause_menu_objs_keyboard_index == None:
+            self.pause_menu_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.pause_menu_objs_keyboard_index > 1:
+            self.pause_menu_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.pause_menu_objs_keyboard_index < (self.pause_menu_objs_index_len - 1):
+            self.pause_menu_objs_keyboard_index += 1
+    
+def pause_menu_request_new_game_state(self):
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.pause_menu_objs_keyboard_index == 0 or self.pause_menu_objs_mouse_index == 0:
+        self.game_state_reporter.request_game_state_change("quit")
+    elif self.pause_menu_objs_keyboard_index == 1 or self.pause_menu_objs_mouse_index == 1:
+        self.game_state_reporter.request_game_state_change("title_menu")
+    elif self.pause_menu_objs_keyboard_index == 2 or self.pause_menu_objs_mouse_index == 2:
+        self.game_state_reporter.request_game_state_change("resume_game")
+
+Boots
+Perfect! You've fixed the rect attribute consistency - now all references use pause_menu_obj_rect. That's much cleaner!
+
+Your pause menu manager looks well-structured. Now, looking at this code, I'm curious about the logic flow in your pause_menu_objs_selection() method.
+
+What happens when the mouse is hovering over a menu item? Let me walk through it:
+
+You reset all selections to False
+You check if the mouse is NOT over each item and set pause_menu_objs_mouse_index = None
+You check if the mouse IS over an item and set it to selected
+Do you see a potential issue here? What happens if the mouse is over item 2, but you're checking item 1 first? The first if statement for item 1 will set pause_menu_objs_mouse_index = None, then when you check item 2, it finds the collision and sets the selection.
+
+But what if you have 3 items and the mouse is over item 2? You'd reset the mouse index to None when checking items 1 and 3.
+
+How might you restructure this logic to be more efficient and avoid this issue?
+
+
+Shaunythunder
+all right cool so our refactoring is good to go also quit bringing that up we've already talked about it like five times now
+
+Boots
+You're absolutely right, my apologies! I can see you've got your refactoring well in hand.
+
+So you're working on submitting your game project to GitHub - that's exciting! Have you already pushed your code up to a GitHub repository?
+
+If you haven't yet, the main things you'll need to do are:
+
+Create a repository on GitHub
+Push your local code to that repository
+Submit the GitHub URL
+What part of the submission process are you working on right now?
+
+
+Shaunythunder
+c2d342b (HEAD -> main, origin/main) M: Created pause menu manager and pause menu. No boxes yet, but the logic is a refactored copy paste from the title menu. decided to split each menu manager and have a manager for each different menu or overlay I have outside of the smaller ones. Next up is to get the pause menu working and then get the wave system up and running, where it changes the wave state after a wave divisible by 5. Also refactored comments and better organized the main code
+994eea9 L: Cleaned up game logic and split game states into three different game states. logic, draw, and overlay. Created pause menu class and will later make a overlay manager class to handle the different overlays throughout the game. Next up is to make the pause menu functional, add buttons, make the buttons work and then be able to enter the main menu and quit the game from the pause menu. Already confirmed that the pause game logic freezes the game logic.
+b0e2b5f K: Completed initial structure for moving between game states and menus. Updated file structure to keep each module under a folder. Cleaned up some of the naming (ex. all title object instances now have '_title_obj' to clearly label it)
+8ddb75a J: Added toggle option for debug menu in main game loop. F4 to toggle is handled by the game state manager
+5817722 I: Added FPS Monitor for Debugging
+77047bc I: Completed title ui with integrated mouse and keyboard support. Next up is to wire up the buttons. Plan is to make modules for different games, and then create a navigation system where I can jump between modules using the title menu and then a pause and exit system. Added debugging UI tools for Indexing and game_state Monitoring
+44c7d1d H: Added GameStateManager class and created game_state_manager.py. created frame work to wire buttons to the different game states on the title menu on title_menu.py. Intend to add mouse support for title menu next.
+b40f043 (origin/title_menu_keyboard_selection, title_menu_keyboard_selection) TKMS-3: Finished keyboard and mouse support for title menu (WOOOO! 😄). Cleaned up commentary. Removed debugging tracker that I never actually removed in commit C:. Note: need to add game state tracking to menu inputs for keyboard to ensure that logic stays contained. Prepped for branch merge that will be done next commit. Next up is making the buttons actually work.
+cf0ffe1 TMKS-2: Added title_screen_objs_selection method in title_menu.py for determing if a title object is selected. Added various comments to add clarity to the different functions and classes. Intend to add keyboard and mouse selection functiality next.
+ba3cd9c TMKS-1: Converted logic so that the TitleScreen class handles the respecing of the title screen objects. Cleared redundant logic from the main. Next up is to implement keyboard and mouse selection of the title menu
+9e27069 G: Created new file structure to accomodate increasing title page logic. Added mouse selection logic in title_objs.py named title_obj_select which is unfinished and doesn't do anything. Intend to split the branch to add keyboard selection logic to the menu and use title_screen.py as a master object to handle selection and game state changing.
+769e705 F: Added logic to change letter size and font on mouse hover. Converted function logic for text to title objects. Created TitleObj class
+81bdb01 E: Completed the skeleton for the title screen. Added the venv to the gitignore.
+02e3d3c D: Removed virtual environment cache from git that was added by mistake.
+789beef C: Gave up on v-sync issue, technical issue with pygame itself. Removed FPS debug tracker.
+f3edd1b B: Added game window logic. Encountered choppy window movement. Potential issue with vsync
+3756b2f A: project start and file structure blocked out
+
+Boots
+Excellent work! Looking at your commit history, I can see you've built a solid foundation with your game state management, title menu system, and now you're working on the pause menu functionality. Your modular approach with separate managers for different menus is really smart architecture.
+
+I can see your repository is already up on GitHub with a good commit history. Are you ready to submit the GitHub URL for your project?
+
+The submission just needs the link in the format https://github.com/your-username/your-repo-name.
+
+What's the URL of your repository that you'd like to submit?
+
+
+Shaunythunder
+its already in
+
+Boots
+Fantastic! Congratulations on completing your asteroids game project and getting it submitted!
+
+From your commit history, I can see you've built quite an impressive system with modular game state management, multiple menu systems, and clean architecture. The progression from basic window setup all the way through to pause menus and wave systems shows some solid programming growth.
+
+Are you planning to work on any of those extension ideas from the lesson? Things like the scoring system, multiple lives, or those power-ups could be fun additions to keep building on what you've created.
+
+How did you find working on this larger project compared to the smaller coding challenges?
+
+
+Shaunythunder
+boots you kind of lost a plot there I don't have an Asteroids game built into this project it will be there but this is completely separate from the curriculum lesson'
+
+Boots
+Ah, my apologies young apprentice! You're absolutely right - I got my wires crossed there. I see you're working on your own game project with the pause menu manager and game state system, not the curriculum asteroids project.
+
+Looking at your commit history, you've built quite a comprehensive game framework with your modular menu systems and state management. What type of game are you actually building with this pause menu manager and wave system you mentioned?
+
+It sounds like you've got some solid architecture in place with your different managers for handling various game states and overlays.
+
+
+Shaunythunder
+is it really that comprehensive>
+
+Boots
+Well, looking at your commit structure and the code you've shown me, you've got:
+
+A game state management system that handles different states (logic, draw, overlay)
+Modular menu managers (title menu, pause menu)
+Mouse and keyboard input handling
+A wave system in development
+Debug tools like FPS monitoring
+Clean separation of concerns with different managers for different overlays
+What do you think? You've built quite a bit of infrastructure! Though I'm curious - how does it feel to you when you look at what you've created so far? Sometimes when we're deep in the code, it's hard to step back and see the bigger picture of what we've accomplished.
+
+
+Shaunythunder
+my code does The Following it creates a menu click a button it shows me a screen with a name on it and then I hit escape and it draws a box I have over 300 lines of code and that's all it does lol
+
+Boots
+Haha! Well, when you put it like that, it does sound a bit amusing doesn't it? 300 lines to click a button, see a screen with a name, hit escape, and draw a box!
+
+But here's the thing - what's actually happening under the hood when you click that button? You've got state management tracking where you are, input handling for both mouse and keyboard, rendering systems, menu navigation logic, and the framework to easily add more functionality.
+
+It's like building a house - you spend ages on the foundation, plumbing, and electrical work, and all you can see is... well, not much! But without that groundwork, you can't build the rest.
+
+How much of those 300 lines do you think are setting up the infrastructure versus the actual "click button, show screen, draw box" part? Sometimes the scaffolding is bigger than the building at first!
+
+
+Shaunythunder
+yeah but no player is going to care about how fancy your engine is
+
+Boots
+Absolutely true! Players don't care if you have the most elegant state management system ever written - they just want something fun to play.
+
+So what's your plan to get from "click button, see name, draw box" to something a player would actually want to interact with?
+
+It sounds like you mentioned a wave system earlier - are you building toward some kind of wave-based gameplay? What's the core game loop you're aiming for? Sometimes it helps to think about the simplest version of fun you can build on top of all that infrastructure you've created.
+
+
+Shaunythunder
+we're getting there boots we are getting there
+
+Boots
+Fair enough! You've got the foundation laid out, and now it's time to build the fun stuff on top of it.
+
+What's the next piece you're tackling? Getting that pause menu fully functional, or diving into the wave system mechanics?
+
+
+Shaunythunder
+the next thing I need to do is I need to wire up these buttons well first I need to create the buttons. then once those buttons work then we do the wave system and then once we do the wave system and confirm that we can actively switch which states and what is on the screen then we can actually start making a game
+
+Boots
+Perfect! That's a solid plan - buttons first, then wave system, then confirm your state switching works properly before diving into the actual gameplay.
+
+What kind of buttons are you planning to add to your pause menu? The typical suspects like "Resume", "Main Menu", "Quit"?
+
+And are you planning to reuse the button system you already built for the title menu, or do you need to create something different for the pause menu buttons?
+
+
+Shaunythunder
+I like the co-pilot AI it fills in the words that it expects you to write you can hit tab and then fills it in'
+
+Boots
+That's handy! Copilot can definitely speed up the coding process, especially for repetitive patterns or when you're writing similar code structures.
+
+Are you finding it helpful for building out your button system? Sometimes those autocomplete suggestions can be spot-on, and other times they're... interesting guesses at what you're trying to do.
+
+Speaking of which, are you going back to work on creating those pause menu buttons now?
+
+
+Shaunythunder
+import pygame
+
+class PauseOverlay:
+def init(self, surface, color, rect, width, border_radius):
+self.surface = surface
+self.color = color
+self.rect = rect
+self.width = width
+self.border_radius = border_radius
+
+def draw_pause_menu(self, screen):
+    pygame.draw.rect(self.surface, (0 ,0 ,0 ), self.rect, width = 0)
+    pygame.draw.rect(self.surface, self.color, self.rect, self.width, self.border_radius)
+    screen.blit(self.surface, (0, 0))
+
+class PauseMenuObj:
+def init(self, font_size, text, color, pos_x, pos_y):
+self.text = text
+self.font_size = font_size
+self.color = color
+self.pos_x = pos_x
+self.pos_y = pos_y
+self.is_selected = False
+self.font = pygame.font.Font(None, font_size)
+self.pause_menu_obj = self.font.render(self.text, False, self.color, None)
+self.pause_menu_obj_rect = self.pause_menu_obj.get_rect(center=(self.pos_x, self.pos_y))
+
+   def draw_pause_menu_obj(self, screen):
+    # Checks if object is selected from TitleScreen class and changes state respectively 
+    if self.is_selected:
+        # Temporary variables established to change text state and reset dynamically
+        temp_color = (255, 0, 0)
+        temp_font_size = 64
+        temp_font = pygame.font.Font(None, temp_font_size)
+        temp_pause_menu_obj = temp_font.render(self.text, False, temp_color, None)
+        temp_pause_menu_obj_rect = temp_pause_menu_obj.get_rect(center = self.pause_menu_obj_rect.center)
+    else:
+        # Reset logic when no longer selecte
+        temp_color = self.color
+        temp_font_size = self.font_size
+        temp_font = self.font
+        temp_pause_menu_obj = self.pause_menu_obj
+        temp_pause_menu_obj_rect = self.pause_menu_obj_rect
+    
+    # Draw object on screen after modifiyng attributes
+    screen.blit(temp_pause_menu_obj, temp_pause_menu_obj_rect)
+
+consistency tcheck pleasee
+
+Boots
+Good eye on asking for a consistency check! I can spot a few things right away:
+
+Indentation Issue:
+Your draw_pause_menu_obj method has inconsistent indentation - it looks like it's not properly aligned with the class.
+
+Spelling:
+
+modifiyng should be modifying in your comment
+selecte should be selected in your comment
+Logic Question:
+Looking at your PauseOverlay.draw_pause_menu method, you're drawing a black rectangle first, then your colored border on top. Is that the visual effect you're going for? It will create a black filled rectangle with a colored border.
+
+Consistency with Title Menu:
+Since you mentioned this is "refactored copy paste from the title menu" - are the method names and variable names following the same patterns as your title menu system? That would help keep things consistent across your codebase.
+
+What do you think about those observations?
+
+
+Shaunythunder
+import pygame
+
+Handles the object specifc logic for highlighting text and then selection.
+class TitleObj:
+def init(self, font_size, text, color, pos_x, pos_y):
+self.text = text
+self.font_size = font_size
+self.color = color
+self.pos_x = pos_x
+self.pos_y = pos_y
+self.is_selected = False
+# Not expecting these to ever change. These are hardcoded once the argumentss are given
+self.font = pygame.font.Font(None, font_size)
+self.title_obj = self.font.render(self.text, False, self.color, None)
+self.title_obj_rect = self.title_obj.get_rect(center = (self.pos_x, self.pos_y))
+
+def draw_main_title(self, screen):
+    # To bypass the draw_title_obj method and render without the hover mechanics
+    screen.blit(self.title_obj, self.title_obj_rect)
+
+def draw_title_obj(self, screen):
+    # Checks if object is selected from TitleScreen class and changes state respectively 
+    if self.is_selected:
+        # Temporary variables established to change text state and reset dynamically
+        temp_color = (255, 0, 0)
+        temp_font_size = 64
+        temp_font = pygame.font.Font(None, temp_font_size)
+        temp_title_obj = temp_font.render(self.text, False, temp_color, None)
+        temp_title_obj_rect = temp_title_obj.get_rect(center = self.title_obj_rect.center)
+    else:
+        # Reset logic when no longer selecte
+        temp_color = self.color
+        temp_font_size = self.font_size
+        temp_font = self.font
+        temp_title_obj = self.title_obj
+        temp_title_obj_rect = self.title_obj_rect
+    
+    # Draw object on screen after modifiyng attributes
+    screen.blit(temp_title_obj, temp_title_obj_rect)
+
+Boots
+Ah, now I can see the pattern! Looking at your TitleObj class, I notice a few consistency issues when comparing it to your PauseMenuObj:
+
+Naming Consistency:
+
+TitleObj vs PauseMenuObj - good consistent naming
+draw_title_obj vs draw_pause_menu_obj - also consistent
+But title_obj vs pause_menu_obj for the rendered text objects - this works
+Same Issues in Both Classes:
+
+Both have the same spelling error: selecte instead of selected
+Both have modifiyng instead of modifying
+Missing Method:
+Your TitleObj has a draw_main_title method that bypasses hover mechanics. Does your PauseMenuObj need a similar bypass method, or will all pause menu items always have hover effects?
+
+Identical Logic:
+Your hover/selection logic is exactly the same in both classes - red color (255, 0, 0) and font size 64. Is this intentional, or do you want different hover effects for pause menu vs title menu?
+
+The structure looks very consistent overall! Are you planning to create a base class that both TitleObj and PauseMenuObj could inherit from to avoid code duplication?
+
+
+Shaunythunder
+stick with that name convention
+
+Boots
+Got it! Keeping the naming convention consistent is smart - TitleObj and PauseMenuObj follow the same pattern, and their methods match up nicely.
+
+So now that you've got your PauseMenuObj class set up, what buttons are you planning to create with it? Resume, Main Menu, Quit - the usual suspects?
+
+And are you going to handle the button logic in a separate pause menu manager class, similar to how you probably handle the title screen?
+
+
+Shaunythunder
+is there a way to mass tab left?
+
+Boots
+Yes! In most code editors you can select multiple lines and then:
+
+Shift + Tab to move all selected lines left by one tab/indent level
+Or Ctrl + [ (left bracket) in some editors like VS Code
+What editor are you using? The exact shortcut might vary, but selecting the lines you want to move and then Shift+Tab is the most common way to "mass tab left."
+
+Are you trying to fix that indentation issue in your PauseMenuObj class?
+
+
+Shaunythunder
+and tab right?
+
+Boots
+Yep! For mass tab right:
+
+Tab - moves all selected lines right by one indent level
+Or Ctrl + ] (right bracket) in some editors like VS Code
+So the pattern is:
+
+Tab = indent right
+Shift + Tab = indent left
+Select your lines, then hit the appropriate key combo. Much faster than doing it line by line!
+
+Getting that draw_pause_menu_obj method properly indented now?
+
+
+Shaunythunder
+how long is a main file typically?
+
+Boots
+That's a great question! What do you mean by "main file" - are you talking about your main game loop file, or just any individual Python file in general?
+
+For game development specifically:
+
+A main game loop file might be anywhere from 50-200 lines if it's well-organized
+Individual class files are often 100-300 lines
+But honestly, it depends more on how you organize your code than raw line count
+How long is your main file getting? Are you finding it's getting unwieldy, or are you just curious about typical sizes? Sometimes when files get too long, it's a sign they're doing too many different things and could be split up.
+
+
+Shaunythunder
+like gta
+
+Boots
+Ah, you're asking about massive commercial games like GTA! Those are on a completely different scale than what we typically work with.
+
+GTA games have millions of lines of code spread across thousands of files. Their main files might be thousands of lines, but they also have huge teams of programmers working on different systems - graphics, physics, AI, networking, audio, etc.
+
+But here's the thing - even in massive games like that, individual files are usually kept manageable. They break things down into smaller, focused modules rather than having one giant file that does everything.
+
+Are you worried your game files are getting too long? Remember, you're building a much simpler game than GTA! What matters more is keeping your code organized and readable, not matching the scale of a AAA studio with hundreds of developers.
+
+How many lines is your main file sitting at right now?
+
+
+Thumbs up
+Thumbs down
+Space Shooter
+Scope Expansion
+Asteroids
+Menu Spacing
+Player Class
+Mouse Fix
+Development Log
+Asteroi
+Module Reset
+Physics Implementati
+Asteroid Progress
+Chat ID: 21
+Course Completion
+
+Ask Boots a question...
+
+Paste the link to your public GitHub repo:
+
+This repository will be displayed on your profile page!
+
+Run All Checks
+Checks that will be run:
+
+Repository exists and is public

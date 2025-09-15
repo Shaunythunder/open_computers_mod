@@ -1,0 +1,30 @@
+/*    */ package li.cil.oc.common.tileentity.traits;
+/*    */ @ScalaSignature(bytes = "\006\001\005MbaB\001\003!\003\r\ta\004\002\n\037B,gnU5eKNT!a\001\003\002\rQ\024\030-\033;t\025\t)a!\001\006uS2,WM\034;jifT!a\002\005\002\r\r|W.\\8o\025\tI!\"\001\002pG*\0211\002D\001\004G&d'\"A\007\002\0051L7\001A\n\004\001AI\002CA\t\030\033\005\021\"BA\003\024\025\t!R#A\005nS:,7M]1gi*\ta#A\002oKRL!\001\007\n\003\025QKG.Z#oi&$\030\020\005\002\03375\t!!\003\002\031\005!)Q\004\001C\001=\0051A%\0338ji\022\"\022a\b\t\003A\rj\021!\t\006\002E\005)1oY1mC&\021A%\t\002\005+:LG\017C\003'\001\021Eq%A\005TS\022,7i\\;oiV\t\001\006\005\002!S%\021!&\t\002\004\023:$\b\"\002\027\001\t#i\023\001\0043fM\006,H\016^*uCR,W#\001\030\021\005\001z\023B\001\031\"\005\035\021un\0347fC:DqA\r\001A\002\023\0051'A\005pa\026t7+\0333fgV\tA\007E\002!k9J!AN\021\003\013\005\023(/Y=\t\017a\002\001\031!C\001s\005iq\016]3o'&$Wm]0%KF$\"a\b\036\t\017m:\024\021!a\001i\005\031\001\020J\031\t\ru\002\001\025)\0035\003)y\007/\0328TS\022,7\017\t\005\006\001!\t\001Q\001\016G>l\007O]3tgNKG-Z:\026\003\005\003\"\001\t\"\n\005\r\013#\001\002\"zi\026DQ!\022\001\005\002\031\013q\"\0368d_6\004(/Z:t'&$Wm\035\013\003i\035CQ\001\023#A\002\005\013AAY=uK\")!\n\001C\001\027\006Q\021n]*jI\026|\005/\0328\025\0059b\005\"B'J\001\004q\025\001B:jI\026\004\"aT+\016\003AS!!\025*\002\tU$\030\016\034\006\003\017MS!\001V\013\002\0355Lg.Z2sC\032$hm\034:hK&\021a\013\025\002\017\r>\024x-\032#je\026\034G/[8o\021\025A\006\001\"\001Z\003-\031X\r^*jI\026|\005/\0328\025\007}Q6\fC\003N/\002\007a\nC\003]/\002\007a&A\003wC2,X\rC\003_\001\021\005s,\001\013sK\006$gI]8n\035\n#fi\034:TKJ4XM\035\013\003?\001DQ!Y/A\002\t\f1A\0342u!\t\031W-D\001e\025\t\t7#\003\002gI\nqaJ\021+UC\036\034u.\0349pk:$\007\"\0025\001\t\003J\027aE<sSR,Gk\034(C)\032{'oU3sm\026\024HCA\020k\021\025\tw\r1\001c\021\025a\007\001\"\021n\003Q\021X-\0313Ge>lgJ\021+G_J\034E.[3oiR\021qD\034\005\006C.\004\rA\031\025\005WBdF\020\005\002ru6\t!O\003\002ti\006Q!/\0327bk:\034\007.\032:\013\005U4\030a\0014nY*\021q\017_\001\005[>$7OC\001z\003\r\031\007o^\005\003wJ\024\001bU5eK>sG.\037\023\002{&\021ap`\001\007\0072KUI\024+\013\007\005\005!/\001\003TS\022,\007bBA\003\001\021\005\023qA\001\024oJLG/\032+p\035\n#fi\034:DY&,g\016\036\013\004?\005%\001BB1\002\004\001\007!\r\003\b\002\016\001\001\n1!A\001\n\023\ty!a\005\0025M,\b/\032:%e\026\fGM\022:p[:\023EKR8s'\026\024h/\032:\025\007}\t\t\002\003\004b\003\027\001\rAY\005\003=nAa\"a\006\001!\003\r\t\021!C\005\0033\ti\"A\rtkB,'\017J<sSR,Gk\034(C)\032{'oU3sm\026\024HcA\020\002\034!1\021-!\006A\002\tL!\001[\016\t\035\005\005\002\001%A\002\002\003%I!a\t\002(\005Q2/\0369fe\022\022X-\0313Ge>lgJ\021+G_J\034E.[3oiR\031q$!\n\t\r\005\fy\0021\001c\023\ta7\004\003\b\002,\001\001\n1!A\001\n\023\ti#!\r\0023M,\b/\032:%oJLG/\032+p\035\n#fi\034:DY&,g\016\036\013\004?\005=\002BB1\002*\001\007!-C\002\002\006m\001")
+/*    */ public interface OpenSides extends TileEntity { int SideCount(); boolean defaultState();
+/*    */   boolean[] openSides();
+/*    */   @TraitSetter
+/*    */   void openSides_$eq(boolean[] paramArrayOfboolean);
+/*    */   byte compressSides();
+/*    */   boolean[] uncompressSides(byte paramByte);
+/*    */   boolean isSideOpen(ForgeDirection paramForgeDirection);
+/*    */   void setSideOpen(ForgeDirection paramForgeDirection, boolean paramBoolean);
+/*    */   void readFromNBTForServer(NBTTagCompound paramNBTTagCompound);
+/*    */   void writeToNBTForServer(NBTTagCompound paramNBTTagCompound);
+/*    */   @SideOnly(Side.CLIENT)
+/*    */   void readFromNBTForClient(NBTTagCompound paramNBTTagCompound);
+/*    */   void writeToNBTForClient(NBTTagCompound paramNBTTagCompound);
+/* 16 */   public final class OpenSides$$anonfun$1 extends AbstractFunction0.mcZ.sp implements Serializable { public final boolean apply() { return apply$mcZ$sp(); } public static final long serialVersionUID = 0L; public boolean apply$mcZ$sp() { return this.$outer.defaultState(); }
+/*    */      public OpenSides$$anonfun$1(OpenSides $outer) {} } public final class OpenSides$$anonfun$compressSides$1 extends AbstractFunction1<ForgeDirection[], ArrayOps<ForgeDirection>> implements Serializable { public static final long serialVersionUID = 0L;
+/* 18 */     public final ArrayOps<ForgeDirection> apply(ForgeDirection[] xs) { return Predef$.MODULE$.refArrayOps((Object[])xs); } public OpenSides$$anonfun$compressSides$1(OpenSides $outer) {} } public final class OpenSides$$anonfun$compressSides$2 extends AbstractFunction1<boolean[], ArrayOps<Object>> implements Serializable { public static final long serialVersionUID = 0L; public final ArrayOps<Object> apply(boolean[] xs) { return Predef$.MODULE$.booleanArrayOps(xs); } public OpenSides$$anonfun$compressSides$2(OpenSides $outer) {} } public final class OpenSides$$anonfun$compressSides$3 extends AbstractFunction2<Object, Tuple2<ForgeDirection, Object>, Object> implements Serializable { public static final long serialVersionUID = 0L; public final int apply(int acc, Tuple2 entry) { return acc | (entry._2$mcZ$sp() ? ((ForgeDirection)entry._1()).flag : 0); }
+/*    */      public OpenSides$$anonfun$compressSides$3(OpenSides $outer) {} } public final class OpenSides$$anonfun$uncompressSides$1 extends AbstractFunction1<ForgeDirection, Object> implements Serializable { public static final long serialVersionUID = 0L; private final byte byte$1; public final boolean apply(ForgeDirection d) {
+/* 20 */       return ((d.flag & this.byte$1) != 0);
+/*    */     }
+/*    */     
+/*    */     public OpenSides$$anonfun$uncompressSides$1(OpenSides $outer, byte byte$1) {} }
+/*    */    }
+
+
+/* Location:              C:\Users\shame\AppData\Roaming\PrismLauncher\instances\GT_New_Horizons_2.7.4_Java_17-21\.minecraft\mods\OpenComputers-1.10.30-GTNH.jar!\li\cil\oc\common\tileentity\traits\OpenSides.class
+ * Java compiler version: 8 (52.0)
+ * JD-Core Version:       1.1.3
+ */

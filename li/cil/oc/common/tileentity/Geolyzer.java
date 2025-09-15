@@ -1,0 +1,28 @@
+/*    */ package li.cil.oc.common.tileentity;
+/*    */ @ScalaSignature(bytes = "\006\001M3A!\001\002\001\033\tAq)Z8msj,'O\003\002\004\t\005QA/\0337fK:$\030\016^=\013\005\0251\021AB2p[6|gN\003\002\b\021\005\021qn\031\006\003\023)\t1aY5m\025\005Y\021A\0017j\007\001\0312\001\001\b\030!\tyQ#D\001\021\025\t\031\021C\003\002\023'\005IQ.\0338fGJ\fg\r\036\006\002)\005\031a.\032;\n\005Y\001\"A\003+jY\026,e\016^5usB\021\001dG\007\0023)\021!DA\001\007iJ\f\027\016^:\n\005qI\"aC#om&\024xN\\7f]RDQA\b\001\005\002}\ta\001P5oSRtD#\001\021\021\005\005\002Q\"\001\002\t\017\r\002!\031!C\001I\005Aq-Z8msj,'/F\001&!\t13&D\001(\025\tA\023&A\005d_6\004xN\\3oi*\021!FB\001\007g\026\024h/\032:\n\005\0059\003BB\027\001A\003%Q%A\005hK>d\027P_3sA!)q\006\001C\001a\005!an\0343f)\005\t\004C\001\0328\033\005\031$B\001\0336\003\035qW\r^<pe.T!A\016\004\002\007\005\004\030.\003\0029g\t\0212i\\7q_:,g\016^\"p]:,7\r^8s\021\025Q\004\001\"\021<\003%\031\027M\\+qI\006$X\rF\001=!\ti\004)D\001?\025\005y\024!B:dC2\f\027BA!?\005\035\021un\0347fC:DQa\021\001\005B\021\013AC]3bI\032\023x.\034(C)\032{'oU3sm\026\024HCA#I!\tid)\003\002H}\t!QK\\5u\021\025I%\t1\001K\003\rq'\r\036\t\003\0276k\021\001\024\006\003\023FI!A\024'\003\0359\023E\013V1h\007>l\007o\\;oI\")\001\013\001C!#\006\031rO]5uKR{gJ\021+G_J\034VM\035<feR\021QI\025\005\006\023>\003\rA\023")
+/*    */ public class Geolyzer extends TileEntity implements Environment {
+/*    */   private final li.cil.oc.server.component.Geolyzer geolyzer;
+/*    */   
+/*  6 */   public boolean isChangeScheduled() { return this.isChangeScheduled; } private boolean isChangeScheduled; private boolean moving; public void isChangeScheduled_$eq(boolean x$1) { this.isChangeScheduled = x$1; } public boolean moving() { return this.moving; } public void moving_$eq(boolean x$1) { this.moving = x$1; } public double xPosition() { return Environment.class.xPosition(this); } public double yPosition() { return Environment.class.yPosition(this); } public double zPosition() { return Environment.class.zPosition(this); } public void markChanged() { Environment.class.markChanged(this); } public boolean isConnected() { return Environment.class.isConnected(this); } public void initialize() { Environment.class.initialize(this); } public void func_145845_h() { Environment.class.updateEntity(this); } public void dispose() { Environment.class.dispose(this); } public void onMessage(Message message) { Environment.class.onMessage(this, message); } public void onConnect(Node node) { Environment.class.onConnect(this, node); } public void onDisconnect(Node node) { Environment.class.onDisconnect(this, node); } @Method(modid = "appliedenergistics2") public boolean prepareToMove() { return Environment.class.prepareToMove(this); } @Method(modid = "appliedenergistics2") public void doneMoving() { Environment.class.doneMoving(this); } public Object[] result(Seq args) { return Environment.class.result(this, args); } public World world() { return TileEntity.class.world((TileEntity)this); } public int x() { return TileEntity.class.x((TileEntity)this); } public int y() { return TileEntity.class.y((TileEntity)this); } public int z() { return TileEntity.class.z((TileEntity)this); } public BlockPosition position() { return TileEntity.class.position((TileEntity)this); } public Block block() { return TileEntity.class.block((TileEntity)this); } public boolean isClient() { return TileEntity.class.isClient((TileEntity)this); } public boolean isServer() { return TileEntity.class.isServer((TileEntity)this); } public void func_145829_t() { TileEntity.class.validate((TileEntity)this); } public void func_145843_s() { TileEntity.class.invalidate((TileEntity)this); } public void onChunkUnload() { TileEntity.class.onChunkUnload((TileEntity)this); } @SideOnly(Side.CLIENT) public void readFromNBTForClient(NBTTagCompound nbt) { TileEntity.class.readFromNBTForClient((TileEntity)this, nbt); } public void writeToNBTForClient(NBTTagCompound nbt) { TileEntity.class.writeToNBTForClient((TileEntity)this, nbt); } public void func_145839_a(NBTTagCompound nbt) { TileEntity.class.readFromNBT((TileEntity)this, nbt); } public void func_145841_b(NBTTagCompound nbt) { TileEntity.class.writeToNBT((TileEntity)this, nbt); } public Packet func_145844_m() { return TileEntity.class.getDescriptionPacket((TileEntity)this); } public void onDataPacket(NetworkManager manager, S35PacketUpdateTileEntity packet) { TileEntity.class.onDataPacket((TileEntity)this, manager, packet); } public Geolyzer() { TileEntity.class.$init$((TileEntity)this); Environment.class.$init$(this);
+/*  7 */     this.geolyzer = new li.cil.oc.server.component.Geolyzer((EnvironmentHost)this); } public li.cil.oc.server.component.Geolyzer geolyzer() { return this.geolyzer; }
+/*    */    public ComponentConnector node() {
+/*  9 */     return geolyzer().node();
+/*    */   } public boolean canUpdate() {
+/* 11 */     return false;
+/*    */   }
+/*    */   public void readFromNBTForServer(NBTTagCompound nbt) {
+/* 14 */     Environment.class.readFromNBTForServer(this, nbt);
+/* 15 */     geolyzer().load(nbt);
+/*    */   }
+/*    */   
+/*    */   public void writeToNBTForServer(NBTTagCompound nbt) {
+/* 19 */     Environment.class.writeToNBTForServer(this, nbt);
+/* 20 */     geolyzer().save(nbt);
+/*    */   }
+/*    */ }
+
+
+/* Location:              C:\Users\shame\AppData\Roaming\PrismLauncher\instances\GT_New_Horizons_2.7.4_Java_17-21\.minecraft\mods\OpenComputers-1.10.30-GTNH.jar!\li\cil\oc\common\tileentity\Geolyzer.class
+ * Java compiler version: 8 (52.0)
+ * JD-Core Version:       1.1.3
+ */

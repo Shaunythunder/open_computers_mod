@@ -1,0 +1,256 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+Hi boots I have finished the course
+
+Boots
+Congratulations on completing the Asteroids project, young apprentice! That's quite an achievement - building a full game from scratch is no small feat!
+
+Since you've finished the course, you've experienced:
+
+Multi-file Python projects
+Real-world object-oriented programming
+And hopefully had a ton of fun in the process!
+How did you find the experience? Did you enjoy seeing OOP concepts come together in a practical project like this? And more importantly - how's your Asteroids game playing? Are you getting decent scores blasting those space rocks?
+
+If you're looking for what to tackle next, there are plenty of other exciting courses on Boot.dev to continue your programming journey!
+
+
+Shaunythunder
+I need your help on something so I'm working on gtnh to work on my ability to be a systems architect and I am my new game developer methodology to the game so I would like your help with it
+
+Boots
+Ah, a fellow systems architect in the making! That's excellent, young apprentice. GTNH (GregTech: New Horizons) is quite the complex beast - perfect for honing those systems thinking skills.
+
+I'd be happy to help you apply game development methodologies to your GTNH adventures! However, I should mention that my expertise is primarily in programming and the Boot.dev curriculum rather than Minecraft modding or game-specific strategies.
+
+That said, I'm curious about your approach! What specific game development methodology are you looking to apply? Are you thinking about:
+
+Iterative development cycles for your factory designs?
+Modular architecture principles for your automation systems?
+Project management techniques for tackling the tech tree?
+Something else entirely?
+If you can share more details about what you're trying to accomplish, I can certainly offer some programming and systems design insights that might translate well to your GTNH engineering challenges!
+
+
+Shaunythunder
+started fresh new game lol
+
+Boots
+Ah, a fresh start! That's always exciting, especially with something as complex as GTNH. Starting over can be a great opportunity to apply better systems thinking from the ground up.
+
+Since you mentioned wanting to work on your systems architect abilities and apply game development methodology, are you planning to approach this new playthrough differently? For example:
+
+Planning out your base layout and automation systems before you build them?
+Breaking down the massive tech progression into smaller, manageable milestones?
+Documenting your designs and processes as you go?
+Applying modular design principles to your factory setups?
+What specific aspects of systems architecture are you hoping to practice through this playthrough? I'm curious how you're thinking about translating programming and development concepts into your gameplay approach!
+
+And hey, if you run into any actual programming challenges along the way (maybe writing scripts to help with planning or automation), that's definitely something I can help with more directly.
+
+
+Shaunythunder
+right now the idea is to make sure everything is good before I move on to the next year and then to utilize open computers like a bastard for just about almost all the automation I want to do outside of the pre built systems
+
+Boots
+Ah, now THAT'S a systems architect approach I can appreciate! Using OpenComputers as your primary automation backbone is brilliant - you're essentially treating the game like a distributed computing environment.
+
+This sounds like you're planning to:
+
+Gate your progression - ensuring each "tier" is solid before advancing (very good software development practice!)
+Custom automation over pre-built solutions - writing your own control systems rather than relying on existing mod automation
+The OpenComputers approach is particularly interesting from a programming perspective because you'll be dealing with:
+
+Resource management (computer components, power, network bandwidth)
+Distributed systems (multiple computers coordinating tasks)
+Real-time control systems (managing factory processes)
+Network architecture (how your computers communicate)
+Are you planning to write most of your automation scripts in Lua? And are you thinking about things like:
+
+Central control systems vs distributed intelligence?
+How you'll handle error recovery and fault tolerance?
+Standardizing your computer "interfaces" for different types of machines?
+This actually sounds like a fantastic way to practice systems design - you're building a real distributed control system, just in a game environment!
+
+
+Shaunythunder
+well one thing that could be cool would be a Auto sorting Golem or having a UI that hey here's everything you got what do you want me to get and then I go hey I would like 64 iron and then it goes and grabs it and then puts it in the deposit chest
+
+Boots
+Oh, that's a fantastic idea! You're essentially designing an automated warehouse management system with a user interface - very much like real-world inventory management systems.
+
+From a systems architecture perspective, you'd be building:
+
+Frontend UI Component:
+
+Inventory display system (showing available items and quantities)
+Request interface (user inputs what they want)
+Status feedback (showing request progress)
+Backend Logic:
+
+Inventory tracking system (knowing where everything is stored)
+Pathfinding/routing (how the golem gets to items efficiently)
+Task queue management (handling multiple requests)
+Item retrieval logic (interfacing with storage systems)
+Integration Layer:
+
+Communication between UI computer and golem controller
+Interfacing with your storage system to get real-time inventory data
+Handling the physical item transfer to the deposit chest
+The cool programming challenges you'd face:
+
+Database design - how do you efficiently track item locations?
+API design - how does the UI communicate with the golem controller?
+Concurrency - what happens if you make multiple requests?
+Error handling - what if an item isn't available or the golem gets stuck?
+Are you thinking of using network cards to have the UI computer communicate with a separate golem controller computer? And how are you planning to handle the inventory scanning - manual input or automated detection?
+
+
+Shaunythunder
+I have no fucking idea what I'm doing
+
+Boots
+Haha, that's perfectly fine, young apprentice! Every great systems architect started exactly where you are - with a cool idea and absolutely no clue how to make it happen. That's actually the best place to start!
+
+Let's break this down into bite-sized pieces. You don't need to solve the whole problem at once - that's the beauty of iterative development.
+
+Start stupidly simple:
+
+First goal: Get ONE computer to display a basic menu
+
+Just hardcode a few items like "Iron Ingot - 64 available"
+Let the player type "1" to select iron
+Print "You selected iron!"
+Second goal: Get that computer to talk to another computer
+
+Have the menu computer send a message to a "worker" computer
+Worker computer just prints "Got request for iron"
+Third goal: Get the worker computer to control a golem
+
+Make the golem move to a specific chest
+Make it grab one specific item
+Each step is a small win that builds toward your bigger vision. You don't need to know how to do step 10 when you're working on step 1.
+
+Which piece sounds like the most interesting starting point to you? The UI menu, the computer-to-computer communication, or the golem control?
+
+
+Shaunythunder
+boots I'm in the Stone Age let's chill for a second
+
+Boots
+Haha, fair enough! Here I am getting all excited about distributed computing systems and you're probably still punching trees and making your first pickaxe!
+
+You're absolutely right - let's chill. Stone Age is actually a great time to think about your overall approach without getting bogged down in the complex stuff. Plus, GTNH's early game has its own challenges to keep you busy for a while.
+
+Take your time getting your basics sorted - good food production, basic tools, maybe your first shelter. The fancy OpenComputers automation dreams can wait until you've got a solid foundation.
+
+How's the early game treating you so far? GTNH's early progression can be pretty different from vanilla Minecraft if you haven't played it before.
+
+And hey, when you do eventually get to the point where you're ready to start tinkering with computers and automation, we can revisit those ideas. No rush!
+
+
+Shaunythunder
+I've gotten to Luv before so I know what I'm doing
+
+Boots
+Ah, my apologies! Getting to LuV in GTNH is no joke - you definitely know what you're doing! That's serious dedication and systems thinking right there.
+
+So you're doing a fresh start with the experience of having navigated that entire tech tree before. That's actually perfect for your systems architect goals - you know the pain points, the bottlenecks, and where better planning could have saved you time.
+
+Starting over with that knowledge and planning to integrate OpenComputers throughout is a really smart approach. You'll be able to identify early on where custom automation will pay dividends later, rather than retrofitting it into an existing setup.
+
+Are you planning to introduce the computer-based automation at specific tech milestones, or more organically as you encounter repetitive tasks that would benefit from it? With your LuV experience, you probably have a good sense of where the biggest automation opportunities are.
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

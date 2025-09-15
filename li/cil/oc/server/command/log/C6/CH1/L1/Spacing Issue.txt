@@ -1,0 +1,1629 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+def high_score_objs_respacing(self)-> None:
+    # Logic for automated spacing for title objects
+    start_x = 30
+    end_x = self._screen_width // 2
+    high_score_screen_respacing_len = len(self.high_score_screen_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_x - start_x) // (high_score_screen_respacing_len - 1))
+    for i, high_score_obj in enumerate(self.high_score_screen_objs):
+        if i == 0 or i == 1:
+            pass
+        else:
+            high_score_obj.high_score_obj_rect.centerx = start_x + i * spacing
+            high_score_obj.selected_high_score_obj_rect.centerx = start_x + i * spacing
+
+so what is wrong with this? my buttons aren't on the screen but they should be
+
+Boots
+It sounds like your intent is to automatically and evenly space your high score screen objects horizontally from start_x to end_x, with the first two items (i == 0 or i == 1) skipped.
+
+I see a couple of possible issues:
+
+Negative Spacing
+You calculate spacing as:
+
+spacing = -((end_x - start_x) // (high_score_screen_respacing_len - 1))
+
+The negative sign means that the computed spacing will move items to the left rather than to the right. If start_x is already on the left side of the screen, using a negative delta will push your items even further left—potentially off-screen.
+
+Indexing and Skipped Items
+By skipping the first two items, your spacing calculation may not line up with the actual elements displayed. But even if that were fine, the i * spacing calculation is liable to compound the negative offset.
+
+Center Coordinates
+It's possible for the calculation start_x + i * spacing to result in negative or otherwise out-of-bounds values for objects depending on the values of start_x, spacing, and i.
+
+Let’s rethink the math just a bit.
+
+If you want evenly distributed n buttons from start_x to end_x, try something similar to this logic (in Python pseudocode):
+
+count = (number of objects you WANT to spread)
+delta = (end_x - start_x) / (count - 1)  # positive value
+
+for i, obj in enumerate(objects_to_spread):
+    obj.centerx = start_x + i * delta
+
+In your case, double-check if you want to skip the first two or always spread all objects. Also, ensure spacing (or delta) is positive and reflects your full width.
+
+Would you like to step through your current variable values to debug together, or would you rather see a refactored example with these ideas?
+
+
+Shaunythunder
+def high_score_objs_respacing(self)-> None:
+# Logic for automated spacing for title objects
+start_x = 30
+end_x = self._screen_width - 30
+high_score_screen_respacing_len = len(self.high_score_screen_objs)
+# Establishes a y coordinate range and then evenly spaces the objects
+spacing = ((end_x - start_x) // (high_score_screen_respacing_len - 1))
+for i, high_score_obj in enumerate(self.high_score_screen_objs):
+if i == 0 or i == 1:
+pass
+else:
+high_score_obj.high_score_obj_rect.centerx = start_x + i * spacing
+high_score_obj.selected_high_score_obj_rect.centerx = start_x + i * spacing
+
+so why wouldnt this work
+
+Boots
+This version is much closer! Now your spacing is positive, which is good.
+
+Let’s walk through some possible reasons why your buttons still might not appear as expected:
+
+Skipping the First Two Elements
+Since you’re skipping i == 0 and i == 1, your loop only positions objects with indices 2 and onward. What do you expect to happen with the first two? Are you manually positioning them somewhere else? If not, their positions might be default (possibly off-screen).
+
+Spacing and Indexing
+You use i * spacing, but if you skip the first two elements, the first “laid out” button will be at start_x + 2 * spacing, not right at start_x. Is that intentional? It might push all your laid-out buttons farther to the right than you expect.
+
+Number of Objects
+If high_score_screen_respacing_len is less than 2, you’ll get a ZeroDivisionError. The calculation also assumes you’re spacing all objects across, but you only reposition some.
+
+Screen Size and Coordinates
+Check the value of self._screen_width. If it’s too small or your calculation overflows, your objects might still end up off-screen.
+
+Rect.centerx vs. Rendering
+Make sure changing centerx is actually affecting where your buttons are rendered. Sometimes, other parts of the code might override positions, or the rects themselves might be too big or too small, causing visual confusion.
+
+Let’s try to clarify:
+
+What do you want to happen with the first two objects?
+How many objects are in self.high_score_screen_objs typically?
+If you want all objects evenly spaced, you shouldn’t skip any in the loop, and the first should start at start_x.
+
+What do you think would happen if you removed the if i == 0 or i == 1 check and just let all high score objects be repositioned?
+
+
+Shaunythunder
+oh so skipping the first two still causes two to be accounted for
+
+Boots
+Exactly! By calculating spacing using the total number of objects, but only repositioning those with indices 2 and higher, your spacing assumes the first two are part of the spread—even though they aren’t moved. This results in a gap at the beginning, and pushes the remaining objects farther to the right than you probably intend.
+
+So, to match your visual results to your spacing logic, you have a few choices:
+
+Option 1: If you want to skip the first two, calculate spacing using only the number of objects you’ll actually move, and update your index math accordingly.
+Option 2: If you want all objects spread evenly, don’t skip any in your loop.
+Why do you want to skip the first two objects? Are they special, or should everything be included in the spacing? How might you rewrite the spacing logic if you only want to move a subset?
+
+
+Shaunythunder
+def high_score_objs_respacing(self)-> None:
+# Logic for automated spacing for title objects
+objects_to_respace = self.high_score_screen_objs[2:]
+start_x = 30
+end_x = self._screen_width - 30
+high_score_screen_respacing_len = len(self.high_score_screen_objs)
+# Establishes a y coordinate range and then evenly spaces the objects
+spacing = ((end_x - start_x) // (high_score_screen_respacing_len - 1))
+for i, high_score_obj in enumerate(objects_to_respace):
+if i == 0 or i == 1:
+pass
+else:
+high_score_obj.high_score_obj_rect.centerx = start_x + i * spacing
+high_score_obj.selected_high_score_obj_rect.centerx = start_x + i * spacing
+
+Boots
+You’re closer now by slicing objects_to_respace = self.high_score_screen_objs[2:]! However, a similar issue remains: your spacing calculation is still based on len(self.high_score_screen_objs), which is the length of the whole list, not just the objects you’re actually spreading out.
+
+Here's what is happening:
+
+objects_to_respace now contains only the objects you want to move.
+But spacing is still calculated using the total number—so your positions may still be off, leading to gaps or objects being off-screen.
+Also, you're still skipping the first two in the loop over objects_to_respace with if i == 0 or i == 1, so now you're skipping 4 items total (the first two of the entire list, then the first two of your slice).
+Let’s reason this through:
+
+If you want to respace just a subset, you should:
+Slice objects_to_respace as you did.
+Calculate spacing using the length of that subset (len(objects_to_respace)).
+Remove the if i == 0 or i == 1... check inside the loop, so you actually space all intended items.
+For example:
+
+objects_to_respace = self.high_score_screen_objs[2:]
+count = len(objects_to_respace)
+spacing = (end_x - start_x) // (count - 1) if count > 1 else 0
+
+for i, high_score_obj in enumerate(objects_to_respace):
+    x = start_x + i * spacing
+    high_score_obj.high_score_obj_rect.centerx = x
+    high_score_obj.selected_high_score_obj_rect.centerx = x
+
+Guiding question:
+Can you see how calculating spacing based on count (the number of objects being spaced) and removing the redundant skip inside the loop ensures all your selected objects are distributed correctly?
+
+
+Shaunythunder
+def high_score_objs_respacing(self)-> None:
+    # Logic for automated spacing for title objects
+    objects_to_respace = self.high_score_screen_objs[2:]
+    start_x = 30
+    end_x = self._screen_width - 30
+    high_score_screen_respacing_len = len(objects_to_respace)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = ((end_x - start_x) // (high_score_screen_respacing_len - 1))
+    for i, high_score_obj in enumerate(objects_to_respace):
+        if i == 0 or i == 1:
+            pass
+        else:
+            high_score_obj.high_score_obj_rect.centerx = start_x + i * spacing
+            high_score_obj.selected_high_score_obj_rect.centerx = start_x + i * spacing
+
+Boots
+Good, you’ve updated your spacing to use the length of objects_to_respace. But notice: your loop still skips the first two objects in the slice by if i == 0 or i == 1: pass. This means those two objects won’t be positioned—so now you’re skipping the first two of the original list and the first two of the sliced list.
+
+Key point:
+If you intend to reposition all objects in objects_to_respace, you do not need to skip any inside the loop.
+
+Try removing this conditional entirely:
+
+for i, high_score_obj in enumerate(objects_to_respace):
+    x = start_x + i * spacing
+    high_score_obj.high_score_obj_rect.centerx = x
+    high_score_obj.selected_high_score_obj_rect.centerx = x
+
+Question to consider:
+What happens to the objects at i == 0 and i == 1 when you allow them to be positioned like the others? Does this now spread all your sliced objects correctly across your desired range?
+
+Try it and observe—what does the display look like now?
+
+
+Shaunythunder
+def high_score_objs_respacing(self)-> None:
+    # Logic for automated spacing for title objects
+    objects_to_respace = self.high_score_screen_objs[2:]
+    start_x = 30
+    end_x = self._screen_width - 30
+    high_score_screen_respacing_len = len(objects_to_respace)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = ((end_x - start_x) // (high_score_screen_respacing_len - 1))
+    for i, high_score_obj in enumerate(objects_to_respace):
+        high_score_obj.high_score_obj_rect.centerx = start_x + i * spacing
+        high_score_obj.selected_high_score_obj_rect.centerx = start_x + i * spacing
+
+Boots
+Yes! That approach is much better: you’re now evenly spacing all objects in your objects_to_respace list between start_x and end_x. There’s no skipping inside the loop, so every object in your selected slice will be positioned correctly.
+
+A guiding thought:
+What do you expect will happen if objects_to_respace only contains one item? What about two?
+Consider whether your spacing calculation might run into trouble (for example, dividing by zero) when there’s only one object. How might you guard against that?
+
+If you like, I can ask you a couple of questions to deepen your understanding—shall we?
+
+
+Shaunythunder
+All right the high score screen is rendering correctly now to fix the actual display and get the real numbers
+
+Boots
+Excellent work figuring out the spacing! For showing real high scores, what data structure are you using to store or retrieve the actual score numbers?
+
+Think about:
+
+Where are the scores coming from—are they generated during the game, loaded from a file, or passed in through some method?
+Is each high score object responsible for rendering its own number, or do you update them elsewhere?
+What would be your next step to ensure each item displays the real number, not just a placeholder?
+
+
+Shaunythunder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+from game_state_manager import GameStateManager
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_manager: "HighScoreDataManager",
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+self._high_score_data_manager = high_score_data_manager
+self._game_mode = "asteroids_mode"
+self.high_score_title_obj = high_score_display.HighScoreObj(
+100, f"High Scores",
+(255, 255, 255),
+screen_width // 2, screen_height // 8
+)
+
+    self.high_score_entries = []
+    start_y = screen_height // 5
+    line_spacing = 50
+
+    for i in range(10):
+        y_position = start_y + (i * line_spacing)
+        high_score_obj = high_score_display.HighScoreObj(
+            32, f"{i +1}. Loading...", 
+            (255, 255, 255),
+            screen_width // 2, y_position
+        )
+        self.high_score_entries.append(high_score_obj)
+    
+    self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+def update_high_score_display(self) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    game_mode = self._game_mode
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        
+        score_entry.text = score_text
+
+def draw_high_score_display(self, screen: pygame.Surface, game_mode = "asteroids_mode") -> None:
+    """Draws the high score display on the given screen."""
+    self.high_score_title_obj.draw_high_score_main_title(screen, game_mode)
+
+    for obj in self.display_objs:
+            obj.draw_high_score_obj(screen)
+
+def change_high_score_display(self, game_mode: str) -> None:
+    """Changes the high score display to the specified game mode."""
+    self._game_mode = game_mode
+
+Boots
+Your HighScoreDisplayManager class is structured quite well! You're initializing display objects, keeping them in a list, and updating their text when new scores come in. Nicely done!
+
+Let’s step through the display of “real numbers:”
+
+How it works now
+In update_high_score_display, you fetch scores with:
+scores = self._high_score_data_manager.get_high_scores(game_mode)
+You update each entry with either a formatted score line or a placeholder if there is no score for that rank.
+What to check or improve
+Where is get_high_scores pulling data from?
+
+Are you sure this method on HighScoreDataManager is returning the current, correct scores for "asteroids_mode"?
+How are scores updated or written to disk, and is this occurring as intended elsewhere in your codebase?
+When do you call update_high_score_display?
+
+You’ll want to ensure this method is called every time scores are updated, or at least before you draw the high score screen.
+If it's not called, your self.high_score_entries will still show “Loading...” or stale values.
+Testing
+
+Try to force a known list of scores and see if it renders. For instance, hard-code scores = [("Bear", 10000), ("Wizard", 9000)] inside the update function to test rendering, then switch back to your real source.
+Questions to Consider
+What happens if your score list is shorter than 10? Does the display fill with dashes for the unused spots, as you expect?
+Does each high_score_obj update its rendered surface when you change its .text property, or do you need to call a method (like .update_surface() or similar)?
+How does HighScoreObj handle new text assignment? If it only draws a cached surface, you might need to trigger a redraw/re-render after .text changes.
+If you like, try printing out the list returned by get_high_scores before the loop to confirm what it contains.
+
+Would you like a quiz on how to debug the display, or shall we walk through the flow together step-by-step?
+
+
+Shaunythunder
+import json
+import os
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDataManager:
+def init(self,
+save_file = "high_scores.json") -> None:
+self.save_file = save_file
+self.high_score_game_modes = {
+"genre_attack": [],
+"asteroids_mode": [],
+"galaga_mode": [],
+"space_invaders_mode": [],
+"Asteroid Dodgeball": [],
+}
+self.max_high_scores = 10
+
+def create_new_high_score(self, game_mode: str, player_name: str, score: int) -> None:
+    """Adds a new high score to the leaderboard specified game mode."""
+    print(f"Adding high score for {player_name} in {game_mode} with score {score}")
+    
+    if game_mode not in self.high_score_game_modes:
+        raise ValueError(f"Game mode '{game_mode}' is not recognized.")
+    
+    self.high_score_game_modes[game_mode].append((player_name, score))
+    self.high_score_game_modes[game_mode].sort(key=lambda x: x[1], reverse=True)
+    if len(self.high_score_game_modes[game_mode]) > self.max_high_scores:
+        self.high_score_game_modes[game_mode] = self.high_score_game_modes[game_mode][:self.max_high_scores]
+
+    print(f"High scores for {game_mode}: {self.high_score_game_modes[game_mode]}")
+
+    self.save_high_scores()
+
+def get_high_scores(self, game_mode: str) -> list:
+    """Returns the high scores for the specified game mode."""
+    if game_mode not in self.high_score_game_modes:
+        raise ValueError(f"Game mode '{game_mode}' is not recognized.")
+    return self.high_score_game_modes[game_mode]
+
+def save_high_scores(self) -> None:
+    """Saves high scores to a JSON file."""
+    try:
+        with open (self.save_file, 'w') as f:
+            json.dump(self.high_score_game_modes, f, indent=2)
+    except Exception as e:
+        print(f"Error saving high scores: {e}")
+
+def load_high_scores(self) -> None:
+    """Loads high scores from a JSON file."""
+    try:
+        if os.path.exists(self.save_file):
+            with open(self.save_file, 'r') as f:
+                loaded_scores = json.load(f)
+                for game_mode in loaded_scores:
+                    self.high_score_game_modes[game_mode] =[
+                        tuple(score) for score in loaded_scores[game_mode]
+                    ] 
+    except Exception as e:
+        print(f"Error loading high scores: {e}")
+
+Boots
+Your HighScoreDataManager looks solid for reading and writing high scores! Let’s reason about how real numbers will appear on your high score screen:
+
+Flow Questions
+When your program starts, are you calling load_high_scores() before displaying/using any scores?
+After a player scores, do you call create_new_high_score(...) with the right values?
+When you display scores, do you call get_high_scores(...) for the correct game mode?
+JSON Storage Caveat
+JSON can only store basic types (lists, dicts, strings, numbers). When you store tuples, they’re saved as lists in the file. You handle this in loading by converting each “score” from a list back to a tuple:
+
+self.high_score_game_modes[game_mode] = [
+    tuple(score) for score in loaded_scores[game_mode]
+]
+
+That shape is important: your display code expects (player_name, score) tuples, not lists.
+
+Synchronization
+When your game starts, to ensure displayed scores are correct, your flow should be:
+
+Call load_high_scores ONCE before displaying scores.
+Whenever scores are changed, call create_new_high_score, which saves automatically.
+When switching high score screens or before drawing them, call update_high_score_display() so the latest values are used.
+A Key Debugging Q:
+Are you calling load_high_scores() somewhere before the screen first tries to show scores? If not, your table will only show in-memory results, and always start empty.
+
+What To Try (without showing solution code):
+Print the result of get_high_scores("asteroids_mode") after loading to see if it shows what’s in your JSON.
+Manually edit your JSON with test data to see if it shows up in the screen, confirming the flow.
+If any step above doesn't happen, what would be the outcome on the display?
+
+
+Shaunythunder
+Updating high scores for asteroids_mode: [('Player', 909)]
+Updating high scores for asteroids_mode: [('Player', 909)]
+Updating high scores for asteroids_mode: [('Player', 909)]
+Updating high scores for asteroids_mode: [('Player', 909)]
+Updating high scores for asteroids_mode: [('Player', 909)]
+Updating high scores for asteroids_mode: [('Player', 909)]
+Updating high scores for asteroids_mode: [('Player', 909)]
+Updating high scores for asteroids_mode: [('Player', 909)]
+Updating high scores for asteroids_mode: [('Player', 909)]
+Updating high scores for asteroids_mode: [('Player', 909)]
+Updating high scores for asteroids_mode: [('Player', 909)]
+
+Boots
+That’s a classic sign: each time you add a score, you’re adding the same score repeatedly—so your list fills with identical values.
+
+Let’s consider why:
+
+Where is your code calling create_new_high_score()? Is it possible it’s being called inside an update loop or being triggered many times for the same score event?
+Are you preventing duplicate submissions, or is there a flag that gets reset?
+Diagnostic questions:
+
+Is create_new_high_score() tied directly to a per-frame event or menu state, rather than a specific user action (like finishing the game)?
+Do you remove or block a score entry once it’s added, or could it be re-added by mistake?
+Next step:
+Check the part of your game where create_new_high_score() is called. Is it inside a section that might run every frame or multiple times whenever the high score screen is displayed, instead of just when a new score is actually achieved?
+
+What trigger should you use to ensure a score is added just once?
+
+
+Shaunythunder
+Updating high scores for asteroids_mode: [('Player', 909)]
+Score entry 0: 1. Player: 909
+Updating high scores for asteroids_mode: [('Player', 909)]
+Score entry 0: 1. Player: 909
+Updating high scores for asteroids_mode: [('Player', 909)]
+Score entry 0: 1. Player: 909
+Updating high scores for asteroids_mode: [('Player', 909)]
+Score entry 0: 1. Player: 909
+Updating high scores for asteroids_mode: [('Player', 909)]
+Score entry 0: 1. Player: 909
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+from game_state_manager import GameStateManager
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_manager: "HighScoreDataManager",
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+self._high_score_data_manager = high_score_data_manager
+self._game_mode = "asteroids_mode"
+self.high_score_title_obj = high_score_display.HighScoreObj(
+100, f"High Scores",
+(255, 255, 255),
+screen_width // 2, screen_height // 8
+)
+
+    self.high_score_entries = []
+    start_y = screen_height // 5
+    line_spacing = 50
+
+    for i in range(10):
+        y_position = start_y + (i * line_spacing)
+        high_score_obj = high_score_display.HighScoreObj(
+            32, f"{i + 1}. Loading...", 
+            (255, 255, 255),
+            screen_width // 2, y_position
+        )
+        self.high_score_entries.append(high_score_obj)
+    
+    self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+def update_high_score_display(self) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    game_mode = self._game_mode
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+    print(f"Updating high scores for {game_mode}: {scores}")
+
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+            print(f"Score entry {index}: {score_text}")
+        else:
+            score_text = f"{index + 1}. ---"
+        
+        score_entry.text = score_text
+
+def draw_high_score_display(self, screen: pygame.Surface, game_mode = "asteroids_mode") -> None:
+    """Draws the high score display on the given screen."""
+    self.high_score_title_obj.draw_high_score_main_title(screen, game_mode)
+
+    for obj in self.display_objs:
+            obj.draw_high_score_obj(screen)
+
+def change_high_score_display(self, game_mode: str) -> None:
+    """Changes the high score display to the specified game mode."""
+    self._game_mode = game_mode
+
+no update top tthe display
+
+Boots
+You’re on the right track—the print statements show that your update logic receives the scores and constructs the display text, but the visual screen does not update as expected.
+
+Let’s reason through what could cause this:
+
+Possible Causes
+Not Redrawing the Screen After Update:
+Are you actually calling draw_high_score_display(screen) after update_high_score_display()? Updating the text in your object alone isn’t enough—Pygame must redraw the updated objects to show the changes.
+
+Surface Not Refreshing:
+Does HighScoreObj re-render its internal Pygame Surface when text is updated? Setting the .text attribute may not rebuild the visual if render logic only runs during initialization.
+
+Game Loop Timing:
+Are update_high_score_display() and draw_high_score_display() called in the correct order and at the right point in your game loop?
+
+Investigative Questions
+After you set score_entry.text = score_text, does the HighScoreObj class re-render the text surface, or does it keep displaying the old one?
+(What’s in your HighScoreObj’s text setter or render logic?)
+Do you call update_high_score_display() whenever a score is changed before redrawing?
+Is another part of the code potentially overwriting or resetting your objects’ display?
+How to Debug
+Try forcibly calling update_high_score_display() and then draw_high_score_display(screen) together (even as a test).
+Inspect or print from HighScoreObj.draw_high_score_obj() to see what .text value it’s actually trying to render.
+Socratic Challenge:
+If updating .text on a Pygame surface doesn’t automatically update the rendered image, what might you need to do inside your HighScoreObj class to ensure the latest text shows?
+
+Let’s see if one of these ideas lines up with your structure!
+
+
+Shaunythunder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+from high_scores_folder.non_interactive_manager.high_score_display_manager import HighScoreDisplayManager
+from high_scores_folder.interactive_manager.high_score_menu_nav_manager import InteractiveHighScoreManager
+import pygame
+
+class HighScoreManager:
+def init(self,
+high_score_data_manager: "HighScoreDataManager",
+high_score_display_handler: "HighScoreDisplayManager",
+high_score_interactive_score_handler: "InteractiveHighScoreManager") -> None:
+self.high_score_data_manager = high_score_data_manager
+self.high_score_display_handler = high_score_display_handler
+self.high_score_interactive_score_handler = high_score_interactive_score_handler
+
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    self.high_score_display_handler.draw_high_score_display(screen)
+
+def update_high_score_display(self) -> None:
+    self.high_score_display_handler.update_high_score_display()
+
+def draw_high_score_navigation(self, screen: pygame.Surface) -> None:
+    self.high_score_interactive_score_handler.draw_high_score_nav_menu(screen)
+
+def update_high_score_navigation(self) -> None:
+    self.high_score_interactive_score_handler.high_score_screen_objs_selection()
+    self.high_score_interactive_score_handler.high_score_objs_respacing()
+
+def update_high_score_nav_with_events(self, event: pygame.event.Event) -> None:    
+    self.high_score_interactive_score_handler.high_score_menu_check_for_input(event)
+
+Boots
+Great! You’ve wrapped your managers together with a HighScoreManager to handle coordinating display and interactivity. Now, let’s connect this with your situation:
+
+You are correctly delegating:
+
+update_high_score_display() calls the display handler’s update.
+draw_high_score_display(screen) delegates the draw.
+But your issue is:
+Even though the underlying high score data updates, the on-screen display does not change.
+
+Key Question
+In your main game or screen loop, when the high score screen is visible, do you call both:
+
+update_high_score_display()
+draw_high_score_display(screen)
+on every display cycle, or at least after any activities that might change the scores?
+
+Or are you calling update... only once—maybe before the first draw, or only on certain events?
+
+Challenge
+What happens inside your HighScoreObj class when you assign a new value to text?
+
+Does assigning .text immediately re-render the Pygame surface for display, or do you need to call a method like .render_surface() or .update_image() to refresh what is actually drawn?
+If .text only changes an internal string, your draw method might still use an old, pre-rendered surface, leading to the display failing to update even though your data is correct.
+So, what do you think happens in this scenario:
+You change the text value on a HighScoreObj, but the old graphic stays on screen. What might need to happen in your HighScoreObj to ensure new text appears each time it's updated?
+
+Would you like to look closer at the text rendering part of your HighScoreObj? Or have you found that section already?
+
+
+Shaunythunder
+"""=====================NON EVENT LOOP LOGIC START====================="""
+
+
+
+if game_state_reporter.request_current_game_logic_state() == "asteroids_mode":
+    asteroids_game_module.spawn_asteroids_game_objects(dt)
+    asteroids_game_module.update_asteroids_game_objects(dt)
+    player_objs_handler.update_player_projectile_objs(dt)
+    player_objs_handler.update_player_primary_obj(dt)
+elif game_state_reporter.request_current_game_logic_state() == "galaga_mode":
+    pass
+elif game_state_reporter.request_current_game_logic_state() == "space_invaders_mode":
+    pass
+elif game_state_reporter.request_current_game_logic_state() == "high_scores":
+    high_score_handler.update_high_score_display()
+    high_score_handler.update_high_score_navigation()
+
+
+"""----------------------NON EVENT LOOP LOGIC END-----------------------"""
+
+Boots
+Let's think this through together! In your non-event loop logic, you are appropriately calling:
+
+elif game_state_reporter.request_current_game_logic_state() == "high_scores":
+    high_score_handler.update_high_score_display()
+    high_score_handler.update_high_score_navigation()
+
+So you are updating your high score display logic every frame while the game is in the "high_scores" state. That’s exactly what you want structurally.
+
+Key Socratic Question:
+
+Where, in your event loop or main draw loop, do you call high_score_handler.draw_high_score_display(screen)?
+Are you sure the drawn surface is being updated every frame, after the update logic runs?
+Second:
+
+When a new score is set, does that happen before you switch to "high_scores" mode?
+Or could there be a delay where your display is updated from old data, because the new score hasn't been added or loaded yet?
+Third:
+
+As we asked before: when changing score_entry.text, does the visible display update immediately? Or does your HighScoreObj class require an explicit render() or "surface update" after setting .text?
+Try this quick experiment:
+In your main rendering section (your draw loop), make sure you call both update logic and draw logic, in that order, like so:
+
+if game_state_reporter.request_current_game_logic_state() == "high_scores":
+    high_score_handler.update_high_score_display()
+    high_score_handler.draw_high_score_display(screen)
+
+Is this what you’re doing in your actual code?
+
+Final challenge:
+If you trace through a single frame:
+
+When you transition into "high_scores" (but after a new score is set), are you calling .update_high_score_display() with up-to-date data?
+Is anything in the draw or update path still displaying cached/old text surfaces?
+If the text still doesn't update visually, what could you check in the HighScoreObj rendering or drawing method?
+
+
+Shaunythunder
+"""=====================DRAWING LOGIC START====================="""
+
+
+
+# For handling drawing logic. All drawing logic is mutually exclusive
+if game_state_reporter.request_current_game_draw_state() == "title_menu":
+    for obj in title_screen_objs.title_screen_objs:
+        if obj == title_screen_objs.title_title_obj:
+            obj.draw_main_title(screen)
+        else:
+            obj.draw_title_obj(screen)
+elif game_state_reporter.request_current_game_draw_state() == "genre_attack":
+    genre_attack_module.draw_genre_attack_title(screen)
+elif game_state_reporter.request_current_game_draw_state() == "asteroids_mode":
+    #asteroids_game_module.draw_asteroids_game_title(screen)
+    player_objs_handler.draw_player_primary_obj(screen)
+    player_objs_handler.draw_player_projectile_objs(screen)
+    asteroids_game_module.draw_asteroids_game_objects(screen)
+elif game_state_reporter.request_current_game_draw_state() == "galaga_mode":
+    galaga_game_module.draw_galaga_game_title(screen)
+elif game_state_reporter.request_current_game_draw_state() == "space_invaders_mode":
+    space_invaders_game_module.draw_space_invaders_game_title(screen)
+elif game_state_reporter.request_current_game_draw_state() == "high_scores":
+    high_score_handler.draw_high_score_display(screen)
+    high_score_handler.draw_high_score_navigation(screen)
+
+"""----------------------DRAWING LOGIC END-----------------------"""
+
+Boots
+Wonderful! Your drawing logic looks structurally correct:
+When in the "high_scores" draw state, both draw_high_score_display(screen) and draw_high_score_navigation(screen) are called each frame.
+
+This means:
+
+Update logic is happening in the non-event-loop section,
+Drawing happens every frame in the draw section,
+Both are gated by the correct "high_scores" state.
+So, if your data is updating but the rendered text does not update, this points us back to one place:
+
+The HighScoreObj Text Rendering
+Key Socratic question:
+When you set score_entry.text = score_text, does this automatically create a new Pygame Surface to draw on the screen? Or is the text string changed, but the drawn image is not regenerated?
+
+If your HighScoreObj looks something like this:
+
+class HighScoreObj:
+    def __init__(...):
+        ...
+        self.text = text
+        self.text_surface = self.font.render(self.text, ...)
+
+    def draw_high_score_obj(self, screen):
+        screen.blit(self.text_surface, ...)
+
+Then changing self.text alone will not update self.text_surface—you must rerender the text surface whenever .text changes!
+
+What should you do?
+Update your HighScoreObj so that when .text is set, it automatically re-renders the Pygame Surface.
+This is often handled with a property setter:
+@property
+def text(self):
+    return self._text
+
+@text.setter
+def text(self, value):
+    self._text = value
+    self.text_surface = self.font.render(self._text, True, self.color)  # or your render method
+
+Reflect:
+Do you already have logic like this?
+If not, can you see how adding it would fix your symptoms (updated data, but not updated visuals)?
+
+Would you like to walk through how to add such a property together? Or do you want to explore your HighScoreObj implementation first?
+
+
+Shaunythunder
+Updated score entry 4 to: 5. ---
+Updated score entry 5 to: 6. ---
+Updated score entry 6 to: 7. ---
+Updated score entry 7 to: 8. ---
+Updated score entry 8 to: 9. ---
+Updated score entry 9 to: 10. ---
+Updated score entry 0 to: 1. Player: 909
+Updated score entry 1 to: 2. ---
+Updated score entry 2 to: 3. ---
+Updated score entry 3 to: 4. ---
+Updated score entry 4 to: 5. ---
+Updated score entry 5 to: 6. ---
+Updated score entry 6 to: 7. ---
+Updated score entry 7 to: 8. ---
+Updated score entry 8 to: 9. ---
+Updated score entry 9 to: 10. ---
+Updated score entry 0 to: 1. Player: 909
+Updated score entry 1 to: 2. ---
+Updated score entry 2 to: 3. ---
+Updated score entry 3 to: 4. ---
+Updated score entry 4 to: 5. ---
+Updated score entry 5 to: 6. ---
+Updated score entry 6 to: 7. ---
+Updated score entry 7 to: 8. ---
+Updated score entry 8 to: 9. ---
+Updated score entry 9 to: 10. ---
+Updated score entry 0 to: 1. Player: 909
+Updated score entry 1 to: 2. ---
+Updated score entry 2 to: 3. ---
+Updated score entry 3 to: 4. ---
+Updated score entry 4 to: 5. ---
+Updated score entry 5 to: 6. ---
+Updated score entry 6 to: 7. ---
+Updated score entry 7 to: 8. ---
+Updated score entry 8 to: 9. ---
+Updated score entry 9 to: 10. ---
+Updated score entry 0 to: 1. Player: 909
+Updated score entry 1 to: 2. ---
+Updated score entry 2 to: 3. ---
+Updated score entry 3 to: 4. ---
+Updated score entry 4 to: 5. ---
+Updated score entry 5 to: 6. ---
+Updated score entry 6 to: 7. ---
+Updated score entry 7 to: 8. ---
+Updated score entry 8 to: 9. ---
+Updated score entry 9 to: 10. ---
+Updated score entry 0 to: 1. Player: 909
+Updated score entry 1 to: 2. ---
+Updated score entry 2 to: 3. ---
+Updated score entry 3 to: 4. ---
+Updated score entry 4 to: 5. ---
+Updated score entry 5 to: 6. ---
+Updated score entry 6 to: 7. ---
+Updated score entry 7 to: 8. ---
+Updated score entry 8 to: 9. ---
+Updated score entry 9 to: 10. ---
+Updated score entry 0 to: 1. Player: 909
+Updated score entry 1 to: 2. ---
+Updated score entry 2 to: 3. ---
+Updated score entry 3 to: 4. ---
+Updated score entry 4 to: 5. ---
+Updated score entry 5 to: 6. ---
+Updated score entry 6 to: 7. ---
+Updated score entry 7 to: 8. ---
+Updated score entry 8 to: 9. ---
+Updated score entry 9 to: 10. ---
+Updated score entry 0 to: 1. Player: 909
+Updated score entry 1 to: 2. ---
+Updated score entry 2 to: 3. ---
+Updated score entry 3 to: 4. ---
+Updated score entry 4 to: 5. ---
+Updated score entry 5 to: 6. ---
+Updated score entry 6 to: 7. ---
+Updated score entry 7 to: 8. ---
+Updated score entry 8 to: 9. ---
+Updated score entry 9 to: 10. ---
+Updated score entry 0 to: 1. Player: 909
+Updated score entry 1 to: 2. ---
+Updated score entry 2 to: 3. ---
+Updated score entry 3 to: 4. ---
+Updated score entry 4 to: 5. ---
+Updated score entry 5 to: 6. ---
+Updated score entry 6 to: 7. ---
+Updated score entry 7 to: 8. ---
+Updated score entry 8 to: 9. ---
+
+its updating, but its not getting to the screen
+
+Boots
+You’ve confirmed that your code is updating the score entry text correctly—your print statements show the new values assigned to each score_entry.text. Yet, as you wisely remark, the new text is not appearing on the screen.
+
+Let’s focus our wizardly debugging senses on the gap between data update and screen draw:
+
+The likely cause
+Almost certainly, the Pygame Surface that visually displays the text is not being regenerated when you assign a new value to score_entry.text.
+
+In many game architectures, the text property is just data, but the actual drawing comes from a rendered surface (like self.text_surface). Unless you re-render that surface when text changes, the visualization remains stuck at whatever it was at creation.
+
+What to check in your HighScoreObj
+After you set score_entry.text = ..., does HighScoreObj automatically call something like self.text_surface = self.font.render(self.text, ...)?
+Or do you have to call a specific method to update the rendered surface?
+If not, your display will never reflect the new text, no matter how many times you update the string!
+
+How can you fix this?
+You want to trigger a surface redraw every time the text changes. This is often done by making text a property:
+
+class HighScoreObj:
+    def __init__(self, ...):
+        ...
+        self._text = text
+        self.font = pygame.font.Font(...)
+        self.color = color
+        self.text_surface = self.font.render(self._text, True, self.color)
+
+    @property
+    def text(self):
+        return self._text
+
+    @text.setter
+    def text(self, value):
+        self._text = value
+        self.text_surface = self.font.render(self._text, True, self.color)
+
+With this magic, every assignment to .text immediately creates a new rendered surface.
+
+Socratic Challenge
+Can you find where your HighScoreObj draws text to a surface?
+When you change .text, is that rendering process triggered?
+If not, how might you insert the rendering logic so it always happens on update?
+Deepen your learning:
+After you fix this, do you see your updated scores on-screen?
+Would you like a quick quiz on property setters, or are you ready to forge ahead?
+
+
+Shaunythunder
+def update_high_score_obj(self, new_text: str) -> None:
+    """Updates the text of the high score object."""
+    self.text = new_text
+    self.high_score_obj = self.font.render(self.text, False, self.color, None)
+    self.high_score_rect = self.high_score_obj.get_rect(center = (self.pos_x, self.pos_y))
+
+Boots
+Splendid, young coder! This update_high_score_obj method is exactly what's needed: it not only sets the new text but also rerenders the Pygame surface and updates its rect for correct positioning.
+
+Now, let's use this power wisely:
+
+When you update a score entry, always call score_entry.update_high_score_obj(score_text) instead of just setting .text.
+This ensures the displayed text is correctly rendered on screen, every time the score changes.
+For example, inside your display update:
+
+for index, score_entry in enumerate(self.high_score_entries):
+    if index < len(scores):
+        player_name, score = scores[index]
+        score_text = f"{index + 1}. {player_name}: {score:,}"
+    else:
+        score_text = f"{index + 1}. ---"
+    score_entry.update_high_score_obj(score_text)
+
+Socratic question:
+Why is it important to both update the text and rerender the surface every time, instead of just assigning a new string to a text attribute?
+
+Are you ready to try this and see your scores appear as they should?
+
+
+Shaunythunder
+def update_high_score_display(self) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    game_mode = self._game_mode
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        
+        score_entry.update_high_score_obj(score_text)
+
+Boots
+Marvelous! By calling score_entry.update_high_score_obj(score_text) within your loop, you ensure that each HighScoreObj both receives the new text and immediately regenerates its Pygame surface for display.
+
+This should resolve the issue:
+
+Your high scores will update in memory,
+The screen will be visually refreshed with the latest data,
+No more stale text or mysterious missing numbers.
+Critical thinking prompt:
+Why is it better to encapsulate both text assignment and surface rendering within a single update_high_score_obj() method, rather than updating text and rendering separately?
+
+Would you like to test this flow, or shall I quiz you on some Pygame drawing fundamentals to further strengthen your wizardly codecraft?
+
+
+Shaunythunder
+okay I got a weird one when I click on the high score menu button turn on the title menu go to the high score screen but exit out back to the title screen and I tried to get back into the high the button is not active it doesn't do anything when I click it
+
+Boots
+A fine bug to hunt! When a menu button works the first time but not after returning, it often means state is not properly reset when you exit and re-enter the high score screen.
+
+Let's reason through the flow step by step:
+
+Does your menu button have a boolean (like active or visible) that controls whether it responds to input?
+
+Is this flag being set to False or otherwise changed when you leave the high score screen?
+When you return to the title screen, do you reset all buttons, or just change screens?
+
+If you have logic that disables inputs or hides certain elements on transition, does it also re-enable/reset them when coming back?
+Are you re-initializing or re-using the same button/menu object every time?
+
+If you only create it once and don’t reset its state, it could “remember” being deactivated.
+Questions to investigate:
+Is there a function that sets the high score button's clickable/active state? Where and when is it called?
+When transitioning screens, is there any part of your code that disables, hides, or deactivates menu buttons as a “cleanup” step?
+If your menu button has any state (pressed, hovered, active...etc.), does it get properly re-initialized when you enter the title screen again?
+A test to try:
+Print or log the state of the high score button (e.g., my_button.active or similar) every time you enter/exit the title menu and high score screen. That should show you if it’s getting “stuck” off.
+
+Socratic prompt:
+If you only ever set a button to inactive on exit, but never set it back to active on re-entry, what happens to its usability on future visits?
+
+Let’s see if you can spot where the button’s state is being toggled—or not! Would you like help tracing that logic, or do you want to have a go yourself first?
+
+
+Shaunythunder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from wave_manager import WaveManager
+from player_class.player_primary_object import PlayerPrimaryObj
+from player_class.player_obj_manager import PlayerObjManager
+from asteroids_game_folder.asteroids_game import AsteroidsGame
+import pygame
+
+Game States
+TITLE_MENU = "title_menu"
+GENRE_ATTACK = "genre_attack"
+ASTEROIDS_MODE = "asteroids_mode"
+GALAGA_MODE = "galaga_mode"
+SPACE_INVADERS = "space_invaders_mode"
+HIGH_SCORES = "high_scores"
+QUIT = "quit"
+PAUSED = "paused"
+RESUME_GAME = "resume_game"
+GAME_OVER = "game_over"
+RETRY_GAME = "retry_game"
+
+Brain for the game. Tracks game states. Takes inputs from modules and then reports the game state
+to the main loop. Works directly with the wave manager to reset the game state when needed.
+class GameStateManager:
+"""Manages the game state transitions and interactions between different game modules."""
+def init (self,
+screen_width:int,
+screen_height: int,
+game_draw_state: str | None,
+game_logic_state: str| None,
+game_overlay_state: str | None,
+wave_manager: "WaveManager | None",
+player_obj: "PlayerPrimaryObj | None",
+player_objs_handler: "PlayerObjManager | None",
+asteroids_game_module: "AsteroidsGame | None"):
+
+    self.screen_width = screen_width
+    self.screen_height = screen_height
+    self._game_draw_state = game_draw_state
+    self._game_logic_state = game_logic_state
+    self._game_overlay_state = game_overlay_state
+    self._is_debug_toggled = False
+    self._is_fps_debug_toggled = False
+    self._transition_from_pause = False
+    self.wave_manager = wave_manager
+    self.player_obj = player_obj
+    self.player_objs_handler = player_objs_handler
+    self.asteroids_game_module = asteroids_game_module
+
+def request_game_state_change(self, requested_game_state: str | None) -> None:
+    """ Core of the game state manager.
+    Takes the requested game state and changes the game state accordingly.
+    Signals to wave manager to reset the game state if needed.
+    Flips boolean for genre attack mode."""
+    if requested_game_state == "title_menu":
+        self._game_draw_state = TITLE_MENU
+        self._game_logic_state = TITLE_MENU
+        self._game_overlay_state = None
+        self._transition_from_pause = False
+        self.reset_modules()
+    elif requested_game_state == "genre_attack":
+        assert self.wave_manager is not None, "Wave manager must be initialized for genre attack mode."
+        self._game_draw_state = SPACE_INVADERS
+        self._game_logic_state = SPACE_INVADERS
+        self.wave_manager.genre_attack_toggle()
+        self._game_overlay_state = None
+    elif requested_game_state == "asteroids_mode":
+        assert self.player_obj is not None, "Player object must be initialized for asteroids mode."
+        self._game_draw_state = ASTEROIDS_MODE
+        self._game_logic_state = ASTEROIDS_MODE
+        if not self._transition_from_pause:
+            self.player_obj.player_primary_obj_genre_transition(self.screen_width // 2, self.screen_height // 2, 0)
+        self._transition_from_pause = False
+        self._game_overlay_state = None
+    elif requested_game_state == "galaga_mode":
+        self._game_draw_state = GALAGA_MODE
+        self._game_logic_state = GALAGA_MODE
+        self._game_overlay_state = None
+    elif requested_game_state == "space_invaders_mode":
+        self._game_draw_state = SPACE_INVADERS
+        self._game_logic_state = SPACE_INVADERS
+        self._game_overlay_state = None
+    elif requested_game_state == "high_scores":
+        print("Requesting high scores.")
+        self._game_draw_state = HIGH_SCORES
+        self._game_logic_state = HIGH_SCORES
+        self._game_overlay_state = None
+    elif requested_game_state == "quit":
+        self._game_logic_state = QUIT
+    elif requested_game_state == "paused":
+        self._game_logic_state = PAUSED
+        self._game_overlay_state = PAUSED
+        self._transition_from_pause = True    
+    elif requested_game_state == "resume_game":
+        self._game_logic_state = self._game_draw_state
+        self._game_overlay_state = None
+    elif requested_game_state == "game_over":
+        self._game_logic_state =  GAME_OVER
+        self._game_overlay_state = GAME_OVER
+    elif requested_game_state == "retry_game":
+        current_game_state = self._game_draw_state
+        self._transition_from_pause = False
+        self.reset_modules()
+        self.request_game_state_change(current_game_state)
+    
+
+def reset_modules(self) -> None:
+    """Resets all modules to their initial state."""
+    assert self.wave_manager is not None, "Wave manager must be initialized to reset modules."
+    assert self.player_objs_handler is not None, "Player object handler must be initialized to reset modules."
+    assert self.asteroids_game_module is not None, "Asteroids game module must be initialized to reset modules."
+    self.wave_manager.reset_wave_manager()
+    self.player_objs_handler.reset_player_obj_manager()
+    self.asteroids_game_module.reset_asteroids_game()
+
+def request_current_game_draw_state(self) -> str | None:
+    """Signals to main game loop current draw state."""
+    return self._game_draw_state
+
+def request_current_game_logic_state(self) -> str | None:
+    """Signals to main game loop current logic state."""
+    return self._game_logic_state
+
+def request_current_game_overlay_state(self) -> str | None:
+    """Signals to main game loop current overlay state."""
+    return self._game_overlay_state
+
+def toggle_debug_keyboard_input(self, event: pygame.event.Event) -> None:
+    """Handles keyboard inputs for toggling debug and FPS debug states."""
+    # Press F4 to toggle debug on and off.
+    # Press F5 to toggle FPS debug on and off.
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_F4:
+        self._is_debug_toggled = not self._is_debug_toggled
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_F5:
+        self._is_fps_debug_toggled = not self._is_fps_debug_toggled
+
+
+def report_debug_toggle_state(self) -> bool:
+    """Reports the current debug toggle state."""
+    return self._is_debug_toggled
+
+def report_fps_debug_toggle_state(self) -> bool:
+    """Reports the current FPS debug toggle state."""
+    return self._is_fps_debug_toggled
+
+Boots
+Your GameStateManager appears to handle draw and logic state transitions thoroughly, and it doesn’t directly manage menu/button objects—that’s likely handled elsewhere (perhaps within the title menu or input managers). Yet, your issue clues us in that something about the button’s state is not reset or re-enabled when you switch to and from the high scores screen.
+
+Let’s distill this situation with a wizardly set of guiding questions:
+
+1. What disables the High Score Menu Button?
+Is there code that sets an active, enabled, or similar property on the high score menu button to False or disables it when pressed?
+On leaving the high score screen, does anything reset or re-enable that button’s state?
+2. What resets when returning to the Title Menu?
+In your request_game_state_change("title_menu") method, you call self.reset_modules().
+Does this also affect the title menu buttons, or only gameplay modules?
+Are the menu objects or their state reset when you return to the title menu, or do they persist from the last time you visited?
+3. Input Handling
+When you try to click the high score button after returning to the title menu, does your input (mouse or keyboard) register at all?
+Can you confirm that the other buttons still work, or is it only the high score button that becomes unresponsive?
+Socratic Nudge
+If a button becomes inactive after use, but isn’t reactivated when returning to its menu:
+
+Where in your codebase (perhaps in your menu or navigation manager) would you expect to find a reset or reactivation step?
+If you were to add a method like reset_buttons() on your menu handler, when should it be called with respect to game state transitions?
+Summary:
+Your GameStateManager takes care of which state the game is in. But what happens to buttons and screen objects during those state transitions depends on the menu/navigation logic. If you don’t reset or re-initialize the high score button’s state when returning to the title menu, it remains in the state left from the previous visit (possibly inactive).
+
+Would you like a hint on how to approach this reset, or are you ready to hunt down where your button’s state could be stuck?
+
+
+Shaunythunder
+import pygame
+from . import title_objs
+from game_state_manager import GameStateManager
+
+Handles the overall logic for iteration, selection, and drawing.
+class TitleScreen:
+def init(self,
+game_state_reporter: GameStateManager,
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+
+    self.title_screen_objs_keyboard_index = None
+    self.title_screen_objs_mouse_index = None
+    
+    
+
+    self.title_title_obj = title_objs.TitleObj(100, "Galactic Asteroid Invaders", (255, 255, 255), screen_width // 2, screen_height // 4)
+    self.genre_attack_title_obj = title_objs.TitleObj(32, "Genre Attack", (255, 255, 255), screen_width // 2, screen_height)
+    self.asteroids_game_title_obj = title_objs.TitleObj(32, "Asteroids Mode", (255, 255, 255), screen_width // 2, screen_height)
+    self.galaga_game_title_obj = title_objs.TitleObj(32, "Galaga Mode", (255, 255, 255), screen_width // 2, screen_height)
+    self.space_invaders_game_title_obj = title_objs.TitleObj(32, "Space Invaders Mode", (255, 255, 255), screen_width // 2, screen_height)
+    self.high_scores_title_obj = title_objs.TitleObj(32, "High Scores", (255, 255, 255), screen_width // 2, screen_height)
+    self.quit_title_obj = title_objs.TitleObj(32, "Quit Game", (255, 255, 255), screen_width // 2, screen_height)
+
+    self.title_screen_objs = [
+        self.title_title_obj,
+        self.genre_attack_title_obj,
+        self.asteroids_game_title_obj,
+        self.galaga_game_title_obj,
+        self.space_invaders_game_title_obj,
+        self.high_scores_title_obj,
+        self.quit_title_obj
+    ]
+    self.title_screen_objs_index_len = len(self.title_screen_objs)
+
+def title_screen_objs_selection(self) -> None:
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, 
+    # selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, title_obj in enumerate(self.title_screen_objs):
+        # Reset all selections at loop start.
+        title_obj.is_selected = False
+    for i, title_obj in enumerate(self.title_screen_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not title_obj.title_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.title_screen_objs_mouse_index = None
+        if title_obj.title_obj_rect.collidepoint(mouse_x, mouse_y):
+            title_obj.is_selected = True
+            self.title_screen_objs_mouse_index = self.title_screen_objs.index(title_obj)
+            self.title_screen_objs_keyboard_index = None
+            break
+        elif self.title_screen_objs_keyboard_index != None and i == self.title_screen_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            title_obj.is_selected = True
+            break
+    
+def title_objs_respacing(self, screen_height: int)-> None:
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    title_screen_respacing_len = len(self.title_screen_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (title_screen_respacing_len - 1))
+    for i, title_obj in enumerate(self.title_screen_objs):
+        if i == 0:
+            pass
+        else:
+            title_obj.title_obj_rect.centery = start_y + i * spacing
+            title_obj.selected_title_obj_rect.centery = start_y + i * spacing
+            
+
+def title_menu_check_for_input(self, event: pygame.event.Event) -> None:
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.title_screen_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.title_screen_objs_keyboard_index == None:
+            self.title_screen_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.title_screen_objs_keyboard_index > 1:
+            self.title_screen_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.title_screen_objs_keyboard_index < (self.title_screen_objs_index_len - 1):
+            self.title_screen_objs_keyboard_index += 1
+    
+def request_new_game_state(self) -> None:
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.title_screen_objs_keyboard_index == 1 or self.title_screen_objs_mouse_index == 1:
+        self._game_state_reporter.request_game_state_change("genre_attack")
+    elif self.title_screen_objs_keyboard_index == 2 or self.title_screen_objs_mouse_index == 2:
+        self._game_state_reporter.request_game_state_change("asteroids_mode")
+    elif self.title_screen_objs_keyboard_index == 3 or self.title_screen_objs_mouse_index == 3:
+        self._game_state_reporter.request_game_state_change("galaga_mode")
+    elif self.title_screen_objs_keyboard_index == 4 or self.title_screen_objs_mouse_index == 4:
+        self._game_state_reporter.request_game_state_change("space_invaders_mode")
+    elif self.title_screen_objs_keyboard_index == 5 or self.title_screen_objs_mouse_index == 5:
+        self._game_state_reporter.request_game_state_change("high_scores")
+    elif self.title_screen_objs_keyboard_index == 6 or self.title_screen_objs_mouse_index == 6:
+        self._game_state_reporter.request_game_state_change("quit")
+
+Boots
+Your implementation is quite robust, and your menu button states are tracked via title_screen_objs_mouse_index and title_screen_objs_keyboard_index. Let’s reason out why the High Scores button stops working after you return from the high scores screen.
+
+What likely happens:
+When you enter the high scores menu, game_state_reporter.request_game_state_change("high_scores") is called.
+When you return to the title menu, the indices for menu selection (title_screen_objs_mouse_index and title_screen_objs_keyboard_index) may not be reset.
+If a stale index persists, especially title_screen_objs_mouse_index, it might not update correctly on your next entry—potentially leaving your logic in a state where it does not detect your mouse as selecting the "High Scores" button.
+Reflect on this logic:
+In title_screen_objs_selection, the mouse index is only reset inside the loop for each object if the mouse isn't over that particular object. However, if you never move your mouse or if the state persists, the index may stay fixed on a value corresponding to a previously selected button.
+When you come back to the menu, if these indices aren’t re-initialized, the menu may think you already have something selected—even when the mouse moves or clicks.
+How to fix:
+Consider explicitly resetting title_screen_objs_mouse_index and title_screen_objs_keyboard_index to None every time you enter the title menu state.
+
+You might add a method like:
+
+def reset_menu_selection(self):
+    self.title_screen_objs_mouse_index = None
+    self.title_screen_objs_keyboard_index = None
+
+...and call this method when you switch back to the title menu (for example, within your game state manager when changing state to "title_menu").
+
+Socratic Question
+What do you expect will happen to your menu navigation logic if you do not clear the selection indices when returning to the menu?
+How does resetting these indices help the event detection and ensure the menu behaves as if it’s freshly entered each time?
+Would you like guidance on exactly where to insert the reset, or shall you try it out yourself and see if that restores the button’s magic?
+
+
+Shaunythunder
+Its like the button just turns off for some reason
+
+Boots
+Indeed—a button “turning off” almost always means that its state variable (like a selection index or an active flag) is not reset or is left in an unusable state when returning to the menu.
+
+Let’s hone our claws and focus:
+
+Key Questions to Debug
+Are your mouse/keyboard indices (title_screen_objs_mouse_index and ..._keyboard_index) ever reset to None when coming back to the title menu?
+If not, old values may persist, “disabling” button selection and input.
+Do you re-initialize or refresh TitleScreen when returning, or could you be operating on objects in a stale state?
+Does your mouse event logic actually fire (are clicks being detected) on the second menu entry, or is the menu stuck in a “selected” state?
+Try printing inside title_menu_check_for_input to see if it triggers.
+Practical Step
+Try adding this when you return to the title menu:
+
+title_screen.reset_menu_selection()
+
+And in your TitleScreen class:
+
+def reset_menu_selection(self):
+    self.title_screen_objs_mouse_index = None
+    self.title_screen_objs_keyboard_index = None
+
+Socratic thought:
+If you never clear these indices, is it possible the menu is “stuck” thinking an entry is already selected or being acted upon, thereby not responding to new clicks?
+Do any other menu functions or state transitions depend on these indices being None for detecting fresh menu input?
+If you try resetting and the button works again, you’ll know you’ve tracked down the root cause. Would you like help searching for the right spot to insert the reset, or would you enjoy the hunt?
+
+
+Shaunythunder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+from game_state_manager import GameStateManager
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_manager: "HighScoreDataManager",
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+self._high_score_data_manager = high_score_data_manager
+self._game_mode = "asteroids_mode"
+self.high_score_title_obj = high_score_display.HighScoreObj(
+100, f"High Scores",
+(255, 255, 255),
+screen_width // 2, screen_height // 8
+)
+
+    self.high_score_entries = []
+    start_y = screen_height // 5
+    line_spacing = 50
+
+    for i in range(10):
+        y_position = start_y + (i * line_spacing)
+        high_score_obj = high_score_display.HighScoreObj(
+            32, f"{i + 1}. Loading...", 
+            (255, 255, 255),
+            screen_width // 2, y_position
+        )
+        self.high_score_entries.append(high_score_obj)
+    
+    self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+def reset_high_score_display(self) -> None:
+    self.__init__(
+        self._game_state_reporter,
+        self._high_score_data_manager,
+        self.high_score_title_obj.high_score_rect.width,
+        self.high_score_title_obj.high_score_rect.height
+    )
+
+def update_high_score_display(self) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    game_mode = self._game_mode
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        
+        score_entry.update_high_score_obj(score_text)
+       
+
+def draw_high_score_display(self, screen: pygame.Surface, game_mode = "asteroids_mode") -> None:
+    """Draws the high score display on the given screen."""
+    self.high_score_title_obj.draw_high_score_main_title(screen, game_mode)
+
+    for obj in self.display_objs:
+            obj.draw_high_score_obj(screen)
+
+def change_high_score_display(self, game_mode: str) -> None:
+    """Changes the high score display to the specified game mode."""
+    self._game_mode = game_mode
+
+Boots
+Your HighScoreDisplayManager class initialization and reset logic look tidy, but this class isn’t responsible for menu button activation—its job is just to organize and show the high score entries.
+
+If you’re considering a parallel between your reset_high_score_display() method and menu button logic, here’s a wizardly insight:
+
+Resetting Display Objects: Perfect for getting a clean slate before showing high scores.
+Resetting Button State: That must still happen on your menu/navigation classes, not here!
+What Does This Mean for the Button Bug?
+Even if you reset or re-initialize your HighScoreDisplayManager, it won’t affect your title menu buttons, because they’re managed elsewhere.
+
+Key takeaways for your specific issue:
+Focus on where your menu button (especially the high scores button) is tracked and selected.
+Reset the selection indices (title_screen_objs_mouse_index, etc.) in your TitleScreen class whenever you return to the title screen.
+The display manager does not track user interaction or input state for the main menu.
+Socratic Prompt
+If your menu’s selection indices remain unset or stuck, what would happen if you try to move your mouse over the button again? Would the menu logic "see" a new selection, or just ignore it?
+Is the “reset” you’re performing in your high score display manager connected in any way to the menu’s button state?
+Would you like to discuss how you might call the menu reset in the right place, or review the event flow of your screen transitions?
+
+
+Shaunythunder
+I moved on from that
+
+Boots
+Wise of you! Sometimes the best magic is to keep moving forward and come back with fresh eyes. If you bump into another troublesome enchantment—be it an elusive bug, a puzzling design, or something curious about Python or Pygame—just call upon old Boots.
+
+Would you like a quick pop quiz to test your understanding of high score rendering and menu state handling, or would you rather press onward to your next adventure?
+
+
+Shaunythunder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+from game_state_manager import GameStateManager
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_manager: "HighScoreDataManager",
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+self._high_score_data_manager = high_score_data_manager
+self._game_mode = "asteroids_mode"
+self.high_score_title_obj = high_score_display.HighScoreObj(
+100, f"High Scores",
+(255, 255, 255),
+screen_width // 2, screen_height // 8
+)
+
+    self.high_score_entries = []
+    start_y = screen_height // 5
+    line_spacing = 50
+
+    for i in range(10):
+        y_position = start_y + (i * line_spacing)
+        high_score_obj = high_score_display.HighScoreObj(
+            32, f"{i + 1}. Loading...", 
+            (255, 255, 255),
+            screen_width // 2, y_position
+        )
+        self.high_score_entries.append(high_score_obj)
+    
+    self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+def reset_high_score_display(self) -> None:
+    self.__init__(
+        self._game_state_reporter,
+        self._high_score_data_manager,
+        self.high_score_title_obj.high_score_rect.width,
+        self.high_score_title_obj.high_score_rect.height
+    )
+
+def update_high_score_display(self) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    game_mode = self._game_mode
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        
+        score_entry.update_high_score_obj(score_text)
+       
+
+def draw_high_score_display(self, screen: pygame.Surface, game_mode = "asteroids_mode") -> None:
+    """Draws the high score display on the given screen."""
+    self.high_score_title_obj.draw_high_score_main_title(screen, game_mode)
+
+    for obj in self.display_objs:
+            obj.draw_high_score_obj(screen)
+
+def change_high_score_display(self, game_mode: str) -> None:
+    """Changes the high score display to the specified game mode."""
+    self._game_mode = game_mode
+
+the reset coordinates are shifted for some reason
+
+Boots
+Good observation! If you are finding that after calling reset_high_score_display() the coordinates of your high score objects are shifted or not what you expect, let’s investigate why.
+
+Here’s what’s happening:
+In your reset_high_score_display() method, you call:
+
+self.__init__(
+    self._game_state_reporter,
+    self._high_score_data_manager,
+    self.high_score_title_obj.high_score_rect.width,
+    self.high_score_title_obj.high_score_rect.height
+)
+
+Let’s look at what values are being used:
+
+Instead of reusing the original screen_width and screen_height, you’re using the width and height of the high score title object’s rect.
+Why is this a problem?
+self.high_score_title_obj.high_score_rect.width and .height are not your full screen dimensions—they’re just the size of the rendered text surface for the title!
+This means your objects are getting created thinking the "screen" is as small as the text label, so their coordinates will be shifted or compressed to this much smaller area.
+How do you fix this?
+You’ll want to store your intended screen_width and screen_height as attributes on your manager when first initialized, so you can always reuse the correct values.
+
+For example, add in __init__:
+
+self._screen_width = screen_width
+self._screen_height = screen_height
+
+Then, in reset_high_score_display(), call:
+
+self.__init__(
+    self._game_state_reporter,
+    self._high_score_data_manager,
+    self._screen_width,
+    self._screen_height
+)
+
+Socratic check:
+Why is using the text rect’s width and height leading to shifted coordinates?
+What will happen if you always use your stored screen dimensions for resetting?
+Try this change, and see if your objects stay where you expect!
+
+
+Shaunythunder
+co pilot strikes again
+
+Boots
+Ah, indeed—sometimes the automagical suggestions of code wizards like Copilot can lead you astray, especially when context slips away! While helpers can be useful companions, they don’t always grasp your grand intent, especially with things like screen dimensions or intricate state.
+
+The lesson here: always anchor important values, like your screen width and height, as explicit attributes rather than relying on properties of unrelated objects (like a text rect’s size).
+
+If you ever run into another mysterious behavioral shift or Copilot casts a wild spell, just call out. Would you like a quiz about managing dimensions and state, or would you prefer to press onward to your next bit of code?
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

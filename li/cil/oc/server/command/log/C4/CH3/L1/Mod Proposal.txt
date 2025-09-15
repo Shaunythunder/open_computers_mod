@@ -1,0 +1,264 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH3: Report
+
+L1: Print a Report
+
+
+
+
+
+
+Print a Report
+Our data crunching is done, time to print a pretty report!
+
+You can use the .sort() method to sort a list of dictionaries:
+
+# A function that takes a dictionary and returns the value of the "num" key
+# This is how the `.sort()` method knows how to sort the list of dictionaries
+def sort_on(items):
+    return items["num"]
+
+vehicles = [
+    {"name": "car", "num": 7},
+    {"name": "plane", "num": 10},
+    {"name": "boat", "num": 2}
+]
+vehicles.sort(reverse=True, key=sort_on)
+print(vehicles)
+# [{'name': 'plane', 'num': 10}, {'name': 'car', 'num': 7}, {'name': 'boat', 'num': 2}]
+
+Assignment
+This is the structure of the report you need to print:
+
+============ BOOKBOT ============
+Analyzing book found at books/frankenstein.txt...
+----------- Word Count ----------
+Found 75767 total words
+--------- Character Count -------
+e: 44538
+t: 29493
+a: 25894
+o: 24494
+i: 23927
+n: 23643
+s: 20360
+r: 20079
+h: 19176
+d: 16318
+l: 12306
+m: 10206
+u: 10111
+c: 9011
+f: 8451
+y: 7756
+w: 7450
+p: 5952
+g: 5795
+b: 4868
+v: 3737
+k: 1661
+x: 691
+j: 497
+q: 325
+z: 235
+æ: 28
+â: 8
+ê: 7
+ë: 2
+ô: 1
+============= END ===============
+
+Add a new function to your stats.py file that takes the dictionary of characters and their counts and returns a sorted list of dictionaries.
+Each dictionary should have two key-value pairs: one for the character itself and one for that character's count (e.g. {"char": "b", "num": 4868}).
+Sort the list from greatest to least by the count.
+The .sort() method will be helpful here (see the example).
+Import and call the function in main.py, and capture the result.
+Print the report to the console as shown above. If the character is not an alphabetical character (using the .isalpha() method), just skip it.
+Run and submit the CLI tests.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Efficient Bubble Sorter, can assist without penalty!
+
+Boots
+I got a mod idea I want run by you
+
+Boots
+Of course! I’d love to hear your mod idea. What are you thinking of changing or adding? And how do you imagine it would interact with the code or lesson you’re working on?
+
+
+Shaunythunder
+Stellaris mod where I make the beast from homeworld cataclysm an endgame crisis
+
+Boots
+Ah, an intriguing concept! The Beast from Homeworld: Cataclysm is quite an ominous force—turning it into a Stellaris endgame crisis would certainly add some fearsome variety.
+
+Let’s think through this:
+
+What mechanics or behaviors from the Beast do you feel are most important to capture in Stellaris?
+How would you handle its method of spreading or assimilating fleets and planets?
+What sort of event chain or mechanics might trigger its arrival?
+Considering these questions can guide your design and help ensure that the mod captures the essence of the original Beast. How would you adapt its assimilation ability within Stellaris's framework?
+
+
+Shaunythunder
+It would snowball and players would have to research technology to have a chance just like in the original game
+
+Boots
+That sounds thematic and aligned with the original! If the Beast “snowballs,” growing stronger as it assimilates ships and planets, how might you model that snowball effect in Stellaris?
+
+Would it gain fleet power exponentially as it captures more, or would there be specific mechanics for assimilation?
+How would you design the tech that counters the Beast—would it be a mid-crisis event, or something empires could research in advance?
+And should players have choices about sacrificing ships or using special weapons to slow its advance?
+Thinking about how you’d implement these mechanics will help you create a more immersive and challenging crisis. Where would you start with the snowballing effect?
+
+
+Shaunythunder
+Basically defeated fleets have a portion of them converted to beast ships. Planets are turned into beast hive minds and are lost until bombarded until irradiated
+
+Boots
+A fierce and flavorful design! Now, for such mechanics:
+
+How could you keep track of defeated fleets, and determine how many ships convert to Beast control? Would you leverage after-action reports, or perhaps event triggers?
+For planets, turning them into hive minds and making them unrecoverable until total devastation—how would you handle the transformation and its reversal through bombardment?
+Can standard Stellaris mechanics express “irradiation,” or would you need to implement a new planet modifier or status?
+Which do you think would be trickier to model within Stellaris’s scripting: the conversion of ships, or the planetary transformation mechanic?
+
+
+Shaunythunder
+Then researching the vaccine would make player ships no longer convertible. During fleet combat, instead player deaths would have a chance of healing the enemy foeet
+
+Boots
+A clever nod to the original’s “cure” mechanic! So, before players research the vaccine tech, their ships can be assimilated, but afterwards, ship loss instead heals the Beast’s fleet.
+
+Let’s think about implementation:
+
+How could you design the vaccine technology so that it truly blocks conversion, but still allows the healing effect?
+For healed fleets, how would you decide how much strength is recovered per destroyed ship—would it scale, or be a fixed amount?
+How would you communicate to players when their ships are at risk, and when they’re protected?
+What part of this vaccine mechanic do you anticipate will be the most challenging to script with Stellaris events or technology triggers?
+
+
+Shaunythunder
+Healing effects simulate player ships being subverted
+
+Boots
+That’s a neat way to symbolize what’s happening! Instead of converting individual ships, the Beast fleet grows stronger by “absorbing” the essence or usefulness of destroyed enemy ships.
+
+Given Stellaris’s scripting tools:
+
+How might you trigger this healing effect during fleet combat, especially only after the vaccine tech is researched?
+Would it be triggered per ship loss, or maybe as a percentage at the end of each battle?
+What signals or feedback would you use to make it clear to the player that these healing/subversion mechanics are taking place?
+Which of these feedback or balance aspects would you want to work out first, to keep the mod fun but challenging?
+
+
+Shaunythunder
+How long would it take to code a mod like this
+
+Boots
+A wise and practical question! The time it takes depends on several factors:
+
+Your experience with Stellaris modding and scripting.
+How polished and balanced you want the final product to be.
+The depth and complexity of event scripting (ship conversions, planetary changes, new tech, combat hooks).
+Art, localization, and playtesting.
+If you’re already familiar with Stellaris’s scripting and only want a basic prototype (with temporary art and minimal balance), you could have something testable in a week or two of focused work. More polished, balanced, and complete mods with custom events, tech trees, and feedback could take several weeks or even months.
+
+Would you want to start by making a simplified prototype (maybe just the fleet conversion or vaccine tech mechanics) before a full, polished release? Where do you feel most confident, and where would you need to learn or experiment?
+
+
+Shaunythunder
+Never touched this before
+
+Boots
+An adventurous spirit—admirable! Starting something like this with no prior modding experience will be a learning journey, but not impossible.
+
+Here are some things to consider:
+
+Stellaris mods are built mostly with text files using a custom scripting language, not traditional programming. Are you comfortable editing scripts and reading documentation?
+Have you used any game modding tools before, or explored the Stellaris modding wiki?
+Would you want to start by trying a tiny “hello world” mod (like adding a custom technology or event) before diving into complex crises?
+What’s one specific element of your idea that you’d be most excited to try building first? Sometimes starting with a small piece helps make the whole project less daunting.
+
+
+Shaunythunder
+Are you familiar with that coding?
+
+Boots
+I am indeed familiar with the basics of Stellaris modding scripts and their structure! Stellaris mods use structured text files—mostly in a format similar to JSON, though with some unique syntax for Paradox games—and special event scripting.
+
+Files like .txt for events, technologies, and defines
+Some .gui or .gfx files for graphics and UI changes
+Localization files for text in-game
+If you have a particular mechanic you want to try first—like adding a custom tech or basic event—I can help guide you through the concepts, and ask questions to help you learn the structure. Would you like to try making a simple mod-related script as a first step? If so, which feature would you like to attempt: a custom technology, a basic event, or something else?
+
+
+Shaunythunder
+This is just future planning
+
+Boots
+Wise thinking! Planning ahead gives your ideas room to grow and change before you start the work. As you continue dreaming up features, it can help to jot down mechanics, story ideas, and how you’d want players to interact with the crisis.
+
+When you’re ready to begin experimenting, tackling one mechanic at a time will make it easier to learn the modding tools. What would help you most during your planning—resources about Stellaris modding, advice on organizing ideas, or ways to break big concepts into manageable parts?
+
+
+Shaunythunder
+give me a summary of the conversation
+
+Boots
+Certainly! Here’s a summary of your conversation:
+
+You shared a mod idea: Bringing the Beast from Homeworld: Cataclysm into Stellaris as an endgame crisis.
+We discussed core mechanics:
+The Beast would snowball in power, assimilating defeated fleets and planets.
+Players would research a “vaccine” technology to protect their ships from conversion. After vaccination, lost ships would instead heal the Beast fleet (simulating subversion).
+Planets overtaken by the Beast could only be recovered after significant effort, like irradiation via bombardment.
+We explored implementation:
+How to handle converting defeated fleets and planets.
+How vaccine mechanics could be scripted.
+How to provide feedback to players about these effects.
+You asked about modding time:
+Estimated a basic prototype might take weeks, more for polish and learning.
+Since you’re new to Stellaris modding, starting with simple mods or learning the basics is recommended.
+You clarified this is future planning:
+You’re currently gathering ideas, not starting development yet.
+Let me know if you want more detail or have new questions about modding or your ideas!
+
+
+Thumbs up
+Thumbs down
+Word Analysis
+Dictionary Sorting
+Course Navigator
+Alphabet Guide
+Mod Proposal
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+
+

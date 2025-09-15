@@ -1,0 +1,130 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Setup
+
+L1: Welcome to Bookbot
+
+
+
+
+Welcome to Bookbot
+This is (perhaps?) your first ever Python project, and almost certainly your first one on Boot.dev. Congratulations!
+
+We're building Book Bot - a Python program that analyzes novels and prints a statistical report of the word and character usage found within. Our learning goals are to:
+
+Configure a professional Python development environment on your local computer
+Practice building a full project from scratch
+Deploy a Python project on your personal GitHub account
+Learn how to use a professional code editor (VS Code)
+Here's a quick demo (you might want to fullscreen):
+
+
+Boot.dev CLI
+Throughout this course, you'll be using the Boot.dev CLI to run our tests (which are just CLI commands) against your local environment. Install it now if you don't already have it. All the instructions and troubleshooting info are on the GitHub page.
+
+Make sure the Boot.dev CLI install worked:
+
+bootdev --version
+
+If you're stuck, reach out in the help forums of the Discord.
+
+Once the bootdev command is working, log in and follow the instructions:
+
+bootdev login
+
+Assignment
+Once you have the CLI installed and you're logged in, copy and paste the run command from the right into your terminal and execute it. If it's doing what you'd expect (printing Ready for bookbot), then run the submit command.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Magnificent, can assist without penalty!
+
+Boots
+Hi boots. We are playing turing complete today
+
+Boots
+Greetings, young scholar! While I'd be delighted to discuss Turing completeness and computational theory, it seems we have a different task at hand.
+
+You're currently working on the "Welcome to Bookbot" lesson, where you'll be building a Python program that analyzes novels and provides statistical reports about word and character usage.
+
+For this particular step, you simply need to run a command in your terminal to check if your environment is ready. Have you installed the Boot.dev CLI as mentioned in the instructions? Once installed, you'll need to run the command that echoes "Ready for bookbot".
+
+Would you like some guidance on setting up your environment for this project, or is there something specific about the Boot.dev CLI that's troubling you?
+
+
+Shaunythunder
+Don't give me that boots, no coding. Think of this as a different coding adventure
+
+Boots
+Ah, I see your intention now. While I appreciate your creativity, I'm here specifically to help you with the Bookbot project and other programming lessons on Boot.dev.
+
+The current lesson is asking you to set up your environment for the Bookbot project - a Python program that will analyze text and generate statistics. It's a practical first project that will help you learn important programming concepts.
+
+If you're looking for a different kind of learning experience or have questions about other programming topics, I'd be happy to discuss those within the context of your programming education. What specifically about Python or programming would you like to explore?
+
+
+Shaunythunder
+NO coding today boots
+
+Boots
+I understand you're not in the mood for coding today. That's perfectly fine - learning comes in many forms and sometimes we need a break!
+
+However, as your teaching assistant on Boot.dev, I'm here specifically to help with your programming journey through the platform's curriculum. The current lesson is about setting up your environment for the Bookbot project.
+
+When you're ready to continue with the lesson, I'll be here to assist you. In the meantime, is there something about programming concepts or theory you'd like to discuss instead? Or perhaps you'd like to take a break and return to the lesson another time?
+
+
+Shaunythunder
+Why are you sometimes excited to help and then sometimes are extremely dense?]
+
+Boots
+You raise a fair point about consistency. My aim is always to be helpful and supportive of your learning journey, though my responses may vary based on how I interpret your questions.
+
+When your questions relate directly to the programming material, I can provide specific guidance. When requests seem to diverge from the curriculum, I try to gently steer us back to productive learning territory.
+
+I apologize if I've come across as "dense" - that's certainly not my intention. I'm here to support your programming education in the most effective way possible.
+
+Would you like to discuss something specific about the Bookbot project, or perhaps a programming concept you're curious about? I'm happy to adjust my approach to better meet your learning needs.
+
+
+Thumbs up
+Thumbs down
+Command Error
+Directory Rename
+Turing Familiar
+Story Session
+Boots Gaming
+Idle
+Greetings Footwear
+Lesson Complete
+Course Completion
+Course Done
+Course End
+Course Finished
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,131 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+61a8e1a (HEAD -> main, origin/main) Conducted all encompassing overhaul of code base to refactor and to comply with python best practices. All methods now have type hints. Added doc strings to ensure the highest amount of clarity possible. Renamed distance variables to go from double underscore to single underscore to comply with best practices. Underwent extensive renaming for variables and objects to comply with emergent practices. Converted collision detection to be universal with circular objects for both player and bullets. Unfortunately it was not able to finish as the bullets are now broken. Will need to make sure game is fully functional before moving on.
+5451722 AH: We now have functioning player collisions with a hitbox that matches the player Sprite. We have all the components we need for asteroid dodgeball but I'll wait until I'm finished with asteroids itself before I Implement that mode. Next up on the list is breaking the asteroids and then creating the UFO. Once that is done, asteroids is finished however I will need the bells and whistles. A game over screen and a way to navigate back to the main menu after you get hit. Additionally this would be a good time to implement the high score system.
+7989278 AG: Introduced bullet collisions termination of bullets upon hit at the current moment asteroids flash red when hit by a bullet. Overall super straight forward. Next step is player collisions.
+be4b34c AF: Probably should have split these into different commits but I have implemented asteroid collisions and now have a fully functional 2D physics engine for the asteroids themselves. This engine uses conservation of momentum and conservation of energy equations and breaks down Vector components and reassembles them after translating the respective forces. Values can be tweaked by adjusting the elastic constant, or the density constant. Be warned setting these values to high will cause smaller asteroids to Jet across the screen faster than is reasonable. Now that we have asteroid physics and they work, I will work on player collisions and bullet collisions. After that I'll implement the asteroid splitting mechanic, player death mechanic, and UFOs and we have completed Asteroids. Well the base game anyway.
+6b55428 AE: Implemented distance ranging system in the asteroid spawning to you ensure that asteroids don't spawn too close to either player or another asteroid. I know I keep saying it but next up is asteroid collisions lol.
+12fba34 AD: Fix the bug where the game crashes if I go to the main menu. Set up a method within the game where the State manager will reset all of the modules in the game. If the game is reset AKA the main menu is accessed. This is a universal reset which calls methods in every manager and is meant to call any instance that contains data such as position data or something that would persist between game sessions. What this does is it basically is a hard reset for the entire game. I will refine this as features emerge that will need to persist between playthroughs. Overall this is a good way to reset the gameplay. Reset methods reset by calling the initialization method of each manager and relevant instance using the arguments what were originally given to the instance. It's basically a factory reset. Next step is to work on collision and collision physics for asteroids.
+0530461 AC: Fixed the asteroid wrapping issue. Asteroids now smoothly spawn off screen and then move on to the screen. Asteroids go off screen and then wrap around smoothly. There is a slight stutter whenever asteroids move across the screen, but I am unsure if that is a issue with the pygame framework or not. I'll continue working and then monitor it later. It doesn't really affect gameplay it's not really a big deal, it's just a slight stutter. Outside of that, I need to what's the issue where I can't navigate to the main screen again from pause. Once that is fixed then we can start working on collisions.
+3286afc AB: Implemented bullet cleanup system. Bullets will now terminate whenever they hit the edge of the screen. Next up is collision mechanics between the player the asteroids and the bullets. Also noticed bug that crashes the game whenever returning to the main menu.
+be062d6 AA:Implemented asteroids onto the screen. Asteroids are able to spawn and wrap around the screen. Set up a Master asteroid class where child asteroids can inherit the methods and then include their own. Ran into an issue where there was stuttering on the screen from the asteroids this was discovered to be because I included the update logic into the event Loop which caused the asteroids to only update when I pressed a button. Now plan on fine tuning the movement and direction of the asteroids before including more features. Still need to create logic to terminate bullets when they hit the edge of the screen. Overall now that asteroids are on the screen we are one step away from having an actual game.
+bd2c8f1 Z: Set up the infrastructure for the asteroids object and asteroids enemy object manager. Integrated asteroids managers into the asteroids module and then integrated it into the main Loop. Cleaned up name game loop to delineate between different sections. Adopted new section labeling strategy by using equal signs to signal the start of a section and dashes to signal the end of a section followed by the subject of the section that ended. Next step is generating asteroids onto the screen and causing them to screen wrap.
+558809c Y: Completed implementation of the player shooting mechanics. Bullets now render on screen. Played around with bullet inertia but it didn't feel fun so it was scrapped. Cleaned up comments on player primary object. Need to make termination logic once bullets leave game area. Next up is asteroids. Wanted to make physics interactions with asteroids, but decided to scrap that idea to be authentic to the original arcade game. Will put twists in enemy types and roguelike elements.
+a6277e1 X: Fixed bug where game would crash if asteroids player tried to deaccelerate. Refined comments
+76ad8c6 W: Implemented screen wrapping for asteroids movement. Added a boundary equal to the long radius of the ship so that the ship is always off screen before wrapping. Separated FPS debug toggle from main debug toggle to F5. Fixed issue where player would reset whenever pause was pressed. Fixed issue where player position and stats would persist even after going to the title menu. Next up is implementing bullets.
+16e6d3d V: Implemented movement physics for asteroids game mode to add the feel of the original arcade game. Player movement for asteroids now relies on vectors instead of scalar values. Next up is to implement screen wrapping while in the asteroids game mode. Additionally need to fix issue where the cursor is present on screen during gameplay. Should only come up when menus are active.
+7bfa7d9 U: Bug fixes. Fixed the mouse issue. The reason was that the player inputs are state based with pygame.key.get_pressed() and did not belong in the event loop as the condition is true every time an event triggers. Additionally fixed a bug that prevented you from pausing in the genre attack mode. Game was looking for Genre attack state but the logic has switched to the boolean flag. Refactored and both issues have been fixed.
+72b288b T: Finished the player object manager. Right now it acts as a proxy where the inputs are routed to the manager and then to the player object. Once bullets and other items are created, then I will test out the create and kill functions. Unfortunately, the mouse bug did not get fixed as further testing revealed it to only be mitigated. Will disable mouse completely when game play is active. Additionally would like to see if I can smooth out the frame rate. But thats more of a art decision if I want the super smooth movement. And to see if pygame is even capable of it. Otherwise clunky retro arcade feel is the way to go. Next up is to create bullets and shoot them. Asteroids after that.
+d80f33f S: Debugged an issue where mousemovement accelerated player movement. Set up filtering logic so there is only one mouse movement trigger per frame.
+bd06cee R: Established player class and got movement controls working. Player is on the screen and able to move around. Movement values need to be tweaked to make the movement reasonable. Completed entire debug UI for every player attribute. Made a way for the game to predetermine the player coordinates whenever there is a game mode change. Not completed as the player resets everytime the game pauses. Next up is to establish a object manager for all things involving the player like bullets and stuff. Primary focus is the asteroids game module for development at this moment in time.
+88373de Q: Completed the architecture for the player class complete with mapping out all aspects of player states for dynamic adjustment when the roguelike elements get installed. The player will get worked into a manager class and there will be some refactoring involved. The idea of the manager class is to handle all aspects of the player such as bullets and other potential player aspects. Its meant to be modular incase extra weapon types or helper ships get added. Next up is to implement the player on screen and be able to control it. Game modules will need to override player x and y to comply with the respective game type. For example asteroids is tank controls, space invaders is left and right, galaga is 8 point controls (its a bullet hell).
+626e119 P: Completed state management and wave management. System is now able to track waves, and trigger a boss flag whenever the 5 wave of a set hits. When on genre attack mode, the game is able to track that its in genre attack mode and then switch to a new game state on each successive start of a set of 5 (ex. 6, 11, 16, 21...). Cleaned up the comments and polished the archetecture. Now it is on to making the game. Will start with Asteroids first. Will flesh out each game in independent modules before tying them together in genre attack mode. Bare minimum, need enemy counts attached to the wave. Once that is finished will then need to start thinking about high score tracking and then rogue like upgrades to finish it off. Overall looking good.
+:
+
+Boots
+Ah, a log of your progress! Excellent! It seems you've been quite busy building this game. You've made great strides in physics and collision detection.
+
+Now that you've completed this lesson, is there anything specific about the commit history or the process you'd like to discuss further? Or perhaps you'd like me to quiz you on a concept?
+
+
+Shaunythunder
+custom project boots.
+
+Boots
+Ah, I see! You are working on a custom project outside of the guided lessons. While I specialize in helping with the official Boot.dev lessons and projects, I can still offer some general guidance and support.
+
+What seems to be the sticking point in your custom project, young apprentice? Tell me a little about what you're trying to achieve and where you're running into trouble.
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

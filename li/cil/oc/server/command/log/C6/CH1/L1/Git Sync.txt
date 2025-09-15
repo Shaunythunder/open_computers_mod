@@ -1,0 +1,134 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+I need to update my home git with my repository, I did some work overseas
+
+Boots
+It sounds like you've been working on your code while traveling and now need to sync your changes with your home git repository! However, this lesson is specifically about setting up the Boot.dev CLI and getting ready to build an Asteroids game project.
+
+The current lesson just requires you to:
+
+Make sure the Boot.dev CLI is installed and working
+Verify Python 3.10+ is installed
+Run the CLI tests with bootdev run <uuid>
+For your git synchronization needs, you'll typically want to:
+
+git pull to get any remote changes first
+git add . to stage your new changes
+git commit -m "your commit message" to commit them
+git push to send them to your remote repository
+But let's focus on getting this lesson completed first! Have you tried running the Boot.dev CLI tests yet? You should be able to run bootdev run <uuid> to test locally, and then bootdev run <uuid> -s to submit when you're ready.
+
+What specific issue are you running into with the CLI setup?
+
+
+Shaunythunder
+would git pull -f work? I don't care about the home changes
+
+Boots
+Yes, git pull -f would work, but be careful! The -f flag forces the pull and will overwrite any local changes you have at home without asking. If you're absolutely sure you don't need anything from your home repository, that's fine.
+
+However, I should mention that the typical approach would be:
+
+git fetch origin to get the latest remote info
+git reset --hard origin/main (or whatever your main branch is) to completely reset your local branch to match the remote
+But let's get back to the lesson at hand! This current lesson is just about verifying your Boot.dev CLI setup before we dive into the Asteroids game project.
+
+Have you run the CLI tests yet? You should be able to:
+
+Run bootdev run <uuid> to test the setup locally
+Run bootdev run <uuid> -s to submit when everything passes
+The tests are checking that your CLI is working and that you have Python 3.10+ installed. Are you running into any issues with the Boot.dev CLI commands?
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

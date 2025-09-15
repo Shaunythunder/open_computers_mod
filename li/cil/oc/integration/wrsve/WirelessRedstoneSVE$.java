@@ -1,0 +1,65 @@
+/*    */ package li.cil.oc.integration.wrsve;
+/*    */ 
+/*    */ import java.lang.reflect.Method;
+/*    */ import scala.runtime.EmptyMethodCache;
+/*    */ 
+/*    */ public final class WirelessRedstoneSVE$ implements WirelessRedstone.WirelessRedstoneSystem {
+/*    */   public static final WirelessRedstoneSVE$ MODULE$;
+/*    */   private final Option<Object> ether;
+/*    */   
+/* 10 */   private WirelessRedstoneSVE$() { MODULE$ = this;
+/* 11 */     this.ether = liftedTree1$1(); } private Option<Object> ether() { return this.ether; } private final Option liftedTree1$1() { try {  } finally {} return 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */ 
+/*    */       
+/* 27 */       (Option)scala.None$.MODULE$; }
+/*    */ 
+/*    */   
+/*    */   public void removeTransmitter(RedstoneWireless rs) {
+/* 31 */     BlockPosition blockPos = li.cil.oc.util.BlockPosition$.MODULE$.apply(rs.redstone());
+/* 32 */     ether().foreach((Function1)new WirelessRedstoneSVE$$anonfun$removeTransmitter$1(rs, blockPos)); } public final class WirelessRedstoneSVE$$anonfun$removeTransmitter$1 extends AbstractFunction1<Object, BoxedUnit> implements Serializable { public static final long serialVersionUID = 0L; private final RedstoneWireless rs$1; private final BlockPosition blockPos$1; private static Class[] reflParams$Cache1 = new Class[] { World.class, int.class, int.class, int.class, Object.class }; private static volatile SoftReference reflPoly$Cache1 = new SoftReference<>(new EmptyMethodCache()); public static Method reflMethod$Method1(Class x$1) { EmptyMethodCache emptyMethodCache; MethodCache methodCache1 = reflPoly$Cache1.get(); if (methodCache1 == null) { emptyMethodCache = new EmptyMethodCache(); reflPoly$Cache1 = new SoftReference<>(emptyMethodCache); }  Method method1 = emptyMethodCache.find(x$1); if (method1 != null) return method1;  method1 = scala.runtime.ScalaRunTime$.MODULE$.ensureAccessible(x$1.getMethod("remTransmitter", reflParams$Cache1)); reflPoly$Cache1 = new SoftReference<>(emptyMethodCache.add(x$1, method1)); return method1; } public final void apply(Object x$1) { Object qual1 = x$1; try { reflMethod$Method1(qual1.getClass()).invoke(qual1, new Object[] { this.rs$1.redstone().world(), BoxesRunTime.boxToInteger(this.blockPos$1.x()), BoxesRunTime.boxToInteger(this.blockPos$1.y()), BoxesRunTime.boxToInteger(this.blockPos$1.z()), BoxesRunTime.boxToInteger(this.rs$1.wirelessFrequency()).toString() }); return; } catch (InvocationTargetException invocationTargetException) { throw invocationTargetException.getCause(); }
+/*    */        }
+/*    */     
+/*    */     public WirelessRedstoneSVE$$anonfun$removeTransmitter$1(RedstoneWireless rs$1, BlockPosition blockPos$1) {} }
+/* 36 */   public void addReceiver(RedstoneWireless rs) { BlockPosition blockPos = li.cil.oc.util.BlockPosition$.MODULE$.apply(rs.redstone());
+/* 37 */     ether().foreach((Function1)new WirelessRedstoneSVE$$anonfun$addReceiver$1(rs, blockPos)); } public final class WirelessRedstoneSVE$$anonfun$addReceiver$1 extends AbstractFunction1<Object, BoxedUnit> implements Serializable { public static final long serialVersionUID = 0L; private final RedstoneWireless rs$2; private final BlockPosition blockPos$2; private static Class[] reflParams$Cache2 = new Class[] { World.class, int.class, int.class, int.class, Object.class }; private static volatile SoftReference reflPoly$Cache2 = new SoftReference<>(new EmptyMethodCache()); public static Method reflMethod$Method2(Class x$1) { EmptyMethodCache emptyMethodCache; MethodCache methodCache2 = reflPoly$Cache2.get(); if (methodCache2 == null) { emptyMethodCache = new EmptyMethodCache(); reflPoly$Cache2 = new SoftReference<>(emptyMethodCache); }  Method method2 = emptyMethodCache.find(x$1); if (method2 != null) return method2;  method2 = scala.runtime.ScalaRunTime$.MODULE$.ensureAccessible(x$1.getMethod("addReceiver", reflParams$Cache2)); reflPoly$Cache2 = new SoftReference<>(emptyMethodCache.add(x$1, method2)); return method2; } public final void apply(Object x$2) { Object qual2 = x$2; try { reflMethod$Method2(qual2.getClass()).invoke(qual2, new Object[] { this.rs$2.redstone().world(), BoxesRunTime.boxToInteger(this.blockPos$2.x()), BoxesRunTime.boxToInteger(this.blockPos$2.y()), BoxesRunTime.boxToInteger(this.blockPos$2.z()), BoxesRunTime.boxToInteger(this.rs$2.wirelessFrequency()).toString() }); return; } catch (InvocationTargetException invocationTargetException) { throw invocationTargetException.getCause(); }
+/*    */        }
+/*    */     
+/*    */     public WirelessRedstoneSVE$$anonfun$addReceiver$1(RedstoneWireless rs$2, BlockPosition blockPos$2) {} }
+/* 41 */   public void removeReceiver(RedstoneWireless rs) { BlockPosition blockPos = li.cil.oc.util.BlockPosition$.MODULE$.apply(rs.redstone());
+/* 42 */     ether().foreach((Function1)new WirelessRedstoneSVE$$anonfun$removeReceiver$1(rs, blockPos)); } public final class WirelessRedstoneSVE$$anonfun$removeReceiver$1 extends AbstractFunction1<Object, BoxedUnit> implements Serializable { public static final long serialVersionUID = 0L; private final RedstoneWireless rs$3; private final BlockPosition blockPos$3; private static Class[] reflParams$Cache3 = new Class[] { World.class, int.class, int.class, int.class, Object.class }; private static volatile SoftReference reflPoly$Cache3 = new SoftReference<>(new EmptyMethodCache()); public static Method reflMethod$Method3(Class x$1) { EmptyMethodCache emptyMethodCache; MethodCache methodCache3 = reflPoly$Cache3.get(); if (methodCache3 == null) { emptyMethodCache = new EmptyMethodCache(); reflPoly$Cache3 = new SoftReference<>(emptyMethodCache); }  Method method3 = emptyMethodCache.find(x$1); if (method3 != null) return method3;  method3 = scala.runtime.ScalaRunTime$.MODULE$.ensureAccessible(x$1.getMethod("remReceiver", reflParams$Cache3)); reflPoly$Cache3 = new SoftReference<>(emptyMethodCache.add(x$1, method3)); return method3; } public final void apply(Object x$3) { Object qual3 = x$3; try { reflMethod$Method3(qual3.getClass()).invoke(qual3, new Object[] { this.rs$3.redstone().world(), BoxesRunTime.boxToInteger(this.blockPos$3.x()), BoxesRunTime.boxToInteger(this.blockPos$3.y()), BoxesRunTime.boxToInteger(this.blockPos$3.z()), BoxesRunTime.boxToInteger(this.rs$3.wirelessFrequency()).toString() }); return; } catch (InvocationTargetException invocationTargetException) { throw invocationTargetException.getCause(); }
+/*    */        }
+/*    */     
+/*    */     public WirelessRedstoneSVE$$anonfun$removeReceiver$1(RedstoneWireless rs$3, BlockPosition blockPos$3) {} }
+/* 46 */   public void updateOutput(RedstoneWireless rs) { BlockPosition blockPos = li.cil.oc.util.BlockPosition$.MODULE$.apply(rs.redstone());
+/* 47 */     ether().foreach((Function1)new WirelessRedstoneSVE$$anonfun$updateOutput$1(rs, blockPos));
+/* 48 */     ether().foreach((Function1)new WirelessRedstoneSVE$$anonfun$updateOutput$2(rs, blockPos)); } public final class WirelessRedstoneSVE$$anonfun$updateOutput$1 extends AbstractFunction1<Object, BoxedUnit> implements Serializable { public static final long serialVersionUID = 0L; private final RedstoneWireless rs$4; private final BlockPosition blockPos$4; private static Class[] reflParams$Cache4 = new Class[] { World.class, int.class, int.class, int.class, Object.class }; private static volatile SoftReference reflPoly$Cache4 = new SoftReference<>(new EmptyMethodCache()); public static Method reflMethod$Method4(Class x$1) { EmptyMethodCache emptyMethodCache; MethodCache methodCache4 = reflPoly$Cache4.get(); if (methodCache4 == null) { emptyMethodCache = new EmptyMethodCache(); reflPoly$Cache4 = new SoftReference<>(emptyMethodCache); }  Method method4 = emptyMethodCache.find(x$1); if (method4 != null) return method4;  method4 = scala.runtime.ScalaRunTime$.MODULE$.ensureAccessible(x$1.getMethod("addTransmitter", reflParams$Cache4)); reflPoly$Cache4 = new SoftReference<>(emptyMethodCache.add(x$1, method4)); return method4; } public final void apply(Object x$4) { Object qual4 = x$4; try { reflMethod$Method4(qual4.getClass()).invoke(qual4, new Object[] { this.rs$4.redstone().world(), BoxesRunTime.boxToInteger(this.blockPos$4.x()), BoxesRunTime.boxToInteger(this.blockPos$4.y()), BoxesRunTime.boxToInteger(this.blockPos$4.z()), BoxesRunTime.boxToInteger(this.rs$4.wirelessFrequency()).toString() }); return; } catch (InvocationTargetException invocationTargetException) { throw invocationTargetException.getCause(); }  } public WirelessRedstoneSVE$$anonfun$updateOutput$1(RedstoneWireless rs$4, BlockPosition blockPos$4) {} } public final class WirelessRedstoneSVE$$anonfun$updateOutput$2 extends AbstractFunction1<Object, BoxedUnit> implements Serializable { public static final long serialVersionUID = 0L; private static Class[] reflParams$Cache5 = new Class[] { World.class, int.class, int.class, int.class, Object.class, boolean.class }; private final RedstoneWireless rs$4; private final BlockPosition blockPos$4; private static volatile SoftReference reflPoly$Cache5 = new SoftReference<>(new EmptyMethodCache()); public static Method reflMethod$Method5(Class x$1) { EmptyMethodCache emptyMethodCache; MethodCache methodCache5 = reflPoly$Cache5.get(); if (methodCache5 == null) { emptyMethodCache = new EmptyMethodCache(); reflPoly$Cache5 = new SoftReference<>(emptyMethodCache); }  Method method5 = emptyMethodCache.find(x$1); if (method5 != null) return method5;  method5 = scala.runtime.ScalaRunTime$.MODULE$.ensureAccessible(x$1.getMethod("setTransmitterState", reflParams$Cache5)); reflPoly$Cache5 = new SoftReference<>(emptyMethodCache.add(x$1, method5)); return method5; } public final void apply(Object x$5) { Object qual5 = x$5; try { reflMethod$Method5(qual5.getClass()).invoke(qual5, new Object[] { this.rs$4.redstone().world(), BoxesRunTime.boxToInteger(this.blockPos$4.x()), BoxesRunTime.boxToInteger(this.blockPos$4.y()), BoxesRunTime.boxToInteger(this.blockPos$4.z()), BoxesRunTime.boxToInteger(this.rs$4.wirelessFrequency()).toString(), BoxesRunTime.boxToBoolean(this.rs$4.wirelessOutput()) }); return; } catch (InvocationTargetException invocationTargetException) { throw invocationTargetException.getCause(); }
+/*    */        }
+/*    */      public WirelessRedstoneSVE$$anonfun$updateOutput$2(RedstoneWireless rs$4, BlockPosition blockPos$4) {} }
+/* 51 */   public boolean getInput(RedstoneWireless rs) { return BoxesRunTime.unboxToBoolean(ether().fold((Function0)new WirelessRedstoneSVE$$anonfun$getInput$1(), (Function1)new WirelessRedstoneSVE$$anonfun$getInput$2(rs))); } public final class WirelessRedstoneSVE$$anonfun$getInput$1 extends AbstractFunction0.mcZ.sp implements Serializable { public static final long serialVersionUID = 0L; public final boolean apply() { return apply$mcZ$sp(); } public boolean apply$mcZ$sp() { return false; } } public final class WirelessRedstoneSVE$$anonfun$getInput$2 extends AbstractFunction1<Object, Object> implements Serializable { public static final long serialVersionUID = 0L; private final RedstoneWireless rs$5; private static Class[] reflParams$Cache6 = new Class[] { World.class, Object.class }; private static volatile SoftReference reflPoly$Cache6 = new SoftReference<>(new EmptyMethodCache()); public static Method reflMethod$Method6(Class x$1) { EmptyMethodCache emptyMethodCache; MethodCache methodCache6 = reflPoly$Cache6.get(); if (methodCache6 == null) { emptyMethodCache = new EmptyMethodCache(); reflPoly$Cache6 = new SoftReference<>(emptyMethodCache); }  Method method6 = emptyMethodCache.find(x$1); if (method6 != null) return method6;  method6 = scala.runtime.ScalaRunTime$.MODULE$.ensureAccessible(x$1.getMethod("getFreqState", reflParams$Cache6)); reflPoly$Cache6 = new SoftReference<>(emptyMethodCache.add(x$1, method6)); return method6; } public final boolean apply(Object x$6) { Object qual6 = x$6; try { return BoxesRunTime.unboxToBoolean(reflMethod$Method6(qual6.getClass()).invoke(qual6, new Object[] { this.rs$5.redstone().world(), BoxesRunTime.boxToInteger(this.rs$5.wirelessFrequency()).toString() })); } catch (InvocationTargetException invocationTargetException) { throw invocationTargetException.getCause(); }
+/*    */        }
+/*    */ 
+/*    */     
+/*    */     public WirelessRedstoneSVE$$anonfun$getInput$2(RedstoneWireless rs$5) {} }
+/*    */ 
+/*    */   
+/*    */   public void resetRedstone(RedstoneWireless rs) {}
+/*    */ }
+
+
+/* Location:              C:\Users\shame\AppData\Roaming\PrismLauncher\instances\GT_New_Horizons_2.7.4_Java_17-21\.minecraft\mods\OpenComputers-1.10.30-GTNH.jar!\li\cil\oc\integration\wrsve\WirelessRedstoneSVE$.class
+ * Java compiler version: 8 (52.0)
+ * JD-Core Version:       1.1.3
+ */

@@ -1,0 +1,107 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L2: Installation
+
+
+
+
+
+
+Installation
+We are going to be using pygame and a virtual environment to develop our game.
+
+Pygame
+Pygame is a module for developing games using Python. It provides simple functions and methods for us to easily draw images within a GUI window and handle user input.
+
+Virtual Environment (venv)
+Virtual environments are Python's way to keep dependencies (e.g. the pygame module) separate from other projects on our machine. For example, we need pygame version 2 for this project, but another project on your computer might require version 1.
+
+As a best practice, each Python project on your machine should have its own virtual environment to keep them isolated from each other.
+
+Assignment
+Create a new uv project on your computer.
+uv init your-project-name
+cd your-project-name
+
+Create a virtual environment at the top level of your project directory:
+uv venv
+
+Activate the virtual environment:
+source .venv/bin/activate
+
+You should see (your-project-name) at the beginning of your terminal prompt, for example, mine is:
+
+(Asteroids) wagslane@MacBook-Pro-2 Asteroids %
+
+Make sure that your virtual environment is activated when running the game or using the bootdev CLI.
+
+Add the pygame library as a project dependency:
+uv add pygame==2.6.1
+
+This tells Python that this project requires pygame version 2.6.1.
+
+Make sure pygame is installed:
+uv run -m pygame
+
+This will result in an error (the test expects an exit code of 1), but the output will show that pygame is installed.
+
+Run and submit the CLI tests.
+
+If you are on WSL, you will probably need to install VcXsrv to run pygame. Follow the installation and configuration instructions on the linked site. If you need help at any point, ask in the community Discord.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Fearless Friday Deployer, can assist without penalty!
+
+Boots
+what is boiler plate code
+
+Boots
+Ah, an excellent question! Boilerplate code refers to standard or repetitive lines of code that are commonly included as a base or setup whenever you undertake a specific programming task. It's like the default framework or template that provides the necessary foundation, which you then build upon.
+
+For example, in Python, if you're creating a basic program, you might often include the following structure to define the entry point of your program:
+
+if __name__ == "__main__":
+    main()
+
+This is boilerplate code for ensuring that certain code only runs when the script is executed directly, not imported as a module.
+
+Now, in the context of your current task with pygame, setting up a virtual environment and adding a requirements.txt file is a kind of "boilerplate setup" for ensuring your project dependencies are isolated and correctly managed.
+
+Why do you think developers might use boilerplate code instead of writing everything from scratch all the time?
+
+
+Thumbs up
+Thumbs down
+Lesson Downloads
+Boilerplate
+Module Error
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,252 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Clean Code
+
+L1: Welcome to Object-Oriented Programming
+
+
+
+
+Welcome to Object-Oriented Programming
+Object-Oriented Programming, or "OOP", is a pattern for (allegedly) writing clean and maintainable code.
+
+Admittedly, not everyone agrees that object-oriented programming is the best way to write code, but, to be a good engineer, you should at least understand it.
+
+Throughout this course, we'll be coding small bits of a real-time strategy game called "Age of Dragons". Players control armies of humans, elves, orcs, and dragons in top-down battles. It's similar to Age of Empires or StarCraft.
+
+
+
+Assignment
+One of the greatest sins when trying to write "clean code" is using misleading variable and function names. Take a look at the destroy_wall function. It takes a list of numbers as input (each representing the health of a wall) and returns a new list with each entry of 0 or less removed.
+
+Based on its name, you might assume that destroy_wall destroys a single wall, but if you look closely, you'll see that it handles multiple walls.
+
+The test suite expects a different function name. Take a look at the main_test.py file to see what it's looking for, and rename the function accordingly.
+Bonus: rename the variables inside the function to be more descriptive.
+After passing the tests, take a look at the solution to see how we named everything.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Primeval 10x Developer, can assist without penalty!
+
+Boots
+(.venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ git push
+To https://github.com/Shaunythunder/Galactic-Space-Invaders
+! [rejected] main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/Shaunythunder/Galactic-Space-Invaders'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+Boots
+Ah, my dear apprentice! I see you've stumbled into the realm of Git version control, but we're currently in the middle of a lesson about function naming and clean code!
+
+Looking at your code, I can see you still need to address the assignment. The test suite is looking for a function called destroy_walls (plural), but your function is named destroy_wall (singular). You'll also want to make those variable names more descriptive.
+
+Let's focus on completing this lesson first! Here's what you need to do:
+
+Rename destroy_wall to destroy_walls
+Consider renaming the variables inside the function to be more descriptive (like wall_healths instead of wall_health for the parameter, new_wall_healths instead of h, and wall_health instead of w)
+Once you've conquered this coding challenge, you can return to your Git adventures. For your Git issue, you'll likely need to run git pull first to get the remote changes, then push again.
+
+But first things first - let's get this function properly named and working!
+
+
+Thumbs up
+Thumbs down
+Boots
+I've completed the course now help me
+
+Boots
+Excellent work completing the lesson, young apprentice! Now I can help you with that Git issue.
+
+The error you're seeing is quite common - it means someone (perhaps you from another computer, or a collaborator) has pushed changes to the remote repository that you don't have locally. Here's how to resolve it:
+
+Pull the remote changes first:
+
+git pull origin main
+
+Then push your changes:
+
+git push origin main
+
+If there are merge conflicts during the pull, Git will tell you which files have conflicts. You'll need to:
+
+Open the conflicted files
+Look for the conflict markers (<<<<<<<, =======, >>>>>>>)
+Decide which changes to keep
+Remove the conflict markers
+Stage and commit the resolved files
+Alternatively, if you're sure your local changes should overwrite what's on the remote (be careful with this!), you can force push:
+
+git push --force-with-lease origin main
+
+The --force-with-lease is safer than --force because it will still fail if someone else has pushed changes since you last fetched.
+
+What happens when you try the git pull command first?
+
+
+Thumbs up
+Thumbs down
+Boots
+is that going to override my changes?
+
+Boots
+Great question! No, git pull won't override your committed changes. Here's what actually happens:
+
+If your changes are committed:
+
+git pull will attempt to merge the remote changes with your local commits
+If there are no conflicts, it creates a merge commit automatically
+If there are conflicts, Git pauses and asks you to resolve them manually
+Your changes remain safe and intact
+If your changes are NOT committed yet:
+
+Git will likely refuse to pull and give you an error like "Your local changes would be overwritten by merge"
+You'd need to either commit your changes first, or stash them with git stash
+To check the status of your current changes, run:
+
+git status
+
+This will show you:
+
+Which files are staged for commit
+Which files have uncommitted changes
+Whether you're ahead/behind the remote branch
+If you have uncommitted changes you want to keep, commit them first:
+
+git add .
+git commit -m "Your commit message"
+
+Then do the pull:
+
+git pull origin main
+
+The worst case scenario is merge conflicts, but even then your code isn't lost - Git just asks you to manually choose which version to keep for conflicting lines.
+
+What does git status show you right now?
+
+
+Thumbs up
+Thumbs down
+Boots
+(.venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ git pull
+hint: You have divergent branches and need to specify how to reconcile them.
+hint: You can do so by running one of the following commands sometime before
+hint: your next pull:
+hint:
+hint: git config pull.rebase false # merge
+hint: git config pull.rebase true # rebase
+hint: git config pull.ff only # fast-forward only
+hint:
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+fatal: Need to specify how to reconcile divergent branches.
+
+Boots
+Ah, Git is asking you to choose how to handle the divergent branches! This is a one-time configuration choice. Here are your options:
+
+Option 1: Merge (most common and safest)
+
+git config pull.rebase false
+git pull
+
+This creates a merge commit that combines both histories. Your commit history will show both branches of development.
+
+Option 2: Rebase (cleaner history)
+
+git config pull.rebase true
+git pull
+
+This replays your commits on top of the remote changes, creating a linear history. It's cleaner but can be trickier if conflicts arise.
+
+Option 3: Fast-forward only (most restrictive)
+
+git config pull.ff only
+git pull
+
+This only works if you haven't made any commits that the remote doesn't have. It will fail in your current situation.
+
+For your situation, I'd recommend the merge approach:
+
+git config pull.rebase false
+git pull
+
+If you want this to be your default for all future repositories, add --global:
+
+git config --global pull.rebase false
+git pull
+
+After the pull completes, you should be able to push your changes successfully. Try the merge approach first - it's the most straightforward for resolving your current situation!
+
+
+Thumbs up
+Thumbs down
+Boots
+can I just got into my git and remove that change?
+
+Boots
+Absolutely! If you'd prefer to handle this through the GitHub web interface, you can definitely do that. Here are a few approaches:
+
+Option 1: Delete the conflicting commit on GitHub
+
+Go to your repository on GitHub
+Click on the "Commits" tab to see the commit history
+Find the commit that's causing the conflict
+If it's a recent commit you don't want, you can revert it by clicking on the commit and then "Revert this commit"
+Option 2: Reset your local branch to match the remote
+If you want to discard your local changes and just match what's on GitHub:
+
+git fetch origin
+git reset --hard origin/main
+
+⚠️ Warning: This will permanently delete any uncommitted local changes!
+
+Option 3: Create a new branch for your local changes
+If you want to keep your local work but start fresh:
+
+git branch my-local-changes  # saves your current work
+git fetch origin
+git reset --hard origin/main  # matches remote
+
+Which specific change are you seeing on GitHub that you want to remove? If you can tell me what the conflicting commit contains, I can give you more targeted advice on the best way to handle it.
+
+The web interface approach is definitely valid - sometimes it's easier to see what's happening visually on GitHub first!
+
+
+Thumbs up
+Thumbs down
+Wall Destruction
+Lesson Request
+Git Push
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+
+

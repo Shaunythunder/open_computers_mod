@@ -1,0 +1,213 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Setup
+
+L1: Welcome to Bookbot
+
+
+
+
+Welcome to Bookbot
+This is (perhaps?) your first ever Python project, and almost certainly your first one on Boot.dev. Congratulations!
+
+We're building Book Bot - a Python program that analyzes novels and prints a statistical report of the word and character usage found within. Our learning goals are to:
+
+Configure a professional Python development environment on your local computer
+Practice building a full project from scratch
+Deploy a Python project on your personal GitHub account
+Learn how to use a professional code editor (VS Code)
+Here's a quick demo (you might want to fullscreen):
+
+
+Boot.dev CLI
+Throughout this course, you'll be using the Boot.dev CLI to run our tests (which are just CLI commands) against your local environment. Install it now if you don't already have it. All the instructions and troubleshooting info are on the GitHub page.
+
+Make sure the Boot.dev CLI install worked:
+
+bootdev --version
+
+If you're stuck, reach out in the help forums of the Discord.
+
+Once the bootdev command is working, log in and follow the instructions:
+
+bootdev login
+
+Assignment
+Once you have the CLI installed and you're logged in, copy and paste the run command from the right into your terminal and execute it. If it's doing what you'd expect (printing Ready for bookbot), then run the submit command.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the Magnificent, can assist without penalty!
+
+Boots
+how to rename a directiory. mv bookbot bookbot_complete?
+
+Boots
+Ah, exactly! The mv command is indeed a clever way to rename directories in the terminal. By executing mv bookbot bookbot_complete, you are effectively telling the system to "move" the directory bookbot to a new location with the name bookbot_complete. Since both names are in the same location, it acts as a rename.
+
+Now, a question for you: What do you think will happen if bookbot_complete already exists as a directory? Will the mv work as intended, or do we need to consider something else?
+
+
+Shaunythunder
+it will move the contents of bookbot into bookbot_complete
+
+Boots
+Exactly, you've grasped it well! If bookbot_complete already exists as a directory, the system will treat the command as an instruction to move the contents of bookbot into bookbot_complete, rather than renaming the bookbot directory itself.
+
+How do you think you could safely check for the existence of bookbot_complete before running the mv command?
+
+
+Shaunythunder
+ls
+
+Boots
+Ah, indeed! The ls command will list the contents of your current directory, and with that, you can check if bookbot_complete already exists.
+
+If you wanted to be absolutely sure about a specific directory's existence, you could use ls bookbot_complete. What would that command tell you if bookbot_complete doesn't exist?
+
+
+Shaunythunder
+ls bookbot_complete'
+
+Boots
+Close, my sharp-eyed friend! The command should be ls bookbot_complete (without the apostrophe at the end). If the directory bookbot_complete does not exist, you'll see an error message like:
+
+ls: cannot access 'bookbot_complete': No such file or directory
+
+This indicates that the directory isn't there yet, so it's safe to proceed with renaming bookbot.
+
+What would you do, though, if bookbot_complete already existed and you still wanted to rename bookbot without interference?
+
+
+Shaunythunder
+typo
+
+Boots
+Ah, no worries! Typos are the bane of any wizard... or programmer! It's all part of the learning magic.
+
+Now, back to my question: How would you handle the situation if bookbot_complete already exists and you want to rename bookbot?
+
+
+Shaunythunder
+either pick a new name or rename bookbot_complete to something else and then rename bookbot
+
+Boots
+Precisely! You’ve got the right spell in your grimoire. If bookbot_complete already exists, you can either:
+
+Pick a new name for bookbot, such as mv bookbot bookbot_final, or...
+Temporarily rename bookbot_complete to something like mv bookbot_complete bookbot_backup and then proceed to rename bookbot.
+It's all about keeping things organized and avoiding overwriting anything important.
+
+Before you proceed, do you want to confirm what’s inside bookbot_complete to ensure it’s safe to rename or modify? How might you do that?
+
+
+Shaunythunder
+cat bookbot-complete
+
+Boots
+Ah, thoughtful idea, but not quite the right approach in this case! The cat command is for viewing the contents of files rather than directories.
+
+To view what’s inside the directory bookbot_complete, you’d want to use ls bookbot_complete. This will list all the items in the directory.
+
+But here’s a little follow-up riddle: What could you do if you want to see more detailed information about the contents, such as whether they're files or other directories?
+
+
+Shaunythunder
+the ls command gives colors to different names so that you can tell type]
+
+Boots
+Ah, you're correct! Many terminal setups will color-code the output of ls to help distinguish between file types—directories, executable files, and normal files all often have different colors. This is quite handy for a quick glance!
+
+However, not all setups support color-coding. If you want more detailed information regardless of your terminal's configuration, you can use the ls -l command. This will show permissions, ownership, size, and modification time for each item.
+
+For example:
+
+ls -l bookbot_complete
+
+Would give you a detailed list of everything in bookbot_complete. What information in this detailed list would help you determine whether an item is a file or a directory?
+
+
+Shaunythunder
+the first letter in the permissions ------
+
+Boots
+Exactly! You're quite astute. The first character in the permissions column tells us the type of item. For example:
+
+A d at the beginning indicates it's a directory.
+A - means it's a regular file.
+Other symbols, like l, indicate different types (e.g., symbolic links).
+So if you run ls -l bookbot_complete, you might see something like:
+
+drwxr-xr-x  5 user group  160 Oct 1 12:00 documents
+-rw-r--r--  1 user group  514 Oct 1 12:05 notes.txt
+
+Here, documents is a directory (starts with d), and notes.txt is a file (starts with -).
+
+If you've verified the contents of bookbot_complete, are you now ready to proceed with renaming bookbot safely? Or do you have more detective work to do?
+
+
+Shaunythunder
+No I'll go ahead and do it
+
+Boots
+Wonderful! You're ready to unleash your renaming magic. Go forth confidently and may your directories be well-organized. Should the command throw up any surprise troubles, come back, and we can sort them out together. What’s coding without a little adventure, after all?
+
+
+Shaunythunder
+what intervals should I be pushing commits?
+
+Boots
+Ah, a wise question—version control is the cornerstone of disciplined development! There’s no strict rule for commit intervals, but here are some enchanting guidelines to consider:
+
+Commit When You Accomplish a Logical Task: Think of commits as bookmarks in the spellbook of your project. Once you've completed a logical step or task, commit your changes. For instance, finished setting up a function? Commit!
+
+Avoid Committing Every Tiny Change: Don’t commit every minor keystroke. A single typo fix can be staged with other small changes before committing.
+
+Commit Frequently, but Meaningfully: Frequent commits with clear and descriptive messages (e.g., Add word counting logic to Bookbot) are like casting small spells—easy to track and helpful for collaboration.
+
+Always Commit Before Major Testing or Refactoring: If you’re about to enter dangerous grounds, such as testing or completely overhauling a section, commit first. This gives you a safety net to recover if things go awry.
+
+A question for you: What do you think the potential risks might be of not committing often enough during your work?
+
+
+Thumbs up
+Thumbs down
+Command Error
+Directory Rename
+Turing Familiar
+Story Session
+Boots Gaming
+Idle
+Greetings Footwear
+Lesson Complete
+Course Completion
+Course Done
+Course End
+Course Finished
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+

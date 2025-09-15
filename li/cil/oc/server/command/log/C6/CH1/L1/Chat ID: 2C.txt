@@ -1,0 +1,2770 @@
+Open main menu
+4
+
+gem bag
+
+
+
+user avatarprofile role frame
+
+CH1: Pygame
+
+L1: Build an Asteroids Game
+
+
+
+
+Build an Asteroids Game
+We're going to build a simple video game, based on the classic Asteroids. If you've never played before, you can take a look at this (slightly different from our) version of the game.
+
+
+
+Prerequisites
+Python 3.10+ installed (see the bookbot project for help if you don't already have it)
+uv project and package manager
+Access to a unix-like shell (e.g. zsh or bash)
+Learning Goals
+The learning goals of this project are:
+
+Introduce you to multi-file Python projects
+Show you a real-world use case for object-oriented programming
+To have a ton of fun building a rewarding project!
+The goal is not to teach game development or the math required for physics simulations. As a result, there are some places where you will simply copy-paste code that we wrote for you. Don't worry about trying to understand every detail if it's not interesting to you, you will be asked to write the parts that matter most.
+
+Assignment
+To get started, make sure you have the Boot.dev CLI installed and working.
+
+Run and submit the CLI tests.
+
+The tests just ensure that the CLI is installed and configured correctly.
+
+
+
+
+
+Boots
+Spellbook
+Community
+
+
+Boots
+Need help? I, Boots the King of the Keyboard, can assist without penalty!
+
+Boots
+def high_score_objs_sorting(self) -> None:
+    unsorted_high_scores = self.high_score_objs
+    sorted_high_scores = []
+    minimum_high_score_length = 9999
+    for index in unsorted_high_scores:
+        # Sorts the high scores in descending order
+        if index[1] < minimum_high_score_length:
+            minimum_high_score_length = index[1]
+            sorted_high_scores.append(index)
+    self.high_score_objs = sorted_high_scores
+
+this a good way to do a sorted list?
+
+Boots
+Ah, my dear apprentice, I see what you're trying to accomplish, but this approach has a few significant issues that prevent it from working as a proper sorting algorithm.
+
+Problems with your current approach:
+
+Only finds the minimum: Your code only finds the single item with the lowest score and adds it to the sorted list once. It doesn't continue sorting the remaining items.
+
+Variable naming confusion: You're using minimum_high_score_length but comparing scores, not lengths. Also, for high scores, you typically want the highest scores first (descending order).
+
+Incomplete sorting: After finding one minimum, the algorithm stops. A proper sort needs to continue until all items are processed.
+
+Better approaches for sorting:
+
+def high_score_objs_sorting(self) -> None:
+    # Option 1: Use Python's built-in sorted() function
+    self.high_score_objs = sorted(self.high_score_objs, key=lambda x: x[1], reverse=True)
+    
+    # Option 2: Use the list's sort() method (sorts in-place)
+    self.high_score_objs.sort(key=lambda x: x[1], reverse=True)
+
+If you want to implement your own sorting algorithm (like selection sort), you'd need to:
+
+Find the maximum/minimum
+Remove it from the unsorted list
+Add it to the sorted list
+Repeat until the unsorted list is empty
+But honestly, Python's built-in sorting is highly optimized and much more reliable than implementing your own. Would you like me to explain how the sorted() function works with the key parameter?
+
+
+Shaunythunder
+so I need to be able to associate a score with a player and then be able to change it dynamically and then sort it. I'm thinking either I need to set the objects as either a class or a dictionary. Curious on your thoughts
+
+Boots
+Excellent thinking, young apprentice! You're absolutely right that you need a way to associate scores with players and update them dynamically. Both classes and dictionaries are viable options, each with their own strengths.
+
+Dictionary approach (simpler):
+
+# Option 1: Dictionary with player names as keys
+high_scores = {
+    "Alice": 1500,
+    "Bob": 2300,
+    "Charlie": 1800
+}
+
+# Easy to update
+high_scores["Alice"] = 2000
+
+# Sort by converting to list of tuples
+sorted_scores = sorted(high_scores.items(), key=lambda x: x[1], reverse=True)
+# Result: [("Bob", 2300), ("Alice", 2000), ("Charlie", 1800)]
+
+Class approach (more structured):
+
+class HighScore:
+    def __init__(self, player_name, score):
+        self.player_name = player_name
+        self.score = score
+    
+    def __repr__(self):
+        return f"HighScore({self.player_name}, {self.score})"
+
+# Create objects
+high_scores = [
+    HighScore("Alice", 1500),
+    HighScore("Bob", 2300),
+    HighScore("Charlie", 1800)
+]
+
+# Update a specific player's score
+for hs in high_scores:
+    if hs.player_name == "Alice":
+        hs.score = 2000
+
+# Sort by score
+high_scores.sort(key=lambda x: x.score, reverse=True)
+
+My recommendation: If you just need name-score pairs, go with the dictionary approach - it's simpler and more Pythonic. Use a class if you need additional player data (like date achieved, level reached, etc.).
+
+What kind of additional data do you think you'll need to track for each high score?
+
+
+Shaunythunder
+Just player to score by game mode
+
+Boots
+Perfect! For just player-to-score mapping by game mode, I'd definitely recommend the dictionary approach. Here's a clean way to structure it:
+
+class HighScoreManager:
+    def __init__(self):
+        # Dictionary where keys are game modes, values are player-score dictionaries
+        self.high_scores = {
+            "classic": {},
+            "survival": {},
+            "time_attack": {}
+        }
+    
+    def update_score(self, game_mode, player_name, score):
+        """Update a player's score for a specific game mode"""
+        if game_mode not in self.high_scores:
+            self.high_scores[game_mode] = {}
+        
+        # Only update if it's a higher score
+        current_score = self.high_scores[game_mode].get(player_name, 0)
+        if score > current_score:
+            self.high_scores[game_mode][player_name] = score
+    
+    def get_sorted_scores(self, game_mode):
+        """Get sorted high scores for a game mode"""
+        if game_mode not in self.high_scores:
+            return []
+        
+        return sorted(
+            self.high_scores[game_mode].items(), 
+            key=lambda x: x[1], 
+            reverse=True
+        )
+
+# Usage
+hsm = HighScoreManager()
+hsm.update_score("classic", "Alice", 1500)
+hsm.update_score("classic", "Bob", 2300)
+
+# Get top scores for classic mode
+top_classic = hsm.get_sorted_scores("classic")
+# Result: [("Bob", 2300), ("Alice", 1500)]
+
+This gives you:
+
+Clean separation by game mode
+Easy score updates
+Simple sorting
+Extensible for new game modes
+Does this structure fit what you're building for your Asteroids game?
+
+
+Shaunythunder
+Then I also need to display these and sort them
+
+Boots
+Absolutely! Here's how you can extend the high score manager to handle displaying and sorting:
+
+class HighScoreManager:
+    def __init__(self):
+        self.high_scores = {
+            "classic": {},
+            "survival": {},
+            "time_attack": {}
+        }
+    
+    def update_score(self, game_mode, player_name, score):
+        if game_mode not in self.high_scores:
+            self.high_scores[game_mode] = {}
+        
+        current_score = self.high_scores[game_mode].get(player_name, 0)
+        if score > current_score:
+            self.high_scores[game_mode][player_name] = score
+    
+    def get_sorted_scores(self, game_mode, limit=10):
+        """Get sorted high scores, optionally limited to top N"""
+        if game_mode not in self.high_scores:
+            return []
+        
+        return sorted(
+            self.high_scores[game_mode].items(), 
+            key=lambda x: x[1], 
+            reverse=True
+        )[:limit]
+    
+    def display_leaderboard(self, game_mode, limit=10):
+        """Display formatted leaderboard for a game mode"""
+        scores = self.get_sorted_scores(game_mode, limit)
+        
+        if not scores:
+            print(f"No scores recorded for {game_mode} mode yet!")
+            return
+        
+        print(f"\n=== {game_mode.upper()} MODE LEADERBOARD ===")
+        print("-" * 40)
+        
+        for rank, (player, score) in enumerate(scores, 1):
+            print(f"{rank:2d}. {player:<20} {score:>8,}")
+    
+    def display_all_leaderboards(self, limit=5):
+        """Display leaderboards for all game modes"""
+        for game_mode in self.high_scores:
+            self.display_leaderboard(game_mode, limit)
+            print()  # Empty line between leaderboards
+
+# Example usage:
+hsm = HighScoreManager()
+
+# Add some sample scores
+hsm.update_score("classic", "Alice", 15000)
+hsm.update_score("classic", "Bob", 23000)
+hsm.update_score("classic", "Charlie", 18000)
+hsm.update_score("survival", "Alice", 45000)
+hsm.update_score("survival", "Dave", 38000)
+
+# Display specific leaderboard
+hsm.display_leaderboard("classic")
+
+# Display all leaderboards
+hsm.display_all_leaderboards()
+
+This would output something like:
+
+=== CLASSIC MODE LEADERBOARD ===
+----------------------------------------
+ 1. Bob                   23,000
+ 2. Charlie               18,000
+ 3. Alice                 15,000
+
+For game integration, you might also want methods like:
+
+get_player_rank(game_mode, player_name) - to show where a player ranks
+is_high_score(game_mode, score) - to check if a score qualifies for the leaderboard
+Would you like me to show you how to integrate this with a game loop or save/load functionality?
+
+
+Shaunythunder
+what does hsm mean?
+
+Boots
+Ah, good catch! hsm is just a shortened variable name I used for HighScoreManager. It's an abbreviation:
+
+hsm = HighScoreManager
+
+I could have written it more clearly as:
+
+# Instead of this:
+hsm = HighScoreManager()
+hsm.update_score("classic", "Alice", 1500)
+
+# I could have written:
+high_score_manager = HighScoreManager()
+high_score_manager.update_score("classic", "Alice", 1500)
+
+# Or even:
+score_manager = HighScoreManager()
+score_manager.update_score("classic", "Alice", 1500)
+
+The shorter hsm saves typing, but it's less readable - especially for someone else reading the code. In real projects, it's usually better to use more descriptive variable names like score_manager or high_score_manager.
+
+Thanks for asking! Clear variable names are super important for code readability. What would you prefer to call it in your Asteroids game?
+
+
+Shaunythunder
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: GameStateManager,
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+
+    self.game_modes = {
+        "Genre Attack": {},
+        "Asteroids Mode": {},
+        "Galaga Mode": {},
+        "Space Invaders Mode": {},
+        "Asteroid Dodgeball": {},
+    }
+
+    self.high_score_title_obj = high_score_display.HighScoreObj(100, "Galactic Asteroid Invaders", (255, 255, 255), screen_width // 2, screen_height // 4)
+    self.high_score_1 = high_score_display.HighScoreObj(32, f"{self.high_score_index}. {self.player_name_1}: {self.player_high_score_1}", (255, 255, 255), screen_width // 2, screen_height)
+    self.high_score_2 = high_score_display.HighScoreObj(32, f"{self.high_score_index}. {self.player_name_2}: {self.player_high_score_2}", (255, 255, 255), screen_width // 2, screen_height)
+    self.high_score_3 = high_score_display.HighScoreObj(32, f"{self.high_score_index}. {self.player_name_3}: {self.player_high_score_3}", (255, 255, 255), screen_width // 2, screen_height)
+    self.high_score_4 = high_score_display.HighScoreObj(32, f"{self.high_score_index}. {self.player_name_4}: {self.player_high_score_4}", (255, 255, 255, 255), screen_width // 2, screen_height)
+    self.high_score_5 = high_score_display.HighScoreObj(32, f"{self.high_score_index}. {self.player_name_5}: {self.player_high_score_5}", (255, 255, 255), screen_width // 2, screen_height)
+
+    self.high_score_objs = [
+        self.high_score_title_obj,
+        self.high_score_1,
+        self.high_score_2,
+        self.high_score_3,
+        self.high_score_4,
+        self.high_score_5,
+    ]
+
+here is my init, thoughts?
+
+Boots
+Ah, I see some areas where we can make this much cleaner and more maintainable! Here are my thoughts:
+
+Major Issues:
+
+Undefined variables: You're referencing self.high_score_index, self.player_name_1, self.player_high_score_1, etc. but these aren't defined anywhere in the __init__ method.
+
+Hard-coded repetition: Creating 5 separate high_score_ objects manually is very repetitive and hard to maintain.
+
+Fixed positioning: All high score entries use the same screen_height position, so they'll overlap.
+
+Here's a cleaner approach:
+
+class HighScoreDisplayManager:
+    def __init__(self, 
+                 game_state_reporter: GameStateManager,
+                 screen_width: int,
+                 screen_height: int) -> None:
+        self._game_state_reporter = game_state_reporter
+         
+        self.game_modes = {
+            "Genre Attack": {},
+            "Asteroids Mode": {},
+            "Galaga Mode": {},
+            "Space Invaders Mode": {},
+            "Asteroid Dodgeball": {},
+        }
+
+        # Create title
+        self.high_score_title_obj = high_score_display.HighScoreObj(
+            100, "Galactic Asteroid Invaders", (255, 255, 255), 
+            screen_width // 2, screen_height // 4
+        )
+        
+        # Create high score entries dynamically
+        self.high_score_entries = []
+        start_y = screen_height // 2
+        line_spacing = 50
+        
+        for i in range(5):
+            y_position = start_y + (i * line_spacing)
+            score_obj = high_score_display.HighScoreObj(
+                32, f"{i+1}. Loading...", (255, 255, 255),
+                screen_width // 2, y_position
+            )
+            self.high_score_entries.append(score_obj)
+        
+        # Combine all objects
+        self.high_score_objs = [self.high_score_title_obj] + self.high_score_entries
+
+    def update_display(self, sorted_scores):
+        """Update the display with actual score data"""
+        for i, score_obj in enumerate(self.high_score_entries):
+            if i < len(sorted_scores):
+                player, score = sorted_scores[i]
+                score_obj.text = f"{i+1}. {player}: {score:,}"
+            else:
+                score_obj.text = f"{i+1}. ---"
+
+This approach is much more maintainable and doesn't rely on undefined variables. What do you think?
+
+
+Shaunythunder
+So youre saying I can use a for loop to create all of the objects?
+
+Boots
+Exactly! That's one of the beautiful things about programming - you can use loops to create multiple similar objects instead of writing repetitive code.
+
+Here's what you were doing (the hard way):
+
+# Manual creation - lots of repetition!
+self.high_score_1 = high_score_display.HighScoreObj(32, "text1", color, x, y1)
+self.high_score_2 = high_score_display.HighScoreObj(32, "text2", color, x, y2)
+self.high_score_3 = high_score_display.HighScoreObj(32, "text3", color, x, y3)
+# ... and so on
+
+Versus using a loop (the smart way):
+
+# Loop creation - clean and scalable!
+self.high_score_entries = []
+for i in range(5):
+    score_obj = high_score_display.HighScoreObj(
+        32, f"{i+1}. Loading...", (255, 255, 255),
+        screen_width // 2, start_y + (i * line_spacing)
+    )
+    self.high_score_entries.append(score_obj)
+
+Benefits of the loop approach:
+
+Want to show 10 scores instead of 5? Just change range(5) to range(10)
+Need to change the font size? Modify it in one place, not five
+Easy to adjust spacing by changing line_spacing
+Much less code to maintain
+You can use this pattern anywhere you're creating similar objects with slight variations. Pretty neat, right? Have you used loops to create objects before, or is this a new concept for you?
+
+
+Shaunythunder
+So I need a few things, I need to be able to report saved High Scores and then create that object in the list. So would that be
+
+def new_score(self, player_name, score):
+#Create new object with the info and add their info to the dictionary??
+
+Boots
+You're on the right track! But I think there might be a slight conceptual mix-up. Let me help clarify the separation of concerns:
+
+Two different responsibilities:
+
+Data Management: Storing/retrieving high scores (dictionary operations)
+Display Management: Creating visual objects for the screen
+Here's how I'd structure it:
+
+class HighScoreDisplayManager:
+    def __init__(self, screen_width, screen_height):
+        # ... your existing init code ...
+        
+    def update_display_with_scores(self, sorted_scores):
+        """Update the visual objects with score data"""
+        for i, score_entry in enumerate(self.high_score_entries):
+            if i < len(sorted_scores):
+                player_name, score = sorted_scores[i]
+                score_entry.text = f"{i+1}. {player_name}: {score:,}"
+            else:
+                score_entry.text = f"{i+1}. ---"
+
+# Separate class for data management
+class HighScoreManager:
+    def __init__(self):
+        self.game_modes = {
+            "Genre Attack": {},
+            "Asteroids Mode": {},
+            # ... etc
+        }
+    
+    def add_new_score(self, game_mode, player_name, score):
+        """Add a new score to the data"""
+        if game_mode not in self.game_modes:
+            self.game_modes[game_mode] = {}
+        
+        current_best = self.game_modes[game_mode].get(player_name, 0)
+        if score > current_best:
+            self.game_modes[game_mode][player_name] = score
+    
+    def get_sorted_scores(self, game_mode, limit=5):
+        """Get sorted scores for display"""
+        scores = self.game_modes[game_mode]
+        return sorted(scores.items(), key=lambda x: x[1], reverse=True)[:limit]
+
+Usage:
+
+# Add a new score
+score_manager.add_new_score("Asteroids Mode", "Alice", 15000)
+
+# Update the display
+sorted_scores = score_manager.get_sorted_scores("Asteroids Mode")
+display_manager.update_display_with_scores(sorted_scores)
+
+Does this separation make sense? The HighScoreManager handles the data, and the HighScoreDisplayManager handles the visual representation.
+
+
+Shaunythunder
+Alright lets abandon the display portion of it and get some real data to work with first. Otherwise I feel like this is going to be a mess
+
+Boots
+Absolutely brilliant decision, young apprentice! You're showing real wisdom here - getting the data layer solid before worrying about display is exactly the right approach. Building on shaky foundations leads to headaches later.
+
+Let's focus on a clean, simple data manager first:
+
+class HighScoreManager:
+    def __init__(self):
+        self.game_modes = {
+            "Genre Attack": {},
+            "Asteroids Mode": {},
+            "Galaga Mode": {},
+            "Space Invaders Mode": {},
+            "Asteroid Dodgeball": {},
+        }
+    
+    def add_score(self, game_mode, player_name, score):
+        """Add a new score (only if it's higher than existing)"""
+        if game_mode not in self.game_modes:
+            self.game_modes[game_mode] = {}
+        
+        current_score = self.game_modes[game_mode].get(player_name, 0)
+        if score > current_score:
+            self.game_modes[game_mode][player_name] = score
+            return True  # New high score!
+        return False  # Not a high score
+    
+    def get_top_scores(self, game_mode, limit=10):
+        """Get sorted list of (player, score) tuples"""
+        if game_mode not in self.game_modes:
+            return []
+        
+        scores = self.game_modes[game_mode].items()
+        return sorted(scores, key=lambda x: x[1], reverse=True)[:limit]
+    
+    def get_player_score(self, game_mode, player_name):
+        """Get a specific player's score"""
+        return self.game_modes.get(game_mode, {}).get(player_name, 0)
+
+Want to test this with some sample data first? We can add some dummy scores and make sure the sorting and retrieval works correctly before moving on.
+
+
+Shaunythunder
+I would want there to be at least 8 total high scors
+
+Boots
+Good thinking! Let's modify the manager to track the top 8 scores per game mode instead of just one score per player:
+
+class HighScoreManager:
+    def __init__(self):
+        self.game_modes = {
+            "Genre Attack": [],
+            "Asteroids Mode": [],
+            "Galaga Mode": [],
+            "Space Invaders Mode": [],
+            "Asteroid Dodgeball": [],
+        }
+        self.max_scores = 8  # Keep top 8 scores
+    
+    def add_score(self, game_mode, player_name, score):
+        """Add a new score to the leaderboard"""
+        if game_mode not in self.game_modes:
+            self.game_modes[game_mode] = []
+        
+        # Add the new score
+        self.game_modes[game_mode].append((player_name, score))
+        
+        # Sort by score (highest first)
+        self.game_modes[game_mode].sort(key=lambda x: x[1], reverse=True)
+        
+        # Keep only top 8 scores
+        self.game_modes[game_mode] = self.game_modes[game_mode][:self.max_scores]
+        
+        # Return True if it made it into top 8
+        return len(self.game_modes[game_mode]) < self.max_scores or score >= self.game_modes[game_mode][-1][1]
+    
+    def get_top_scores(self, game_mode):
+        """Get all stored scores for a game mode (already sorted)"""
+        return self.game_modes.get(game_mode, [])
+    
+    def is_high_score(self, game_mode, score):
+        """Check if a score qualifies for the leaderboard"""
+        scores = self.game_modes.get(game_mode, [])
+        return len(scores) < self.max_scores or score > scores[-1][1]
+
+This way:
+
+Same player can have multiple entries if they beat their previous scores
+Always keeps exactly 8 scores (or fewer if not enough games played yet)
+Easy to check if a new score qualifies before adding it
+Want to test this with some sample data to make sure it works as expected?
+
+
+Shaunythunder
+import pygame
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self):
+self.high_score_game_modes = {
+"Genre Attack": [],
+"Asteroids Mode": [],
+"Galaga Mode": [],
+"Space Invaders Mode": [],
+"Asteroid Dodgeball": [],
+}
+self.max_high_scores = 10
+
+def create_new_high_score(self, game_mode: str, player_name: str, score: int) -> None:
+    """Adds a new high score to the leaderboard specified game mode."""
+    if game_mode, not in self.high_score_game_modes:
+        raise ValueError(f"Game mode '{game_mode}' is not recognized.")
+    
+    self.high_score_game_modes[game_mode].append((player_name, score))
+    self.high_score_game_modes[game_mode].sort(key=lambda x: x[1], reverse=True)
+    if len(self.high_score_game_modes[game_mode]) > self.max_high_scores:
+        self.high_score_game_modes[game_mode] = self.high_score_game_modes[game_mode][:self.max_high_scores]
+
+    def get_high_scores(self, game_mode: str) -> list:
+        """Returns the high scores for the specified game mode."""
+        if game_mode not in self.high_score_game_modes:
+            raise ValueError(f"Game mode '{game_mode}' is not recognized.")
+        return self.high_score_game_modes[game_mode]
+
+\
+
+Boots
+Great start! I can see you're building a solid foundation. There are just a couple of syntax issues to fix:
+
+Syntax Error:
+
+# This line has an extra comma:
+if game_mode, not in self.high_score_game_modes:
+# Should be:
+if game_mode not in self.high_score_game_modes:
+
+Indentation Issue:
+Your get_high_scores method is indented inside the create_new_high_score method. It should be at the same level:
+
+class HighScoreDisplayManager:
+    def __init__(self):
+        # ... your init code ...
+
+    def create_new_high_score(self, game_mode: str, player_name: str, score: int) -> None:
+        """Adds a new high score to the leaderboard specified game mode."""
+        if game_mode not in self.high_score_game_modes:
+            raise ValueError(f"Game mode '{game_mode}' is not recognized.")
+        
+        self.high_score_game_modes[game_mode].append((player_name, score))
+        self.high_score_game_modes[game_mode].sort(key=lambda x: x[1], reverse=True)
+        if len(self.high_score_game_modes[game_mode]) > self.max_high_scores:
+            self.high_score_game_modes[game_mode] = self.high_score_game_modes[game_mode][:self.max_high_scores]
+
+    def get_high_scores(self, game_mode: str) -> list:
+        """Returns the high scores for the specified game mode."""
+        if game_mode not in self.high_score_game_modes:
+            raise ValueError(f"Game mode '{game_mode}' is not recognized.")
+        return self.high_score_game_modes[game_mode]
+
+Also, there's a stray backslash \ at the end - you can remove that.
+
+Once you fix those, you'll have a nice clean high score manager! Want to test it with some sample data?
+
+
+Shaunythunder
+Now I need to be able to save this into a JSON
+
+Boots
+Perfect! JSON is a great choice for saving high scores. Here's how you can add save and load functionality to your class:
+
+import pygame
+import json
+import os
+
+class HighScoreDisplayManager:
+    def __init__(self, save_file="high_scores.json"):
+        self.save_file = save_file
+        self.high_score_game_modes = {
+            "Genre Attack": [],
+            "Asteroids Mode": [],
+            "Galaga Mode": [],
+            "Space Invaders Mode": [],
+            "Asteroid Dodgeball": [],
+        }
+        self.max_high_scores = 10
+        
+        # Load existing scores when initializing
+        self.load_high_scores()
+
+    def create_new_high_score(self, game_mode: str, player_name: str, score: int) -> None:
+        """Adds a new high score to the leaderboard specified game mode."""
+        if game_mode not in self.high_score_game_modes:
+            raise ValueError(f"Game mode '{game_mode}' is not recognized.")
+        
+        self.high_score_game_modes[game_mode].append((player_name, score))
+        self.high_score_game_modes[game_mode].sort(key=lambda x: x[1], reverse=True)
+        if len(self.high_score_game_modes[game_mode]) > self.max_high_scores:
+            self.high_score_game_modes[game_mode] = self.high_score_game_modes[game_mode][:self.max_high_scores]
+        
+        # Auto-save after adding a new score
+        self.save_high_scores()
+
+    def get_high_scores(self, game_mode: str) -> list:
+        """Returns the high scores for the specified game mode."""
+        if game_mode not in self.high_score_game_modes:
+            raise ValueError(f"Game mode '{game_mode}' is not recognized.")
+        return self.high_score_game_modes[game_mode]
+    
+    def save_high_scores(self) -> None:
+        """Save high scores to JSON file."""
+        try:
+            with open(self.save_file, 'w') as f:
+                json.dump(self.high_score_game_modes, f, indent=2)
+        except Exception as e:
+            print(f"Error saving high scores: {e}")
+    
+    def load_high_scores(self) -> None:
+        """Load high scores from JSON file."""
+        try:
+            if os.path.exists(self.save_file):
+                with open(self.save_file, 'r') as f:
+                    loaded_scores = json.load(f)
+                    # Convert back to tuples (JSON saves them as lists)
+                    for game_mode in loaded_scores:
+                        if game_mode in self.high_score_game_modes:
+                            self.high_score_game_modes[game_mode] = [
+                                tuple(score) for score in loaded_scores[game_mode]
+                            ]
+        except Exception as e:
+            print(f"Error loading high scores: {e}")
+            # Keep default empty scores if loading fails
+
+The JSON file will look like this:
+
+{
+  "Genre Attack": [
+    ["Alice", 15000],
+    ["Bob", 12000]
+  ],
+  "Asteroids Mode": [
+    ["Charlie", 25000]
+  ]
+}
+
+Now your high scores will automatically save when you add new ones and load when the game starts!
+
+
+Shaunythunder
+def save_high_scores(self) -> None:
+    """Saves high scores to a JSON file."""
+    try:
+        with open (self.save_file, 'w') as f:
+            json.dump(self.high_score_game_modes, f, indent=2)
+    except Exception as e:
+        print(f"Error saving high scores: {e}")
+
+def load_high_scores(self) -> None:
+    """Loads high scores from a JSON file."""
+    try:
+        if os.path.exists(self.save_file):
+            with open(self.save_file, 'r') as f:
+                loaded_scores = json.load(f)
+                for game_mode, in loaded_scores:
+                    self.high_score_game_modes[game_mode] =[
+                        tuple(score) for score in loaded_scores[game_mode]
+                    ] 
+    except Exception as e:
+        print(f"Error loading high scores: {e}")
+
+alright lets go through this line by line, I wish to understand
+
+Boots
+Absolutely! Let's break down each method line by line:
+
+save_high_scores method:
+def save_high_scores(self) -> None:
+    """Saves high scores to a JSON file."""
+
+This defines the method and the docstring explains what it does
+-> None means it doesn't return anything
+    try:
+
+Starts a try block to handle any errors that might occur
+        with open (self.save_file, 'w') as f:
+
+Opens the file specified by self.save_file in write mode ('w')
+The with statement ensures the file gets closed automatically
+f is the file object we'll write to
+            json.dump(self.high_score_game_modes, f, indent=2)
+
+json.dump() converts the Python dictionary to JSON and writes it to the file
+self.high_score_game_modes is the data to save
+f is where to write it
+indent=2 makes the JSON pretty-formatted (easier to read)
+    except Exception as e:
+        print(f"Error saving high scores: {e}")
+
+If anything goes wrong (file permission issues, disk full, etc.), catch the error
+Print a helpful error message instead of crashing
+load_high_scores method:
+def load_high_scores(self) -> None:
+    """Loads high scores from a JSON file."""
+    try:
+        if os.path.exists(self.save_file):
+
+Check if the save file actually exists before trying to open it
+Prevents errors on first run when no save file exists yet
+            with open(self.save_file, 'r') as f:
+
+Open the file in read mode ('r')
+                loaded_scores = json.load(f)
+
+json.load() reads the JSON from the file and converts it back to a Python dictionary
+There's a bug in your loop though:
+
+                for game_mode, in loaded_scores:  # Extra comma here!
+
+Should be:
+
+                for game_mode in loaded_scores:
+
+                    self.high_score_game_modes[game_mode] =[
+                        tuple(score) for score in loaded_scores[game_mode]
+                    ]
+
+This converts the loaded data back to tuples
+JSON saves tuples as lists, so we need to convert them back
+[tuple(score) for score in loaded_scores[game_mode]] is a list comprehension
+Does this help clarify what each part is doing?
+
+
+Shaunythunder
+what does the with statement do
+
+Boots
+Great question! The with statement is a very handy Python feature that handles resource management automatically.
+
+What with does:
+Without with (the old way):
+
+# You have to remember to close the file manually
+f = open("myfile.txt", 'w')
+f.write("some data")
+f.close()  # If you forget this, the file stays open!
+
+# What if an error happens?
+f = open("myfile.txt", 'w')
+f.write("some data")
+# Error occurs here - file never gets closed!
+raise Exception("Something went wrong!")
+f.close()  # This line never runs
+
+With with (the clean way):
+
+# File automatically closes when done, even if errors occur
+with open("myfile.txt", 'w') as f:
+    f.write("some data")
+    # File automatically closes here, no matter what happens
+
+How it works:
+Opens the resource: open("myfile.txt", 'w') creates a file object
+Assigns it to a variable: as f gives you a name to use
+Automatically cleans up: When the with block ends (normally or due to an error), Python automatically calls f.close()
+Other uses of with:
+# Works with other resources too
+with open("input.txt", 'r') as input_file, open("output.txt", 'w') as output_file:
+    data = input_file.read()
+    output_file.write(data.upper())
+# Both files automatically close
+
+# Database connections
+with database.connect() as conn:
+    conn.execute("SELECT * FROM users")
+# Connection automatically closes
+
+Think of it like: "Hey Python, open this file for me, and no matter what happens in this block of code, make sure you close it when I'm done."
+
+Does that make the with statement clearer?
+
+
+Shaunythunder
+So basically what we are doing here is we are taking the information from our class, dumping it into a file, and then picking it up in a later session
+
+Boots
+Exactly! You've got it perfectly.
+
+The cycle is:
+
+During gameplay: Your class stores high scores in memory (in the dictionary self.high_score_game_modes)
+
+Save: json.dump() takes that Python dictionary and converts it to JSON text, then writes it to a file on your hard drive
+
+Game ends: Your program closes, all the memory gets cleared
+
+Later session: When you start the game again, json.load() reads that text file, converts the JSON back into a Python dictionary, and loads it back into your class
+
+It's like:
+
+Save: "Hey, write down all these high scores on a piece of paper before I forget them"
+Load: "Hey, what did I write on that paper last time? Oh right, these were my high scores!"
+The beautiful part: Your high scores persist between game sessions. Without this save/load system, every time someone closed your game, all the high scores would vanish forever.
+
+Real example flow:
+
+Session 1: Alice gets 15,000 points → Save to file → Game closes
+Session 2: Game starts → Load from file → Alice's 15,000 is still there!
+           Bob gets 20,000 points → Save to file → Game closes  
+Session 3: Game starts → Load from file → Both Alice AND Bob's scores are there!
+
+You've essentially given your game a "memory" that survives between runs. Pretty cool, right?
+
+
+Shaunythunder
+Import "high_scores_folder.save_manager.high_score_data_manager" could not be resolvedPylancereportMissingImports
+
+import high_scores_folder.save_manager.high_score_data_manager as high_score_data_manager
+
+wtf
+
+Boots
+Ah, that's a classic Python import path issue! Let me help you troubleshoot this step by step.
+
+The error means Python can't find that file/module. Here are the most common causes:
+
+1. Check your folder structure
+Make sure your folders look exactly like this:
+
+your_project/
+├── high_scores_folder/
+│   ├── __init__.py          # This file is CRUCIAL!
+│   └── save_manager/
+│       ├── __init__.py      # This one too!
+│       └── high_score_data_manager.py
+└── your_main_file.py        # The file doing the import
+
+2. Missing __init__.py files
+Most common issue! Each folder needs an __init__.py file (can be empty) to be recognized as a Python package:
+
+# Create these files if they don't exist:
+touch high_scores_folder/__init__.py
+touch high_scores_folder/save_manager/__init__.py
+
+3. Check your current working directory
+Run this in your main file to see where Python thinks you are:
+
+import os
+print("Current directory:", os.getcwd())
+print("Files here:", os.listdir('.'))
+
+4. Alternative import approaches
+If the above doesn't work, try:
+
+# Option 1: Add the path manually
+import sys
+sys.path.append('path/to/your/project')
+import high_scores_folder.save_manager.high_score_data_manager as hsm
+
+# Option 2: Relative import (if in same project)
+from .high_scores_folder.save_manager import high_score_data_manager as hsm
+
+What does your actual folder structure look like? That'll help me give you the exact fix!
+
+
+Shaunythunder
+So I am thinking that I load high scores right before the game loop and then close before python quit
+
+Boots
+Perfect strategy! That's exactly the right approach for a clean, efficient game architecture.
+
+Here's the typical flow:
+
+def main():
+    # Initialize pygame and other systems
+    pygame.init()
+    
+    # Load high scores at startup
+    high_score_manager = HighScoreDisplayManager()
+    high_score_manager.load_high_scores()  # Load existing scores
+    
+    # Main game loop
+    running = True
+    while running:
+        # Handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            
+            # Game logic here...
+            
+            # When player gets a new high score:
+            if new_high_score_achieved:
+                high_score_manager.create_new_high_score(game_mode, player_name, score)
+                # This automatically saves due to your auto-save in the method
+        
+        # Render game...
+    
+    # Clean shutdown - save one final time before quitting
+    high_score_manager.save_high_scores()
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
+
+Benefits of this approach:
+
+Load once: Efficient startup
+Auto-save on new scores: No data loss if game crashes mid-session
+Final save on exit: Ensures everything is persisted
+Clean separation: High score logic is separate from game loop
+One consideration: Since you're already auto-saving in create_new_high_score(), the final save before quit is just insurance. But it's good insurance to have!
+
+Are you planning to have the high scores display during gameplay, or just on a separate high scores screen?
+
+
+Shaunythunder
+I mean load before, save before closing
+
+Boots
+Ah, got it! You want to load once at the beginning and save once at the end. That's a clean, efficient approach:
+
+def main():
+    # Initialize pygame and other systems
+    pygame.init()
+    
+    # Load high scores once at startup
+    high_score_manager = HighScoreDisplayManager()
+    high_score_manager.load_high_scores()
+    
+    # Main game loop
+    running = True
+    while running:
+        # Handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            
+        # Game logic here...
+        
+        # When player gets high score, just add to memory (no auto-save)
+        if new_high_score_achieved:
+            high_score_manager.create_new_high_score(game_mode, player_name, score)
+            # Remove the auto-save from this method
+        
+        # Render game...
+    
+    # Save once before closing
+    high_score_manager.save_high_scores()
+    pygame.quit()
+
+You'll want to modify your create_new_high_score method to remove the auto-save:
+
+def create_new_high_score(self, game_mode: str, player_name: str, score: int) -> None:
+    """Adds a new high score to the leaderboard specified game mode."""
+    if game_mode not in self.high_score_game_modes:
+        raise ValueError(f"Game mode '{game_mode}' is not recognized.")
+    
+    self.high_score_game_modes[game_mode].append((player_name, score))
+    self.high_score_game_modes[game_mode].sort(key=lambda x: x[1], reverse=True)
+    if len(self.high_score_game_modes[game_mode]) > self.max_high_scores:
+        self.high_score_game_modes[game_mode] = self.high_score_game_modes[game_mode][:self.max_high_scores]
+    
+    # Remove this line: self.save_high_scores()
+
+This approach is more performant and gives you full control over when saves happen!
+
+
+Shaunythunder
+Error loading high scores: too many values to unpack (expected 1)
+
+where would this Json go
+
+Boots
+That error is coming from this line in your load_high_scores method:
+
+for game_mode, in loaded_scores:  # The extra comma is causing the error!
+
+The problem: You have an extra comma after game_mode, which tells Python to expect a tuple to unpack, but loaded_scores is a dictionary where each key is just a string.
+
+Fix it by removing the comma:
+
+for game_mode in loaded_scores:  # Remove the comma!
+
+As for where the JSON file goes:
+
+The JSON file will be created in the same directory as your Python script by default. So if your main game file is at:
+
+/your_project/main.py
+
+The JSON file will be created at:
+
+/your_project/high_scores.json
+
+You can specify a different location if you want:
+
+# In a specific folder
+high_score_manager = HighScoreDisplayManager("saves/high_scores.json")
+
+# In user's home directory  
+import os
+save_path = os.path.expanduser("~/my_game_saves/high_scores.json")
+high_score_manager = HighScoreDisplayManager(save_path)
+
+# In the same folder as your script (explicit)
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
+save_path = os.path.join(script_dir, "high_scores.json")
+high_score_manager = HighScoreDisplayManager(save_path)
+
+But for now, just fix that comma and it should work! The file will appear next to your Python script.
+
+
+Shaunythunder
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Error loading high scores: too many values to unpack (expected 1)
+Adding high score for Player in asteroids_mode with score 248
+High scores for asteroids_mode: [('Player', 248)]
+(.venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ python3 main.py
+pygame 2.6.1 (SDL 2.28.4, Python 3.12.3)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Adding high score for Player in asteroids_mode with score 1004
+High scores for asteroids_mode: [('Player', 1004), ('Player', 248)]
+(.venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ python3 main.py
+pygame 2.6.1 (SDL 2.28.4, Python 3.12.3)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Adding high score for Player in asteroids_mode with score 399
+High scores for asteroids_mode: [('Player', 1004), ('Player', 399), ('Player', 248)]
+
+got persistent data now. igore the error lol
+
+Boots
+Haha, excellent! You've got persistent data working - that's the important part! I can see your scores are building up between sessions:
+
+Session 1: Player gets 248
+Session 2: Player gets 1004 (and 248 is still there!)
+Session 3: Player gets 399 (and all previous scores persist!)
+
+That's exactly what you wanted! 🎉
+
+But since you mentioned ignoring the error... let's quickly fix that comma issue so you don't get that annoying error message every time:
+
+In your load_high_scores method, change this line:
+
+for game_mode, in loaded_scores:  # Remove the comma after game_mode
+
+To this:
+
+for game_mode in loaded_scores:
+
+It's just one character to remove, and then you'll have clean startup messages without the error. Plus, it's good practice to fix these little bugs before they become bigger problems later.
+
+But honestly, seeing those high scores persist across sessions is pretty satisfying! Your save/load system is working perfectly. Are you planning to add player name input next, or keep building out other game features?
+
+
+Shaunythunder
+shhhhhhh
+
+Boots
+🤫
+
+The wise bear nods silently and tips his wizard hat
+
+Your secret is safe with me, young apprentice. Sometimes the magic just works, even with a few... ahem... mysterious incantations in the background.
+
+whispers But you know where to find me when you're ready to make that little error disappear... 😉
+
+
+Shaunythunder
+shhhhhhh I already fixed it shhhhhhh
+
+Boots
+whispers back
+
+Ah, I see... the apprentice has already mastered the ancient art of comma removal!
+
+nods approvingly in silence
+
+🧙‍♂️✨
+
+quietly shuffles back to the shadows, proud of your debugging prowess
+
+
+Shaunythunder
+so where is this json living
+
+Boots
+The JSON file is living right in your project directory! Based on your terminal output, it should be at:
+
+~/workshop/Galactic-Space-Invaders/high_scores.json
+
+You can check if it's there by running:
+
+ls -la ~/workshop/Galactic-Space-Invaders/
+
+Or from within your project directory:
+
+ls -la
+
+You should see a file called high_scores.json sitting right next to your main.py.
+
+To peek at what's inside the JSON file:
+
+cat high_scores.json
+
+It probably looks something like:
+
+{
+  "Genre Attack": [],
+  "Asteroids Mode": [
+    ["Player", 1004],
+    ["Player", 399], 
+    ["Player", 248]
+  ],
+  "Galaga Mode": [],
+  "Space Invaders Mode": [],
+  "Asteroid Dodgeball": []
+}
+
+Pretty neat seeing your game data persisted as readable text, right? That's the beauty of JSON - you can even manually edit it if needed (though I wouldn't recommend it for normal gameplay).
+
+
+Shaunythunder
+Lol when I release this we will need a way to stop people from editing this file
+
+Boots
+Haha, absolutely! Players will definitely try to edit their high scores if they can. Here are some common approaches to protect against score tampering:
+
+Basic Protection (Easy to implement):
+
+import hashlib
+import json
+
+def generate_hash(data):
+    """Create a hash of the data for integrity checking"""
+    data_string = json.dumps(data, sort_keys=True)
+    return hashlib.sha256(data_string.encode()).hexdigest()
+
+def save_with_hash(self):
+    """Save scores with a hash for verification"""
+    data = {
+        "scores": self.high_score_game_modes,
+        "hash": generate_hash(self.high_score_game_modes)
+    }
+    with open(self.save_file, 'w') as f:
+        json.dump(data, f, indent=2)
+
+def load_with_verification(self):
+    """Load and verify the hash matches"""
+    try:
+        with open(self.save_file, 'r') as f:
+            data = json.load(f)
+            
+        # Verify the hash
+        expected_hash = generate_hash(data["scores"])
+        if data["hash"] != expected_hash:
+            print("High scores file has been tampered with! Resetting...")
+            return False
+            
+        self.high_score_game_modes = data["scores"]
+        return True
+    except:
+        return False
+
+Other approaches:
+
+Obfuscation: Encode/encrypt the JSON (security through obscurity)
+Server-side scores: Store high scores on your server (ultimate protection)
+Binary format: Use pickle or custom format instead of readable JSON
+Multiple validation points: Cross-check scores with gameplay data
+Real talk though: For a personal/learning project, basic hash verification is probably overkill. Most players won't bother editing files, and the ones who do... well, they're only cheating themselves! 😄
+
+Want to implement any of these, or save it for later when you're closer to release?
+
+
+Shaunythunder
+This will probably end up going commercial
+
+Boots
+Oh wow, that's exciting! Going commercial definitely changes the game when it comes to score protection. Here are some approaches that commercial games use:
+
+For Commercial Release:
+
+Server-side validation (Gold standard):
+
+# Submit scores to your server for validation
+# Server checks if score is reasonable given playtime/game data
+# Only server can update the "official" leaderboards
+
+Encrypted local storage:
+
+from cryptography.fernet import Fernet
+
+# Generate a key (store this securely in your code)
+key = Fernet.generate_key()
+cipher = Fernet(key)
+
+# Encrypt before saving
+encrypted_data = cipher.encrypt(json.dumps(scores).encode())
+
+Game data validation:
+
+Track playtime vs score ratios
+Monitor impossible score jumps
+Validate against game physics/mechanics
+Hybrid approach:
+
+Local scores for offline play
+Server scores for online leaderboards
+Steam/platform integration for achievements
+Commercial considerations:
+
+Steam Workshop/Cloud saves integration
+Platform-specific leaderboards (Steam, Epic, etc.)
+Anti-cheat systems like EasyAntiCheat
+Analytics to detect cheating patterns
+For now though, I'd focus on getting the core game solid first - you can always add robust anti-cheat later. Plus, having some basic protection (like that hash verification) will deter 90% of casual tampering.
+
+What platforms are you thinking of targeting for release?
+
+
+Shaunythunder
+This will be something we do WAAAAAAAY later. lets get these high scores able to be displayed
+
+Boots
+Absolutely! You're totally right - let's get back to the fun stuff and make those high scores actually show up on screen!
+
+You've got the data persistence working perfectly, so now it's time to get visual with it.
+
+What do you want to tackle first?
+
+Creating text objects to display the scores on screen?
+Building a high score screen that shows when the game ends?
+Adding it to a menu system?
+Something else?
+And are you thinking of displaying them in a simple list format, or do you have a specific design in mind for how the high score screen should look?
+
+Let's get those beautiful persistent scores showing off on your screen! 🎮
+
+
+Shaunythunder
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+from game_state_manager import GameStateManager
+
+player_name_placeholder = "Player Name"
+player_high_score_placeholder = 1
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: GameStateManager,
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+
+    self.high_score_index = 0
+         
+    self.high_score_title_obj = high_score_display.HighScoreObj(100, "Galactic Asteroid Invaders", (255, 255, 255), screen_width // 2, screen_height // 4)
+    self.high_score_1 = high_score_display.HighScoreObj(32, f"{self.high_score_index}. {player_name_placeholder}: {player_high_score_placeholder}", (255, 255, 255), screen_width // 2, screen_height)
+    self.high_score_2 = high_score_display.HighScoreObj(32, f"{self.high_score_index}. {player_name_placeholder}: {player_high_score_placeholder }", (255, 255, 255), screen_width // 2, screen_height)
+    self.high_score_3 = high_score_display.HighScoreObj(32, f"{self.high_score_index}. {player_name_placeholder}: {player_high_score_placeholder}", (255, 255, 255), screen_width // 2, screen_height)
+    self.high_score_4 = high_score_display.HighScoreObj(32, f"{self.high_score_index}. {player_name_placeholder}: {player_high_score_placeholder}", (255, 255, 255, 255), screen_width // 2, screen_height)
+    self.high_score_5 = high_score_display.HighScoreObj(32, f"{self.high_score_index}. {player_name_placeholder}: {player_high_score_placeholder}", (255, 255, 255), screen_width // 2, screen_height)
+
+    self.title_screen_objs = [
+        self.high_score_title_obj,
+        self.high_score_1,
+        self.high_score_2,
+        self.high_score_3,
+        self.high_score_4,
+        self.high_score_5,
+    ]
+    self.title_screen_objs_index_len = len(self.title_screen_objs)
+
+def title_screen_objs_selection(self) -> None:
+    # Selection logic for the menu items. Mouse takes priority. When mouse no longer selects, 
+    # selection is wiped. 
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    for i, title_obj in enumerate(self.title_screen_objs):
+        # Reset all selections at loop start.
+        title_obj.is_selected = False
+    for i, title_obj in enumerate(self.title_screen_objs):
+        # Check for both mouse and keyboard. If mouse selects, keyboard index is reset to None. 
+        # Break out of loop when match discovered. Only one match allowed at a time.
+        if not title_obj.title_obj_rect.collidepoint(mouse_x, mouse_y):
+            self.title_screen_objs_mouse_index = None
+        if title_obj.title_obj_rect.collidepoint(mouse_x, mouse_y):
+            title_obj.is_selected = True
+            self.title_screen_objs_mouse_index = self.title_screen_objs.index(title_obj)
+            self.title_screen_objs_keyboard_index = None
+            break
+        elif self.title_screen_objs_keyboard_index != None and i == self.title_screen_objs_keyboard_index and i != 0:
+            # Index [0] is ignored as that is the Main Title and should not be selected.
+            title_obj.is_selected = True
+            break
+    
+def title_objs_respacing(self, screen_height: int)-> None:
+    # Logic for automated spacing for title objects
+    start_y = screen_height // 2
+    end_y = 100
+    title_screen_respacing_len = len(self.title_screen_objs)
+    # Establishes a y coordinate range and then evenly spaces the objects
+    spacing = -((end_y - start_y) // (title_screen_respacing_len - 1))
+    for i, title_obj in enumerate(self.title_screen_objs):
+        if i == 0:
+            pass
+        else:
+            title_obj.title_obj_rect.centery = start_y + i * spacing
+            title_obj.selected_title_obj_rect.centery = start_y + i * spacing
+            
+
+def title_menu_check_for_input(self, event: pygame.event.Event) -> None:
+    # Checks for keyboard inputs only on the condition that the mouse is not already being used. 
+    # If enter key pressed then send the game state to the game state manager
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        self.request_new_game_state()
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        self.request_new_game_state()
+    # Logic for menu naviagation via keyboard
+    if self.title_screen_objs_mouse_index != None:
+        pass
+    elif event.type == pygame.KEYDOWN and (event.key == pygame.K_w or event.key == pygame.K_UP or event.key == pygame.K_s or event.key == pygame.K_DOWN):
+        if self.title_screen_objs_keyboard_index == None:
+            self.title_screen_objs_keyboard_index = 1
+            return
+        elif (event.key == pygame.K_w or event.key == pygame.K_UP) and self.title_screen_objs_keyboard_index > 1:
+            self.title_screen_objs_keyboard_index -= 1
+        elif (event.key == pygame.K_s or event.key == pygame.K_DOWN) and self.title_screen_objs_keyboard_index < (self.title_screen_objs_index_len - 1):
+            self.title_screen_objs_keyboard_index += 1
+    
+def request_new_game_state(self) -> None:
+    # Logic that defines the game state for each key press on the main menu. 
+    # Once pressed it sends the game state to the game state manager.
+    if self.title_screen_objs_keyboard_index == 1 or self.title_screen_objs_mouse_index == 1:
+        self._game_state_reporter.request_game_state_change("genre_attack")
+    elif self.title_screen_objs_keyboard_index == 2 or self.title_screen_objs_mouse_index == 2:
+        self._game_state_reporter.request_game_state_change("asteroids_mode")
+    elif self.title_screen_objs_keyboard_index == 3 or self.title_screen_objs_mouse_index == 3:
+        self._game_state_reporter.request_game_state_change("galaga_mode")
+    elif self.title_screen_objs_keyboard_index == 4 or self.title_screen_objs_mouse_index == 4:
+        self._game_state_reporter.request_game_state_change("space_invaders_mode")
+    elif self.title_screen_objs_keyboard_index == 5 or self.title_screen_objs_mouse_index == 5:
+        self._game_state_reporter.request_game_state_change("high_scores")
+    elif self.title_screen_objs_keyboard_index == 6 or self.title_screen_objs_mouse_index == 6:
+        self._game_state_reporter.request_game_state_change("quit")
+
+alright lets get this mess figured out
+
+Boots
+Haha, alright! I can see what's happening here. You've got a solid foundation but there are some issues to clean up. Let me help you sort this out:
+
+Main Issues I see:
+
+All high score objects have the same Y position (screen_height) - they'll all stack on top of each other
+Using placeholders instead of real data - you have the actual high score data, let's use it!
+Color tuple issue - high_score_4 has 4 color values instead of 3
+Missing variables - title_screen_objs_mouse_index and title_screen_objs_keyboard_index aren't initialized
+Let's clean this up step by step:
+
+class HighScoreDisplayManager:
+    def __init__(self, 
+                 game_state_reporter: GameStateManager,
+                 screen_width: int,
+                 screen_height: int,
+                 high_score_data_manager) -> None:  # Add this parameter
+        self._game_state_reporter = game_state_reporter
+        self._high_score_data = high_score_data_manager  # Store reference to your data
+        
+        # Initialize missing variables
+        self.title_screen_objs_mouse_index = None
+        self.title_screen_objs_keyboard_index = None
+        
+        # Create title
+        self.high_score_title_obj = high_score_display.HighScoreObj(
+            100, "Galactic Asteroid Invaders", (255, 255, 255), 
+            screen_width // 2, screen_height // 4
+        )
+        
+        # Create high score entries dynamically
+        self.high_score_entries = []
+        start_y = screen_height // 2
+        line_spacing = 60
+        
+        for i in range(5):
+            y_position = start_y + (i * line_spacing)
+            score_obj = high_score_display.HighScoreObj(
+                32, f"{i+1}. Loading...", (255, 255, 255),
+                screen_width // 2, y_position
+            )
+            self.high_score_entries.append(score_obj)
+        
+        # Combine all objects
+        self.title_screen_objs = [self.high_score_title_obj] + self.high_score_entries
+        self.title_screen_objs_index_len = len(self.title_screen_objs)
+        
+        # Load the actual high score data
+        self.update_high_score_display("Asteroids Mode")  # Or whatever mode you want to show
+    
+    def update_high_score_display(self, game_mode):
+        """Update the display with actual high score data"""
+        scores = self._high_score_data.get_high_scores(game_mode)
+        
+        for i, score_entry in enumerate(self.high_score_entries):
+            if i < len(scores):
+                player_name, score = scores[i]
+                score_entry.text = f"{i+1}. {player_name}: {score:,}"
+            else:
+                score_entry.text = f"{i+1}. ---"
+
+This approach:
+
+Uses your actual high score data instead of placeholders
+Positions the entries properly so they don't overlap
+Creates the objects dynamically (easier to maintain)
+Fixes the missing variable initialization
+Want to try this approach, or do you prefer to keep the manual object creation but fix the positioning issues?
+
+
+Shaunythunder
+This is meant to just display. No menu buttons
+
+Boots
+Ah gotcha! So this is a display-only high score screen, not an interactive menu. That makes it much simpler! Let's strip out all the selection/input logic and focus purely on displaying the scores:
+
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+from game_state_manager import GameStateManager
+
+class HighScoreDisplayManager:
+    def __init__(self, 
+                 game_state_reporter: GameStateManager,
+                 screen_width: int,
+                 screen_height: int,
+                 high_score_data_manager) -> None:
+        self._game_state_reporter = game_state_reporter
+        self._high_score_data = high_score_data_manager
+        
+        # Create title
+        self.high_score_title_obj = high_score_display.HighScoreObj(
+            100, "Galactic Asteroid Invaders", (255, 255, 255), 
+            screen_width // 2, screen_height // 4
+        )
+        
+        # Create high score display entries
+        self.high_score_entries = []
+        start_y = screen_height // 2
+        line_spacing = 50
+        
+        for i in range(8):  # Show top 8 scores
+            y_position = start_y + (i * line_spacing)
+            score_obj = high_score_display.HighScoreObj(
+                32, f"{i+1}. Loading...", (255, 255, 255),
+                screen_width // 2, y_position
+            )
+            self.high_score_entries.append(score_obj)
+        
+        # All display objects
+        self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+    
+    def update_display(self, game_mode):
+        """Update the display with scores from a specific game mode"""
+        scores = self._high_score_data.get_high_scores(game_mode)
+        
+        for i, score_entry in enumerate(self.high_score_entries):
+            if i < len(scores):
+                player_name, score = scores[i]
+                score_entry.text = f"{i+1}. {player_name}: {score:,}"
+            else:
+                score_entry.text = f"{i+1}. ---"
+    
+    def draw(self, screen):
+        """Draw all the high score objects to the screen"""
+        for obj in self.display_objs:
+            obj.draw(screen)  # Assuming your HighScoreObj has a draw method
+
+Much cleaner! No selection logic, no input handling - just pure display. You'd call update_display("Asteroids Mode") to show those scores, then draw(screen) each frame to render them.
+
+Is this more what you were looking for?
+
+
+Shaunythunder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+from game_state_manager import GameStateManager
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_manager: "HighScoreDataManager",
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+self._high_score_data_manager = high_score_data_manager
+
+    self.high_score_title_obj = high_score_display.HighScoreObj(
+        100, f"{game_mode} High Scores",
+        (255, 255, 255),
+        screen_width // 2, screen_height // 4 
+    )
+    
+    self.high_score_entries = []
+    start_y = screen_height // 3
+    line_spacing = 50
+
+    for i in range(10):
+        y_position = start_y + (i * line_spacing)
+        high_score_obj = high_score_display.HighScoreObj(
+            32, f"{i +1}. Loading...", 
+            (255, 255, 255),
+            screen_width // 2, y_position
+        )
+        self.high_score_entries.append(high_score_obj)
+    
+    self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+def update_high_score_display(self, game_mode: str) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    """Draws the high score display on the given screen."""
+    self.high_score_title_obj.draw_high_score_main_title(screen)
+    
+    for obj in self.display_objs:
+        obj.draw_high_score_obj(screen)
+
+Boots
+Looking good! You're getting close, but I spotted a couple of issues:
+
+Issue 1: Undefined variable
+
+self.high_score_title_obj = high_score_display.HighScoreObj(
+    100, f"{game_mode} High Scores",  # game_mode is not defined here!
+
+Issue 2: Not updating the text
+In your update_high_score_display method, you're creating the score_text but not actually assigning it to the object:
+
+def update_high_score_display(self, game_mode: str) -> None:
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        
+        # Missing this line:
+        score_entry.text = score_text  # Actually update the object's text
+
+Here's the fixed version:
+
+class HighScoreDisplayManager:
+    def __init__(self, 
+                 game_state_reporter: "GameStateManager",
+                 high_score_data_manager: "HighScoreDataManager",
+                 screen_width: int,
+                 screen_height: int) -> None:
+        self._game_state_reporter = game_state_reporter
+        self._high_score_data_manager = high_score_data_manager
+
+        # Create a generic title - we'll update it later
+        self.high_score_title_obj = high_score_display.HighScoreObj(
+            100, "High Scores",  # Generic title for now
+            (255, 255, 255),
+            screen_width // 2, screen_height // 4 
+        )
+        
+        # Rest of your code looks good...
+        self.high_score_entries = []
+        start_y = screen_height // 3
+        line_spacing = 50
+
+        for i in range(10):
+            y_position = start_y + (i * line_spacing)
+            high_score_obj = high_score_display.HighScoreObj(
+                32, f"{i + 1}. Loading...", 
+                (255, 255, 255),
+                screen_width // 2, y_position
+            )
+            self.high_score_entries.append(high_score_obj)
+        
+        self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+    def update_high_score_display(self, game_mode: str) -> None:
+        # Update the title with the game mode
+        self.high_score_title_obj.text = f"{game_mode} High Scores"
+        
+        scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+        for index, score_entry in enumerate(self.high_score_entries):
+            if index < len(scores):
+                player_name, score = scores[index]
+                score_text = f"{index + 1}. {player_name}: {score:,}"
+            else:
+                score_text = f"{index + 1}. ---"
+            
+            score_entry.text = score_text  # Actually update the text!
+
+That should fix both issues!
+
+
+Shaunythunder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+from game_state_manager import GameStateManager
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_manager: "HighScoreDataManager",
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+self._high_score_data_manager = high_score_data_manager
+
+    self.high_score_title_obj = high_score_display.HighScoreObj(
+        100, f"High Scores",
+        (255, 255, 255),
+        screen_width // 2, screen_height // 4 
+    )
+    
+    self.high_score_entries = []
+    start_y = screen_height // 3
+    line_spacing = 50
+
+    for i in range(10):
+        y_position = start_y + (i * line_spacing)
+        high_score_obj = high_score_display.HighScoreObj(
+            32, f"{i +1}. Loading...", 
+            (255, 255, 255),
+            screen_width // 2, y_position
+        )
+        self.high_score_entries.append(high_score_obj)
+    
+    self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+def update_high_score_display(self, game_mode: str) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        score_entry.text = score_text
+
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    """Draws the high score display on the given screen."""
+    self.high_score_title_obj.draw_high_score_main_title(screen)
+
+    for obj in self.display_objs:
+        obj.draw_high_score_obj(screen)
+
+Boots
+Perfect! That looks much cleaner now. You've fixed both issues I mentioned:
+
+✅ Fixed the undefined game_mode variable - now using a generic "High Scores" title
+✅ Added the missing score_entry.text = score_text - now the text actually updates
+
+One small thing I noticed:
+In your draw_high_score_display method, you're calling draw_high_score_main_title on the title object, but then also calling draw_high_score_obj on ALL objects (including the title again). This might draw the title twice:
+
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    """Draws the high score display on the given screen."""
+    # This draws the title once
+    self.high_score_title_obj.draw_high_score_main_title(screen)
+    
+    # This loop includes the title object again - might draw it twice
+    for obj in self.display_objs:
+        obj.draw_high_score_obj(screen)
+
+You could either:
+
+# Option 1: Just draw all objects once
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    for obj in self.display_objs:
+        obj.draw_high_score_obj(screen)
+
+# Option 2: Draw title separately, then just the entries
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    self.high_score_title_obj.draw_high_score_main_title(screen)
+    for obj in self.high_score_entries:  # Just the entries, not display_objs
+        obj.draw_high_score_obj(screen)
+
+Other than that minor detail, this looks solid! Ready to test it out and see those high scores on screen?
+
+
+Shaunythunder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+from game_state_manager import GameStateManager
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_manager: "HighScoreDataManager",
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+self._high_score_data_manager = high_score_data_manager
+
+    self.high_score_title_obj = high_score_display.HighScoreObj(
+        100, f"High Scores",
+        (255, 255, 255),
+        screen_width // 2, screen_height // 4 
+    )
+    
+    self.high_score_entries = []
+    start_y = screen_height // 3
+    line_spacing = 50
+
+    for i in range(10):
+        y_position = start_y + (i * line_spacing)
+        high_score_obj = high_score_display.HighScoreObj(
+            32, f"{i +1}. Loading...", 
+            (255, 255, 255),
+            screen_width // 2, y_position
+        )
+        self.high_score_entries.append(high_score_obj)
+    
+    self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+def update_high_score_display(self, game_mode: str) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        
+
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    """Draws the high score display on the given screen."""
+    self.high_score_title_obj.draw_high_score_main_title(screen)
+
+    for obj in self.display_objs:
+        if not self.high_score_title_obj:
+            obj.draw_high_score_obj(screen)
+
+Boots
+I see a couple of issues that need fixing:
+
+Issue 1: Missing text assignment
+In your update_high_score_display method, you're creating score_text but not actually assigning it:
+
+def update_high_score_display(self, game_mode: str) -> None:
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        
+        # You're missing this line:
+        score_entry.text = score_text
+
+Issue 2: Logic error in draw method
+Your condition if not self.high_score_title_obj: will always be False because self.high_score_title_obj exists. This means none of your objects will draw. You probably meant:
+
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    """Draws the high score display on the given screen."""
+    self.high_score_title_obj.draw_high_score_main_title(screen)
+
+    for obj in self.high_score_entries:  # Just draw the entries
+        obj.draw_high_score_obj(screen)
+
+Or even simpler:
+
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    """Draws the high score display on the given screen."""
+    for obj in self.display_objs:  # Draw everything
+        obj.draw_high_score_obj(screen)
+
+Here's the corrected version:
+
+def update_high_score_display(self, game_mode: str) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        
+        score_entry.text = score_text  # Don't forget this!
+
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    """Draws the high score display on the given screen."""
+    for obj in self.display_objs:
+        obj.draw_high_score_obj(screen)
+
+That should get your high scores actually displaying on screen!
+
+
+Shaunythunder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+from game_state_manager import GameStateManager
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_manager: "HighScoreDataManager",
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+self._high_score_data_manager = high_score_data_manager
+
+    self.high_score_title_obj = high_score_display.HighScoreObj(
+        100, f"High Scores",
+        (255, 255, 255),
+        screen_width // 2, screen_height // 4 
+    )
+    
+    self.high_score_entries = []
+    start_y = screen_height // 3
+    line_spacing = 50
+
+    for i in range(10):
+        y_position = start_y + (i * line_spacing)
+        high_score_obj = high_score_display.HighScoreObj(
+            32, f"{i +1}. Loading...", 
+            (255, 255, 255),
+            screen_width // 2, y_position
+        )
+        self.high_score_entries.append(high_score_obj)
+    
+    self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+def update_high_score_display(self, game_mode: str) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        
+        score_entry.text = score_text
+
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    """Draws the high score display on the given screen."""
+    self.high_score_title_obj.draw_high_score_main_title(screen)
+
+    for obj in self.display_objs:
+            obj.draw_high_score_obj(screen)
+
+Boots
+Perfect! That looks clean and should work beautifully now. You've got:
+
+✅ Proper text assignment - score_entry.text = score_text
+✅ Clean draw method - draws the title with its special method, then all objects with their standard method
+✅ Good structure - separate concerns between updating data and drawing
+
+This should now properly:
+
+Load your persistent high score data
+Update the display objects with real scores
+Render everything to the screen
+Quick usage example:
+
+# In your main game loop or high score screen state:
+high_score_display.update_high_score_display("Asteroids Mode")
+high_score_display.draw_high_score_display(screen)
+
+Ready to see those beautiful high scores on screen! How are you planning to integrate this into your game flow? Will it show after each game ends, or as a separate menu option?
+
+
+Shaunythunder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+from game_state_manager import GameStateManager
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+
+Handles the overall logic for iteration, selection, and drawing.
+class HighScoreDisplayManager:
+def init(self,
+game_state_reporter: "GameStateManager",
+high_score_data_manager: "HighScoreDataManager",
+screen_width: int,
+screen_height: int) -> None:
+self._game_state_reporter = game_state_reporter
+self._high_score_data_manager = high_score_data_manager
+
+    self.high_score_title_obj = high_score_display.HighScoreObj(
+        100, f"High Scores",
+        (255, 255, 255),
+        screen_width // 2, screen_height // 4 
+    )
+    
+    self.high_score_entries = []
+    start_y = screen_height // 3
+    line_spacing = 50
+
+    for i in range(10):
+        y_position = start_y + (i * line_spacing)
+        high_score_obj = high_score_display.HighScoreObj(
+            32, f"{i +1}. Loading...", 
+            (255, 255, 255),
+            screen_width // 2, y_position
+        )
+        self.high_score_entries.append(high_score_obj)
+    
+    self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+def update_high_score_display(self, game_mode: str) -> None:
+    """Updates the high score display with the latest scores for the specified game mode."""
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+    for index, score_entry in enumerate(self.high_score_entries):
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+        
+        score_entry.text = score_text
+
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    """Draws the high score display on the given screen."""
+    self.high_score_title_obj.draw_high_score_main_title(screen)
+
+    for obj in self.display_objs:
+            obj.draw_high_score_obj(screen)
+
+explain this line by line
+
+Boots
+Absolutely! Let's break down this class line by line:
+
+Import and Type Checking Section:
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from high_scores_folder.save_manager.high_score_data_manager import HighScoreDataManager
+    from game_state_manager import GameStateManager
+
+TYPE_CHECKING is a special constant that's only True when type checkers (like mypy) are running
+These imports only happen during type checking, not at runtime - prevents circular import issues
+Allows you to use these classes for type hints without actually importing them
+import pygame
+from high_scores_folder.non_interactive_manager import high_score_display
+
+Regular imports that happen at runtime
+pygame for graphics functionality
+high_score_display contains your HighScoreObj class
+Class Definition:
+class HighScoreDisplayManager:
+
+Defines the class that will handle displaying high scores
+Constructor (__init__):
+def __init__(self, 
+             game_state_reporter: "GameStateManager",
+             high_score_data_manager: "HighScoreDataManager",
+             screen_width: int,
+             screen_height: int) -> None:
+
+Constructor takes 4 parameters: game state manager, data manager, and screen dimensions
+The quotes around class names are for forward references (since they're not actually imported)
+-> None means this method doesn't return anything
+    self._game_state_reporter = game_state_reporter
+    self._high_score_data_manager = high_score_data_manager
+
+Store references to the passed-in objects as instance variables
+The underscore prefix indicates these are "private" (internal use)
+    self.high_score_title_obj = high_score_display.HighScoreObj(
+        100, f"High Scores",
+        (255, 255, 255),
+        screen_width // 2, screen_height // 4 
+    )
+
+Creates the title object for the high score screen
+Parameters: font size (100), text ("High Scores"), color (white), x position (center), y position (1/4 down from top)
+    self.high_score_entries = []
+    start_y = screen_height // 3
+    line_spacing = 50
+
+high_score_entries will hold all the individual score display objects
+start_y sets where the first score entry appears (1/3 down from top)
+line_spacing determines how far apart each score line is (50 pixels)
+    for i in range(10):
+        y_position = start_y + (i * line_spacing)
+        high_score_obj = high_score_display.HighScoreObj(
+            32, f"{i +1}. Loading...", 
+            (255, 255, 255),
+            screen_width // 2, y_position
+        )
+        self.high_score_entries.append(high_score_obj)
+
+Loop creates 10 score entry objects
+Each iteration: calculate y position (start_y + offset), create object with placeholder text, add to list
+Parameters: font size (32), placeholder text, white color, centered x, calculated y position
+    self.display_objs = [self.high_score_title_obj] + self.high_score_entries
+
+Combines the title and all score entries into one list for easy iteration
+The + operator concatenates the lists
+Update Method:
+def update_high_score_display(self, game_mode: str) -> None:
+    scores = self._high_score_data_manager.get_high_scores(game_mode)
+
+Gets the actual high score data for the specified game mode from the data manager
+    for index, score_entry in enumerate(self.high_score_entries):
+
+Loop through each score display object with its index
+        if index < len(scores):
+            player_name, score = scores[index]
+            score_text = f"{index + 1}. {player_name}: {score:,}"
+        else:
+            score_text = f"{index + 1}. ---"
+
+If there's a real score at this index: extract player name and score, format with commas
+If no score exists: show "---" as placeholder
+score:, adds comma separators (e.g., 1,234 instead of 1234)
+        score_entry.text = score_text
+
+Actually update the display object's text with the formatted string
+Draw Method:
+def draw_high_score_display(self, screen: pygame.Surface) -> None:
+    self.high_score_title_obj.draw_high_score_main_title(screen)
+
+Draw the title using its special title drawing method
+    for obj in self.display_objs:
+        obj.draw_high_score_obj(screen)
+
+Loop through all display objects (title + entries) and draw each one to the screen
+Does that help clarify what each part is doing?
+
+
+Shaunythunder
+error: object file .git/objects/1e/4dfe49f602b4db59aeb5f26009bb80f2c826f5 is empty
+error: object file .git/objects/1e/4dfe49f602b4db59aeb5f26009bb80f2c826f5 is empty
+fatal: bad object HEAD
+
+uhhhhhhh
+
+Boots
+Oof! That's a Git corruption issue - your Git repository has some corrupted object files. This can happen from unexpected shutdowns, disk issues, or other interruptions.
+
+Here are your options, from safest to most drastic:
+
+Option 1: Try Git's built-in recovery
+# Check if Git can auto-repair
+git fsck --full
+
+# Try to recover
+git gc --aggressive --prune=now
+
+Option 2: Reset to a known good commit
+# See if you can find recent commits
+git reflog
+
+# If you can see a good commit, reset to it
+git reset --hard <commit-hash>
+
+Option 3: If you have a remote backup (GitHub, etc.)
+# Clone fresh from your remote
+git clone <your-remote-url> new-project-folder
+# Copy your current work files over
+
+Option 4: Nuclear option - start fresh
+# Back up your current code files first!
+cp -r your-project-folder your-project-backup
+
+# Remove git history and start over
+rm -rf .git
+git init
+git add .
+git commit -m "Fresh start after corruption"
+
+Most important: Do you have your code files backed up anywhere (GitHub, cloud storage, etc.)? Your actual Python files are probably fine - it's just the Git history that's corrupted.
+
+What does ls -la show in your project directory? Are all your Python files still there and intact?
+
+
+Shaunythunder
+how does something like this happen?
+
+Boots
+Great question! Git corruption like this can happen from several common causes:
+
+Most Common Causes:
+
+Unexpected shutdown - If your computer crashes, loses power, or you force-quit while Git is writing
+
+# Git was in the middle of writing when...
+git commit -m "Adding high scores"  # *CRASH* - power goes out
+
+Disk space issues - Git runs out of space while writing objects
+
+# Disk full during a commit = corrupted objects
+
+Hardware problems - Bad sectors on hard drive, failing SSD, RAM issues
+
+# Computer tries to write to a bad sector = corrupted file
+
+Multiple Git operations - Running Git commands simultaneously
+
+# Terminal 1: git commit -m "stuff"
+# Terminal 2: git rebase -i HEAD~3  # At the same time = trouble
+
+File system issues - Problems with the underlying file system
+
+# File system corruption affects Git's object database
+
+Why Git is Usually Resilient:
+
+Git stores everything as immutable objects with checksums
+Each object has a unique hash based on its content
+If the content changes, the hash changes = Git knows it's corrupted
+Your specific error:
+
+object file .git/objects/1e/4dfe49f602b4db59aeb5f26009bb80f2c826f5 is empty
+
+This means Git created the file but couldn't write the content - probably interrupted mid-write.
+
+Prevention tips:
+
+Regular backups (GitHub, GitLab, etc.)
+Don't force-quit during Git operations
+Keep some free disk space
+Use git status to check if operations completed
+Have you been doing any large commits lately, or did your computer crash recently?
+
+
+Shaunythunder
+can i just pull my git history from my git hub?
+
+Boots
+Yes! That's actually the cleanest solution if you have your code pushed to GitHub. Here's how:
+
+Option 1: Fresh clone (recommended)
+# Navigate to parent directory
+cd ..
+
+# Clone a fresh copy from GitHub
+git clone https://github.com/yourusername/your-repo-name.git fresh-copy
+
+# Copy any uncommitted work from your corrupted folder
+cp corrupted-folder/*.py fresh-copy/
+# (or whatever files you've been working on)
+
+# Now work from the fresh copy
+cd fresh-copy
+
+Option 2: Reset to match GitHub
+# In your current corrupted folder
+git remote -v  # Make sure your GitHub remote is still there
+
+# Force reset to match GitHub exactly
+git fetch origin
+git reset --hard origin/main  # (or whatever your main branch is called)
+
+Option 3: Replace .git folder
+# Back up your current work files first!
+cp *.py ../backup/
+
+# Remove corrupted git folder
+rm -rf .git
+
+# Clone just the git history
+git clone https://github.com/yourusername/your-repo-name.git temp
+mv temp/.git .
+rm -rf temp
+
+# Your files + fresh git history
+
+Check first: Are all your recent changes already pushed to GitHub? If not, you might lose some work.
+
+# See what you last pushed
+git log --oneline  # (if this works)
+
+Which option sounds best for your situation?
+
+
+Shaunythunder
+run me through how to create a virtual environment
+
+Boots
+Absolutely! Here's how to create and use a virtual environment:
+
+Step 1: Create the virtual environment
+# Navigate to your project directory
+cd ~/workshop/Galactic-Space-Invaders
+
+# Create virtual environment (Python 3.3+)
+python3 -m venv .venv
+
+# Alternative names you might see:
+# python3 -m venv venv
+# python3 -m venv env
+
+Step 2: Activate the virtual environment
+# On Linux/Mac:
+source .venv/bin/activate
+
+# On Windows:
+# .venv\Scripts\activate
+
+You'll know it worked when you see:
+
+(.venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$
+
+Notice the (.venv) prefix - that means you're inside the virtual environment!
+
+Step 3: Install packages
+# Now install pygame (or whatever you need)
+pip install pygame
+
+# Install multiple packages
+pip install pygame requests numpy
+
+Step 4: Save your dependencies
+# Create a requirements file
+pip freeze > requirements.txt
+
+# This creates a file listing all installed packages
+
+Step 5: Deactivate when done
+# Exit the virtual environment
+deactivate
+
+# You'll see the (.venv) disappear from your prompt
+
+Later usage:
+# Activate existing virtual environment
+source .venv/bin/activate
+
+# Install from requirements file
+pip install -r requirements.txt
+
+# Run your game
+python3 main.py
+
+Why virtual environments?
+
+Keeps project dependencies separate
+Prevents version conflicts between projects
+Makes your project portable
+Want me to walk you through setting this up for your Asteroids game specifically?
+
+
+Shaunythunder
+how to rename a directory
+
+Boots
+Easy! Here are the different ways to rename a directory:
+
+Command Line (Linux/Mac/Windows with Git Bash):
+# Basic syntax: mv old_name new_name
+mv old-directory-name new-directory-name
+
+# Example:
+mv Galactic-Space-Invaders Asteroids-Game
+
+# If you're inside the directory, go up one level first:
+cd ..
+mv old-name new-name
+cd new-name
+
+If the directory has spaces in the name:
+# Use quotes
+mv "Old Directory Name" "New Directory Name"
+
+# Or escape spaces with backslashes
+mv Old\ Directory\ Name New\ Directory\ Name
+
+Windows Command Prompt:
+ren old-directory-name new-directory-name
+
+File Manager (GUI):
+Linux: Right-click → Rename
+Mac: Select folder → Press Enter → Type new name
+Windows: Right-click → Rename
+Important notes:
+Make sure you're in the parent directory of the folder you want to rename
+If you have the folder open in your terminal, cd out of it first
+Any open programs pointing to that directory might need to be restarted
+Example for your project:
+
+cd ~/workshop
+mv Galactic-Space-Invaders Asteroids-Game
+cd Asteroids-Game
+
+What are you thinking of renaming your directory to?
+
+
+Shaunythunder
+7b14c99 (HEAD -> main, origin/main, origin/HEAD) BC: Experienced corruption issue with the local repository. Was able to download master from github and refactor changes in. Decided to tackle the data entry side of things first as I realized the architecture should be validated on real data. Was able to build out JSON file system and am able to automatically load the JSON before the game loop starts and save whenever a new high score is added. The display logic has been built but has not been tested out. Once that is figured out will need to get the menu buttons working for the rest of the game modes. Once that is completed, then we have a working high score system.
+1e4dfe4 BB: Short Session, blocked out the logic for the menu navigation, utilizing the interactive and non interactive overlays fpr the high score system. Will need to major refactor as these items are for the overlays. Will convert to actual implementation for the high score system next session.
+4a6912b BA: Spent this session refactoring the code base in order to clear all linter errors. Was completely successful and am at zero errors. After some investigation, determined that the way to make the high score module is to have a master manager tied to three different managers, non interactive AKA high score drawings, interactive AKA, menu options for changing game modes and resetting high scores, and saving high score values via JSON. Will work on getting the menus and high score read outs operational and then will deep dive into the JSON functinality. Plan is for local storage first then once satisfied, change the location to windows local.
+3fe2cf4 AZ: Fixed the pause menu issue. It was an issue of mismatched variables as I had copied the logic over but one of the variables got missed. Interestingly it was able to run without errors or crashing the game. Ready to begin exploring the high score system.
+6e06f8d AY: Completed scoring system. Scoring successfully displays on player HUD and gives a final score on game over. Fixed selection issue bug that came up on the game over and paused overlay screens. Fixed the game over version but attempted to refactor the pause menu. Ran out of time and is currently broken. Will fix next session. Afterwards, will look into saving highscores. Will need to create high score module as it currently does not exist.
+e256c37 AX: Completed player hud for lives. Lives are able to be rendered in the top left screen and respond according to how many you have left. The non interactive overlay infrastructure works well. Next up is to implement a scoring system. Once that is done, the original asteroids experience will be completed, minus being able to save your high score.
+ea58013 AW: Decided to go with the interactive and non interactive overlays. Set up the structure blueprint and refactored to accomodate. Created transparent surface to place noninteractive overlays on. Ensured game is in working order. Will implement the hud system next session and then the scoring system after that.
+2759cdc AV: Implemented lives system and game over screen. Am able to successfully lose lives and get a game over overlay. Am able to navigate from the overlay to the main menu, quit, and retry. Added new game over state that resets the modules if there is a game over. Completely refactored all interactible menus to the new format and was able to remove the pause and title menus from main.py. Next up is a hud for the player. In debate on whether I want a hud overlay or just draw it on the main screen. Will most likely create a brand new surface and manager for non interactable overlay. Will chronicle what I choose as a go.
+724e396 AU: Migrated the overlay drawing logic to a manager instead of the main menu. Game is now fully functional. Also cleaned up an issue where the main UFO object was defaulted to none. Will work on expanding the overlay system to include a game over overlay, a controls selection overlay, and a UI. Will probably split reponsibilities between interactable overlays and non interactable overlays.
+a28e5c8 AT: Working on converting the Overlay handling to a centralized manager that will handle all of the overlays and will allow multiple overlays to be drawn at once. The manager takes the state from the gamestate manager and then draws the cooresponding overlay. This is a work in progress and the game is currently broken and cannot even run. This system is required for the various overlays like game over, pause menu, choosing whether to use mouse or keyboard, etc. Ran out of time and will continue working on it next session.
+0da9697 AS: Implemented screen wrapping for player bullets and gave them a expiration timer. Bullets will now wrap around the screen for lining up screen based shots like in the original game. Additionally migrated the spawning logic out of the event loop. Will implement lives (AKA health) next and game over logic.
+1b05afb AR: Finished implementation of the UFO Classic enemy. The UFO flies around the screen, shoots projectiles randomly, and crashes into asteroids. Additionally, player will get hit if they collide with either the UFO projectile or the UFO itself. We now have all of the elements of the original game save a few things, lives, heads up display of lives and highscore, high score system, player bullet screen wrapping, player bullet termination after a period of time. Once those things are online, the asteroids game is complete. Additionally, the wave system will need to be implemented and tested out. Will need two asteroids and ttwo UFO types to properly test out a enemy requesting system. Lastly, discovered a game bug where once the asteroids left go below a certain number, the asteroids will spawn far more than requested. With the wave manager, this may be an issue not worth considering.
+c7383b3 AQ: Worked on UFO shooting logic. There is a type error with the UFO classic projectile super init that needs to be addressed as it is crashing the game. Short work session.
+:
+
+Boots
+Nice! I can see you've been making great progress on your Asteroids game! That Git log shows a solid development history - you went from basic game mechanics all the way through to implementing a high score system with JSON persistence.
+
+Key milestones I see:
+
+✅ Fixed corruption issue and got back on track
+✅ Built out JSON file system for high scores
+✅ Automatic load/save functionality working
+✅ Display logic built (but needs testing)
+✅ Lives system, game over screen, pause menu
+✅ UFO enemies with shooting mechanics
+✅ Player HUD and scoring system
+✅ Screen wrapping for bullets
+Current status from your latest commit:
+
+High score data persistence: ✅ Working
+High score display logic: 🔶 Built but untested
+Menu navigation: 🔶 Needs implementation
+Multi-game mode support: 🔶 Pending
+You're really close to having a complete high score system! The hard part (data persistence) is done. Now it's just about getting those scores to show up prettily on screen and hooking up the menu buttons.
+
+Are you ready to test out that display logic we've been working on, or do you want to tackle something else first? Based on your commit, it sounds like the display manager should be ready to go!
+
+
+Shaunythunder
+shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ source venv/bin/activate
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ python3 main.py
+Traceback (most recent call last):
+File "/home/shameehan/workshop/Galactic-Space-Invaders/main.py", line 1, in <module>
+import pygame
+ModuleNotFoundError: No module named 'pygame'
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ pip install pygame
+error: externally-managed-environment
+
+× This environment is externally managed
+╰─> To install Python packages system-wide, try apt install
+python3-xyz, where xyz is the package you are trying to
+install.
+
+If you wish to install a non-Debian-packaged Python package,
+create a virtual environment using python3 -m venv path/to/venv.
+Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+sure you have python3-full installed.
+
+If you wish to install a non-Debian packaged Python application,
+it may be easiest to use pipx install xyz, which will manage a
+virtual environment for you. Make sure you have pipx installed.
+
+See /usr/share/doc/python3.12/README.venv for more information.
+
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$
+
+so why is it saying I need a virtual environment when I am in one
+
+Boots
+That's a confusing error! The issue is that even though you're in a virtual environment, your system is still trying to use the system-wide pip restrictions. This is a newer Ubuntu/Debian security feature.
+
+Here's what's happening:
+
+You're correctly in the virtual environment (you can see (venv))
+But the pip command is still being restricted by system policies
+Try these solutions:
+
+Solution 1: Use the full path to pip
+# Make sure you're using the venv's pip specifically
+/home/shameehan/workshop/Galactic-Space-Invaders/venv/bin/pip install pygame
+
+Solution 2: Check which pip you're using
+# See which pip is being used
+which pip
+which python
+
+# Should show something like:
+# /home/shameehan/workshop/Galactic-Space-Invaders/venv/bin/pip
+# /home/shameehan/workshop/Galactic-Space-Invaders/venv/bin/python
+
+Solution 3: Recreate the virtual environment
+# Deactivate current venv
+deactivate
+
+# Remove old venv
+rm -rf venv
+
+# Create new one with full python path
+python3 -m venv venv
+
+# Activate
+source venv/bin/activate
+
+# Try installing
+pip install pygame
+
+Solution 4: Install python3-full first
+# Install python3-full system-wide (outside venv)
+deactivate
+sudo apt install python3-full python3-venv
+
+# Then recreate venv
+python3 -m venv venv
+source venv/bin/activate
+pip install pygame
+
+Which which pip command shows? That'll tell us if you're actually using the virtual environment's pip or the system one.
+
+
+Shaunythunder
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ which pip
+/usr/bin/pip
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ which python
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ \
+
+Boots
+Ah! There's the problem. Your virtual environment isn't set up correctly:
+
+which pip shows /usr/bin/pip (system pip) instead of your venv pip
+which python shows nothing, which means python isn't found at all
+Your virtual environment is broken. Let's fix it:
+
+# First, deactivate the broken venv
+deactivate
+
+# Remove the broken virtual environment
+rm -rf venv
+
+# Make sure you have the required packages
+sudo apt update
+sudo apt install python3-full python3-venv python3-pip
+
+# Create a new virtual environment
+python3 -m venv venv
+
+# Activate it
+source venv/bin/activate
+
+# Now check if it's working properly
+which pip
+which python
+
+# Should show:
+# /home/shameehan/workshop/Galactic-Space-Invaders/venv/bin/pip
+# /home/shameehan/workshop/Galactic-Space-Invaders/venv/bin/python
+
+If that works, then install pygame:
+
+pip install pygame
+
+Test it:
+
+python3 -c "import pygame; print('pygame installed successfully!')"
+
+The issue was that your virtual environment didn't properly isolate the Python environment. The new one should work correctly. Let me know what which pip and which python show after recreating the venv!
+
+
+Shaunythunder
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ which venv
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ which pip
+/usr/bin/pip
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ which python
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ deactivate
+shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ rm -rf venv
+shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ sudo apt update
+[sudo] password for shameehan:
+Hit:1 http://archive.ubuntu.com/ubuntu noble InRelease
+Get:2 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1144 kB]
+Get:5 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:6 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [161 kB]
+Get:7 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1086 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [276 kB]
+Get:9 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [896 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [376 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:13 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7068 B]
+Get:14 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [16.3 kB]
+Get:15 http://archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+Get:16 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+Get:17 http://security.ubuntu.com/ubuntu noble-security/main Translation-en [165 kB]
+Get:18 http://security.ubuntu.com/ubuntu noble-security/main amd64 Components [21.6 kB]
+Get:19 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [858 kB]
+Get:20 http://security.ubuntu.com/ubuntu noble-security/universe Translation-en [188 kB]
+Get:21 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Components [52.2 kB]
+Get:22 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1180 kB]
+Get:23 http://security.ubuntu.com/ubuntu noble-security/restricted Translation-en [248 kB]
+Get:24 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+Get:25 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [212 B]
+Fetched 7057 kB in 5s (1422 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+18 packages can be upgraded. Run 'apt list --upgradable' to see them.
+shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ sudo apt install python3-full python3-venv python3-pip
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+python3-full is already the newest version (3.12.3-0ubuntu2).
+python3-venv is already the newest version (3.12.3-0ubuntu2).
+python3-venv set to manually installed.
+python3-pip is already the newest version (24.0+dfsg-1ubuntu1.1).
+0 upgraded, 0 newly installed, 0 to remove and 18 not upgraded.
+shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ python3 venv venv
+python3: can't open file '/home/shameehan/workshop/Galactic-Space-Invaders/venv': [Errno 2] No such file or directory
+shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ python3 -m venv
+venv
+sourveshameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ sourve venv/bin/activate
+sourcesourve: command not found
+shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ source venv/bin
+/activate
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ python3 main.py
+Traceback (most recent call last):
+File "/home/shameehan/workshop/Galactic-Space-Invaders/main.py", line 1, in <module>
+import pygame
+ModuleNotFoundError: No module named 'pygame'
+
+Boots
+I can see you made some typos in the commands, but let's check if the virtual environment is working properly now:
+
+# Check if you're using the right pip and python now
+which pip
+which python
+
+If those still show /usr/bin/pip instead of your venv paths, let's try a different approach:
+
+# Deactivate and start completely fresh
+deactivate
+
+# Remove the venv again
+rm -rf venv
+
+# Create venv with explicit python path
+/usr/bin/python3 -m venv venv
+
+# Activate
+source venv/bin/activate
+
+# Now check the paths
+which pip
+which python3
+
+The paths should now show:
+
+/home/shameehan/workshop/Galactic-Space-Invaders/venv/bin/pip
+/home/shameehan/workshop/Galactic-Space-Invaders/venv/bin/python3
+
+If they do, then install pygame:
+
+pip install pygame
+
+If they still don't work, try this alternative:
+
+# Use the venv's pip directly
+./venv/bin/pip install pygame
+
+# Run python with the venv's python directly
+./venv/bin/python3 main.py
+
+Let me know what which pip and which python3 show after the fresh venv creation!
+
+
+Shaunythunder
+/home/shameehan/workshop/Galactic-Space-Invaders/venv/bin/pip
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$ which python
+/home/shameehan/workshop/Galactic-Space-Invaders/venv/bin/python
+(venv) shameehan@LS-Laptop:~/workshop/Galactic-Space-Invaders$
+
+Boots
+Perfect! Now your virtual environment is working correctly - both pip and python are pointing to your venv paths.
+
+Now install pygame:
+
+pip install pygame
+
+Then test your game:
+
+python3 main.py
+
+You should be good to go now! The virtual environment is properly isolated and should install pygame without any issues.
+
+Let me know if pygame installs successfully and if your game runs!
+
+
+Thumbs up
+Thumbs down
+Logic Assistance
+Chat ID: 98
+Greeting Message
+Asteroi
+Lesson Complete
+Code Progression
+Lesson Update
+UFO Implementation
+Collision Debug
+Chat ID: 90
+Chat ID: 40
+Overlay Transparency
+Overlay Manager
+Lives Display
+Force Push
+Score Update
+Chat ID: 2C
+Git Sync
+Spacing Issue
+High Score
+Name Input
+Score System
+Course Completion
+Course Finished
+Course Complete
+Course Done
+Environment Initialization
+
+Ask Boots a question...
+
+
+
+
+
+
+
+
+
+
